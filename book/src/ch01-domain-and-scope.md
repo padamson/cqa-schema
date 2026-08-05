@@ -54,7 +54,16 @@ SECTION OUTLINE:
   - On iteration (N&M's three fundamental rules).
 
 CARRIED-IN DEFERRALS -> this step:
-  (none — first step)
+  [ ] introduction.md: decide whether it now wants a short "The domain"
+      section, mirroring the wine book the template showcases. It currently
+      defers outright ("...are Chapter 1's subject"), which may be
+      sufficient — if a summary is added, take the wording from the
+      schema's own `description:` so the two agree.
+      (source: introduction.md, closing section)
+  [ ] schema/cqa.yaml: replace the `description:` TODO with the domain and
+      purpose statement this chapter produces — domain and purpose only,
+      no method or grounding claims (CLAUDE.md, "Schema descriptions state
+      domain and purpose, nothing else"). (source: scaffold stub)
 
 AUTHORING CHECKLIST:
   [ ] freeze a new cqa-yaml-vN listing tag in the same change

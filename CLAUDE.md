@@ -114,13 +114,20 @@ enabled it becomes a required preprocessor, so also add it to CI.
 
 - **Trunk-based on `main`.** Commit directly to `main`; don't propose
   feature branches as a workflow.
-- **Two sets of competency questions, kept apart.** This schema's domain
-  *is* competency-question evaluation, so two CQ sets are easy to confuse:
-  `cqa`'s **own** competency questions (Step 1 — what this ontology must
-  answer about benchmarks) and the **worked example's** (the benchmark a
-  consumer authors, which is a set of `cqa` records rather than questions
-  about `cqa`). Never interleave them, and always say which set a question
-  belongs to. This is the one place the meta-subject can lose a reader.
+- **Two sets of competency questions: `CQ-cqa` and `CQ-wine`.** Every ontology
+  built with the ontology-authoring-template sketches competency questions for
+  its own schema, and this one is no different — the only wrinkle is that
+  `cqa`'s subject *is* competency questions, so "the competency questions" is
+  ambiguous unless labelled. **`CQ-cqa`** is this ontology's own Step 1 output (what a schema
+  for benchmarks must express); **`CQ-wine`** is the worked example's, which
+  are *data* — records conforming to `cqa`. Individual questions take a
+  number: `CQ-wine 4`, `CQ-cqa 2`. Use the labels wherever both could be
+  meant, including commits and notes.
+
+  Hyphen, not a subscript: the labels have to survive YAML record names,
+  commit messages, and cross-repo notes, and a subscript copies out as
+  "CQcqa" — ambiguous again. The form also matches the schema's own
+  kebab-case id pattern, so a prose label and a record id can be one string.
 - **The worked example lives in the consuming repo, not here.** A benchmark
   is meaningless without the graph it benchmarks, and this schema has no
   domain graph — its instances are always a consumer's. So the demand driver
