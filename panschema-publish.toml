@@ -1,0 +1,45 @@
+[schema]
+name = "wine"
+version = "0.2.0"
+linkml = "1.7.0"
+
+[files]
+main = "schema/wine.yaml"
+
+[publishing]
+versions = ["v0.1.0", "v0.2.0"]
+edge = "main"
+# On each release: append the new tag to `versions` above and set
+# `current` to it, so `/schema/current/` aliases to the latest release
+# while `/schema/main/` stays the bleeding edge.
+current = "v0.2.0"
+output_dir = "site/schema"
+format = "html"
+# Header brand/home link target. Our publish dir is site/schema/<version>/,
+# so "../../" escapes back to the book root (works in both localhost dev
+# and the github.io deploy). The panschema default "../current/" assumes a
+# standalone schema-only deploy and is wrong for this book-nested layout.
+site_root_url = "../../"
+
+# Curated instance graphs published behind the schema page's in-page
+# selector (panschema feature 37). `name` labels each tab; `data` is
+# repo-relative. Declaration order drives the selector order (preview
+# first, as the teaching lead-in); `exemplar = true` marks the tab the
+# page opens on (the full worked example). Both render switchably.
+[[instances]]
+name = "preview"
+data = "data/wine-preview.yaml"
+
+[[instances]]
+name = "worked-example"
+data = "data/wine-instances.yaml"
+exemplar = true
+
+# Book→schema toolbar link (the reverse of site_root_url above): a button
+# in the book's toolbar pointing at the published schema docs. Assets are
+# installed by `mdbook-panschema install book` (see scripts/install-assets.sh)
+# and are gitignored like the other generated book assets.
+[book_link]
+enabled = true
+schema_path = "schema/current/"
+label = "Schema reference"

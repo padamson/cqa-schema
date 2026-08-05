@@ -1,0 +1,183 @@
+# wine
+
+> **This repo is the worked showcase for the ontology-authoring-template.**
+> It builds a small wine ontology from scratch to demonstrate the method.
+> A consumer who wants their own ontology runs the **erect-scaffold** skill,
+> which discards this showcase and restores the blank template baseline
+> (then **setup-ontology** renames it). See README "Start your own".
+
+A [LinkML](https://linkml.io) ontology grounded in BFO 2020 (ISO/IEC
+21838-2:2020) and the Common Core Ontologies (CCO), authored following
+*Ontology Development 101* (Noy & McGuinness, 2001 — "N&M") adapted to
+LinkML. It models wines, the grapes and regions behind them, and the
+pairing and vintage-quality judgments made about them.
+
+The repo is two things at once:
+
+- **`schema/wine.yaml`** — the schema artifact itself.
+- **`book/`** — *Building wine*, an mdbook that is the public log of
+  building the schema from scratch, following N&M adapted to LinkML.
+  Each N&M step gets a chapter; the schema grows incrementally with
+  **frozen listings** embedded at each stage.
+
+## Chapter ↔ N&M step
+
+Chapters map to the seven N&M steps and live at
+`book/src/chNN-<kebab-title>.md`, listed in `book/src/SUMMARY.md`:
+
+1. Determine domain and scope · 2. Reuse existing ontologies ·
+3. Enumerate important terms · 4. Define classes and hierarchy ·
+5. Define slots · 6. Facets (`slot_usage`) · 7. Instances + validate
+
+(The Introduction is the unnumbered prefix chapter `introduction.md`;
+the seven steps are `ch01`–`ch07`, so the rendered Chapter N is N&M
+Step N.) Match the existing voice: design discussion aimed at a reader
+comfortable with LinkML and ontology basics, N&M quotes in
+`admonish quote` blocks,
+external claims backed by citations.
+
+## Authoring with mdbook-listings
+
+This repo uses the **mdbook-listings** plugin, installed at project
+scope (see `.claude/settings.json`). Its bundled skill documents the
+full mechanics — `freeze`/`list`, the `{{#include}}` / `{{#callout}}`
+/ `{{#diff}}` directives, inline `# CALLOUT:` markers vs. sidecar
+TOML, and the tag/SHA-256 identity model. **Consult that skill
+(`references/cli.md`, `references/directives.md`) for how the tool
+works** — this section records only what's specific to *this* repo.
+
+The book embeds **frozen snapshots** of `schema/wine.yaml` so a
+later edit can't silently change what a chapter renders. Repo
+conventions on top of the plugin:
+
+- **Freeze from `book/`**, source `../schema/wine.yaml`, tag
+  `wine-yaml-v<N>`. Each chapter that advances the schema bumps
+  the tag so earlier chapters keep pointing at the snapshot they
+  froze:
+  `cd book && mdbook-listings freeze ../schema/wine.yaml --tag wine-yaml-v2 --force`
+- **Callouts on files we author here** (e.g. `schema/wine.yaml`)
+  go *inline* as `# CALLOUT:` markers — never sidecar TOML, which is
+  reserved for generated/third-party/no-comment-syntax listings.
+- **Integrity check:** two gates run. `mdbook-listings verify
+  --book-root book` fails on a frozen snapshot whose bytes no longer
+  match `listings.toml` (edited but not re-frozen) or a broken
+  `{{#include}}` / `{{#callout}}`; it is wired into both the
+  `.pre-commit-config.yaml` hook and the `docs.yml` CI (before the
+  build). `mdbook build` exiting 0 additionally fails on a missing
+  `{{#callout}}` label or a broken `{{#include}}`.
+
+### Dev loop (`scripts/dev.sh`) and the freeze foot-gun
+
+`scripts/dev.sh` watches `schema/`, `book/src/`, and `book/*.toml`
+and rebuilds the combined `site/` on change (via `scripts/rebuild.sh`,
+which also runs `mdbook-listings install` to refresh callout CSS/JS).
+But **editing `schema/wine.yaml` does not re-freeze the listing**
+— a frozen listing is a point-in-time snapshot by design. The watcher
+will rebuild from the *old* frozen bytes, so callout/listing changes
+won't appear until you re-freeze. The loop:
+
+1. Edit `schema/wine.yaml` (markers and all).
+2. `cd book && mdbook-listings freeze ../schema/wine.yaml --tag <tag> --force`
+   (writing `book/src/listings/<tag>.yaml` — itself watched — triggers the rebuild).
+3. Hard-refresh the browser (Cmd+Shift+R) to bust cached CSS/JS/HTML.
+
+If callouts seem missing, suspect a **stale `site/`** first: confirm
+the freshly built `book/build/<chapter>.html` has `callout-badge`
+elements before debugging anything deeper.
+
+For anything not covered above, defer to the installed mdbook-listings
+plugin skill, then `mdbook-listings <cmd> --help`.
+
+## Building
+
+```
+cd book && mdbook serve   # local preview with live reload
+cd book && mdbook build   # output to book/build/
+```
+
+Preprocessors must be on `PATH`: `mdbook-listings`, and the
+`mdbook-admonish` fork (`feat/mdbook-0.5-compat`); `mdbook-panschema`
+(from the panschema workspace) must be there too — it generates the
+gitignored book→schema toolbar-link assets that `book.toml` references
+(`scripts/install-assets.sh` runs all three installers). The published
+docs site (schema HTML + the book) is built and deployed by
+`.github/workflows/docs.yml` via the panschema toolchain on push to
+`main` and on `v*` tags.
+
+Math is **opt-in** and not shipped in the stock template: to write `$…$`
+in chapters, enable `mdbook-katex` (pin `0.10.0-alpha`, ordered
+`after = ["admonish"]`) per the README "Math (optional)" section. Once
+enabled it becomes a required preprocessor, so also add it to CI.
+
+## Conventions
+
+- **Trunk-based on `main`.** Commit directly to `main`; don't propose
+  feature branches as a workflow.
+- **Schema edits are chapter-scoped.** When a chapter advances the
+  schema, freeze a new listing tag in the same change so the prose and
+  the snapshot stay consistent.
+- **Demand-driven dogfood.** The schema grows because the worked
+  example (Appendix A) needs it, not speculatively. The worked example
+  should drive the build from Step 1 — if a class or slot only earns
+  its keep at validation (Step 7), that is a smell.
+- **External grounding is by URI, not import.** BFO/CCO/etc. are
+  referenced via `subclass_of` + prefixes, *not* LinkML `imports:`
+  (which is for other LinkML schemas — only `linkml:types` is
+  imported). (`class_uri` asserts identity, which ch04 rejects as too
+  strong; a slot that needs external grounding would use `slot_uri`,
+  but none do yet.)
+- **Schema descriptions state domain and purpose, nothing else.**
+  `description:` fields ship with the artifact (generated docs, RDF,
+  downstream graphs), so they carry only what a consumer of the *artifact*
+  needs: what the ontology is about and what it is for. They never
+  reference the book's structure (no chapter/step numbers, no "N&M", no
+  CQ numbers, no "a later chapter will…") — and, just as important, they
+  never carry the *method* story: no "built following Ontology
+  Development 101", no "grounded in BFO/CCO", no "adapted to LinkML". The
+  grounding is self-documenting in the schema structure (prefixes,
+  `subclass_of`); the methodology belongs to the book.
+  Book-facing and method-facing context goes in `#` comments or
+  `# CALLOUT:` markers (which stay out of the artifact's data), not in
+  permanent metadata.
+- **Deferrals are tracked in the target chapter's scaffold.** When
+  prose defers work to a later chapter or N&M step ("deferred to
+  Chapter 6", "Step 5 work", "Chapter 7 will revisit"), add a
+  matching `[ ]` TODO line in that chapter's `.md` scaffold,
+  inside the HTML-comment `CARRIED-IN DEFERRALS` block (every step
+  stub ships with one), citing the source chapter/section. Write
+  the prose deferral and the scaffold TODO *together* so nothing
+  promised is dropped. The HTML comments never render.
+  (Within-chapter "next increment" work — not yet deferred to a
+  *later* chapter — stays in the buildout plan, not these blocks.)
+- **Strip a chapter's scaffold once finalized.** When a chapter is
+  authored, delete its whole HTML-comment scaffold block
+  (`CHARTER`/`SECTION OUTLINE`/`AUTHORING CHECKLIST`, and its own
+  now-discharged `CARRIED-IN DEFERRALS`). Only *unwritten* chapters keep
+  scaffolds — their `CARRIED-IN DEFERRALS` blocks still hold live TODOs
+  that earlier chapters wrote forward. A finished chapter's own forward
+  deferrals live in the *later* chapters' scaffolds, not its own, so
+  deleting its scaffold loses nothing.
+
+## Lessons
+
+These are lessons-learned baked into the template; each step-chapter
+stub carries the matching one as a LESSON line in its authoring
+checklist.
+
+- **Worked example as demand-driver from Step 1.** Pick the worked
+  example early and let it pull every class and slot into existence; if
+  something only validates at Step 7, that is a smell.
+- **Verify the upper-ontology CATEGORY, not just the IRI.** A resolving
+  BFO/CCO IRI is not enough — confirm the category fit (e.g. don't
+  ground a Quality as an Information Content Entity).
+- **Graph viz as island detector.** Build the panschema class graph and
+  treat island (disconnected) nodes as bugs to explain or remove.
+- **A concern that fights the layer wants a companion ontology.** If a
+  concept keeps resisting the foundational grounding, that is a signal
+  it belongs in a separate companion ontology, not bolted on here.
+- **The book is a chronological log, not a snapshot.** Narrate
+  reversals and dead-ends as they happened; do not retro-edit earlier
+  chapters to hide a path that was later abandoned.
+- **Speculative forward-references stay in private notes.** Keep
+  future-repo names, roadmap, and speculative plans out of the public
+  book and commits.

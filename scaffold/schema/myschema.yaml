@@ -1,0 +1,40 @@
+id: https://w3id.org/myschema/
+name: myschema
+# The description ships with the artifact, so it states only what the
+# ontology is about and what it is for — domain and purpose. The method
+# (grounded in BFO 2020 / CCO, authored following Ontology Development
+# 101 adapted to LinkML) is self-documenting in the structure below and
+# is the book's story, not the artifact's metadata. Fill in Step 1.
+description: |-
+  TODO (Step 1): one or two sentences stating this ontology's domain
+  (what it is about) and purpose (what it is for). Domain and purpose
+  only — no methodology, no grounding claims, no book references.
+license: https://creativecommons.org/licenses/by/4.0/
+version: 0.1.0-dev
+
+prefixes:
+  # The LinkML metamodel and this schema's own namespace
+  linkml: https://w3id.org/linkml/
+  myschema: https://w3id.org/myschema/
+
+  # Foundational grounding: BFO and CCO
+  obo: http://purl.obolibrary.org/obo/
+  cco: https://www.commoncoreontologies.org/
+
+default_prefix: myschema
+default_range: string
+
+# Only linkml:types is imported. External OWL ontologies (BFO, CCO, ...)
+# are reused by URI via subclass_of plus the prefixes above — never via
+# imports:, which is reserved for other LinkML schemas.
+imports:
+  - linkml:types
+
+classes:
+  # Step 4+ populate these.
+
+slots:
+  # Step 5+ populate these.
+
+enums:
+  # Step 4+ populate these.
