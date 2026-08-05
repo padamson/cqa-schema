@@ -18,8 +18,8 @@ repeated here.
 ## Step 0 — orient
 
 - Derive the schema name from `panschema-publish.toml` (`[schema].name`)
-  or the `schema/*.yaml` filename — never assume `myschema` (the repo may
-  already be renamed via the [[setup-ontology]] skill).
+  or the `schema/*.yaml` filename — never assume `myschema`; derive it,
+  don't hardcode it.
 - Find the next chapter to advance. The Introduction is the unnumbered
   prefix chapter (`introduction.md`); the seven N&M steps are ch01…ch07,
   so the rendered Chapter N is N&M Step N (mapping in CLAUDE.md). The next
@@ -130,4 +130,3 @@ change** (CLAUDE.md: schema edits are chapter-scoped; trunk-based on
 
 - Tool mechanics → the **mdbook-listings** skill.
 - Standing conventions, voice, lessons → **CLAUDE.md**.
-- The one-time placeholder rename → the **setup-ontology** skill.

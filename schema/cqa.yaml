@@ -1,5 +1,5 @@
-id: https://w3id.org/myschema/
-name: myschema
+id: https://w3id.org/cqa/
+name: cqa
 # The description ships with the artifact, so it states only what the
 # ontology is about and what it is for — domain and purpose. The method
 # (grounded in BFO 2020 / CCO, authored following Ontology Development
@@ -15,13 +15,13 @@ version: 0.1.0-dev
 prefixes:
   # The LinkML metamodel and this schema's own namespace
   linkml: https://w3id.org/linkml/
-  myschema: https://w3id.org/myschema/
+  cqa: https://w3id.org/cqa/
 
   # Foundational grounding: BFO and CCO
   obo: http://purl.obolibrary.org/obo/
   cco: https://www.commoncoreontologies.org/
 
-default_prefix: myschema
+default_prefix: cqa
 default_range: string
 
 # Only linkml:types is imported. External OWL ontologies (BFO, CCO, ...)

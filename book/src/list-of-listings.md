@@ -1,6 +1,6 @@
 # List of Listings
 
-Every frozen snapshot the book embeds, in the order it first appears,
-grouped by chapter.
+Every frozen snapshot the book embeds, grouped by the chapter it appears
+in. Populates as chapters embed listings.
 
 {{#list-of-listings}}

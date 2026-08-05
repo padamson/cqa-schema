@@ -1,17 +1,11 @@
 # Appendix A: The Worked Example
 
-This is the full wine catalog Chapter 7 builds: the instance graph that
-answers all seven competency questions. It is a single LinkML data file,
-`data/wine-instances.yaml`, and it conforms to the schema — `panschema
-validate` confirms it, and the publish step revalidates it before the
-site goes out.
-
-[Chapter 7](ch07-instances-and-validation.md#a-small-example-instance-graph)
-opens with a four-record *preview* to introduce what an individual and an
-edge are; this is the larger graph that preview stood in for. Both are
-published on the schema page behind an in-page selector, so the two can be
-read together: the preview to learn the shape, this catalog to watch it
-carry the questions. The schema is one model; these are two instance
-graphs conforming to it, and a deployment's own catalog would be a third.
-
-{{#include listings/wine-instances-v1.yaml caption="The complete wine catalog"}}
+<!--
+CHARTER: Embed the full worked-example data listing here — the LinkML
+data file the Step-7 chapter builds and validates against the schema,
+frozen as a listing (`\{{#include listings/<tag>.yaml}}`). Introduce it
+briefly: it conforms to the schema, and the Step-7 intro's small preview
+stood in for it. This is the larger of the two curated instance graphs
+(the preview is the other); both publish behind the schema page's
+selector via [[instances]] in panschema-publish.toml.
+-->

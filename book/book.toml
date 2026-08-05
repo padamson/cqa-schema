@@ -2,8 +2,8 @@
 authors = ["Paul Adamson"]
 language = "en"
 src = "src"
-title = "Building wine"
-description = "Building the wine LinkML ontology from scratch, following Ontology Development 101 adapted to LinkML"
+title = "Building cqa"
+description = "Building the cqa LinkML ontology from scratch, following Ontology Development 101 adapted to LinkML"
 
 [build]
 build-dir = "build"
@@ -18,12 +18,9 @@ assets_version = "3.1.0" # do not edit: managed by `mdbook-admonish install`
 command = "mdbook-listings"
 before = ["admonish", "links"]
 number-listings = true
-# In-page {{#list-of-listings}} index (see src/list-of-listings.md).
+# In-page {{#list-of-listings}} index (src/list-of-listings.md) plus each
+# page's listings nested under their section in the sidebar.
 list-of-listings = true
-# "nested" puts each page's listings under their section heading in the
-# per-page TOC (e.g. Listing 4.1 under "The classes"). NOT "append",
-# whose book-wide section overlays mdbook's TOC with this theme (dogfood
-# finding filed to mdbook-listings 2026-07-27).
 list-of-listings-sidebar = "nested"
 
 [output]

@@ -1,24 +1,25 @@
-# wine
-
-> **This repo is the worked showcase for the ontology-authoring-template.**
-> It builds a small wine ontology from scratch to demonstrate the method.
-> A consumer who wants their own ontology runs the **erect-scaffold** skill,
-> which discards this showcase and restores the blank template baseline
-> (then **setup-ontology** renames it). See README "Start your own".
+# cqa
 
 A [LinkML](https://linkml.io) ontology grounded in BFO 2020 (ISO/IEC
 21838-2:2020) and the Common Core Ontologies (CCO), authored following
 *Ontology Development 101* (Noy & McGuinness, 2001 — "N&M") adapted to
-LinkML. It models wines, the grapes and regions behind them, and the
-pairing and vintage-quality judgments made about them.
+LinkML.
+
+`cqa` is a vocabulary for **competency question benchmarks**: the questions
+a knowledge graph exists to answer, each paired with the full specification
+of its correct answer, so a set of them can be *run* as an evaluation rather
+than filed as a design note.
 
 The repo is two things at once:
 
-- **`schema/wine.yaml`** — the schema artifact itself.
-- **`book/`** — *Building wine*, an mdbook that is the public log of
+- **`schema/cqa.yaml`** — the schema artifact itself.
+- **`book/`** — *Building cqa*, an mdbook that is the public log of
   building the schema from scratch, following N&M adapted to LinkML.
   Each N&M step gets a chapter; the schema grows incrementally with
   **frozen listings** embedded at each stage.
+
+The schema starts at `version: 0.1.0-dev`; prior releases, once cut, are
+reachable via their git tags.
 
 ## Chapter ↔ N&M step
 
@@ -46,16 +47,16 @@ TOML, and the tag/SHA-256 identity model. **Consult that skill
 (`references/cli.md`, `references/directives.md`) for how the tool
 works** — this section records only what's specific to *this* repo.
 
-The book embeds **frozen snapshots** of `schema/wine.yaml` so a
+The book embeds **frozen snapshots** of `schema/cqa.yaml` so a
 later edit can't silently change what a chapter renders. Repo
 conventions on top of the plugin:
 
-- **Freeze from `book/`**, source `../schema/wine.yaml`, tag
-  `wine-yaml-v<N>`. Each chapter that advances the schema bumps
+- **Freeze from `book/`**, source `../schema/cqa.yaml`, tag
+  `cqa-yaml-v<N>`. Each chapter that advances the schema bumps
   the tag so earlier chapters keep pointing at the snapshot they
   froze:
-  `cd book && mdbook-listings freeze ../schema/wine.yaml --tag wine-yaml-v2 --force`
-- **Callouts on files we author here** (e.g. `schema/wine.yaml`)
+  `cd book && mdbook-listings freeze ../schema/cqa.yaml --tag cqa-yaml-v2 --force`
+- **Callouts on files we author here** (e.g. `schema/cqa.yaml`)
   go *inline* as `# CALLOUT:` markers — never sidecar TOML, which is
   reserved for generated/third-party/no-comment-syntax listings.
 - **Integrity check:** two gates run. `mdbook-listings verify
@@ -71,13 +72,13 @@ conventions on top of the plugin:
 `scripts/dev.sh` watches `schema/`, `book/src/`, and `book/*.toml`
 and rebuilds the combined `site/` on change (via `scripts/rebuild.sh`,
 which also runs `mdbook-listings install` to refresh callout CSS/JS).
-But **editing `schema/wine.yaml` does not re-freeze the listing**
+But **editing `schema/cqa.yaml` does not re-freeze the listing**
 — a frozen listing is a point-in-time snapshot by design. The watcher
 will rebuild from the *old* frozen bytes, so callout/listing changes
 won't appear until you re-freeze. The loop:
 
-1. Edit `schema/wine.yaml` (markers and all).
-2. `cd book && mdbook-listings freeze ../schema/wine.yaml --tag <tag> --force`
+1. Edit `schema/cqa.yaml` (markers and all).
+2. `cd book && mdbook-listings freeze ../schema/cqa.yaml --tag <tag> --force`
    (writing `book/src/listings/<tag>.yaml` — itself watched — triggers the rebuild).
 3. Hard-refresh the browser (Cmd+Shift+R) to bust cached CSS/JS/HTML.
 
@@ -113,6 +114,19 @@ enabled it becomes a required preprocessor, so also add it to CI.
 
 - **Trunk-based on `main`.** Commit directly to `main`; don't propose
   feature branches as a workflow.
+- **Two sets of competency questions, kept apart.** This schema's domain
+  *is* competency-question evaluation, so the book holds two CQ sets that
+  are easy to confuse: `cqa`'s **own** competency questions (Step 1 — what
+  this ontology must answer about benchmarks) and the **worked example's**
+  (Appendix A — the benchmark a consumer authors). Never interleave them in
+  one section, and always say which set a question belongs to. This is the
+  one place the meta-subject can lose a reader.
+- **`spike/` is a reference target, not a source.** It holds an earlier
+  throwaway build of the schema and is gitignored. Chapters may consult it
+  to see where the design landed, but nothing is copied from it wholesale —
+  each step reintroduces only what that step's competency questions demand.
+  If a chapter's questions don't move the design off the spike, the
+  questions weren't doing any work.
 - **Schema edits are chapter-scoped.** When a chapter advances the
   schema, freeze a new listing tag in the same change so the prose and
   the snapshot stay consistent.

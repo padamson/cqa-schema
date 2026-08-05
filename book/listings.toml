@@ -1,61 +1,7 @@
 version = 1
 
-[[listing]]
-tag = "wine-yaml-v1"
-source = "../schema/wine.yaml"
-frozen = "src/listings/wine-yaml-v1.yaml"
-sha256 = "708955dcd82afc9c3aef2957d52416ec278436f40f6b1a7e404e2f81d3025884"
-
-[[listing]]
-tag = "wine-yaml-v2"
-source = "../schema/wine.yaml"
-frozen = "src/listings/wine-yaml-v2.yaml"
-sha256 = "24c44aeb278330a79036b7dcf7077125bc597a163f72a248439cc3498daebf12"
-
-[[listing]]
-tag = "wine-yaml-v3"
-source = "../schema/wine.yaml"
-frozen = "src/listings/wine-yaml-v3.yaml"
-sha256 = "4cf3d6c6b0d0124a582f6dc39ba781339092a6dce901c765d43c3dee8853e0e3"
-
-[[listing]]
-tag = "wine-yaml-v4"
-source = "../schema/wine.yaml"
-frozen = "src/listings/wine-yaml-v4.yaml"
-sha256 = "d29ea55ed544055d44c0bc8bd0bf6c6abbacf2db2771df156df6a3ccf6761534"
-
-[[listing]]
-tag = "wine-yaml-v5"
-source = "../schema/wine.yaml"
-frozen = "src/listings/wine-yaml-v5.yaml"
-sha256 = "fef9eacbe42608f88fe699eec15f601c5d0e1fa35e818f7ba20594e2eddb3cc5"
-
-[[listing]]
-tag = "wine-preview-v1"
-source = "../data/wine-preview.yaml"
-frozen = "src/listings/wine-preview-v1.yaml"
-sha256 = "f65efe54a4e15b7cdfda8119931fbfb928e110987cd1845b2c4b43b240010926"
-
-[[listing]]
-tag = "wine-instances-v1"
-source = "../data/wine-instances.yaml"
-frozen = "src/listings/wine-instances-v1.yaml"
-sha256 = "01d098c9a4b6ce349f74bb5f05a14edb8fc37a5a3fce0947c7b282ede9af03f9"
-
-[[listing]]
-tag = "wine-yaml-v6"
-source = "../schema/wine.yaml"
-frozen = "src/listings/wine-yaml-v6.yaml"
-sha256 = "e7c294dfdf088e5d05d596432ed8a95a7c1f80ea1fa5f58d90019dae550d6f1d"
-
-[[listing]]
-tag = "unjustified-verdict-v1"
-source = "../data/invalid/unjustified-verdict.yaml"
-frozen = "src/listings/unjustified-verdict-v1.yaml"
-sha256 = "778f8579469fcbfe9a15285591a5e82092b88de58841aab97601475886ba7f24"
-
-[[listing]]
-tag = "bad-id-v1"
-source = "../data/invalid/bad-id.yaml"
-frozen = "src/listings/bad-id-v1.yaml"
-sha256 = "3a6c2f86a977d0f512da64c3e3a4ea951f251a60d9ecd2042452e8e27af1ff4b"
+# Frozen mdbook-listings snapshots are appended here as each chapter
+# advances the schema. Freeze from the book root, e.g.:
+#   cd book && mdbook-listings freeze ../schema/cqa.yaml \
+#     --tag cqa-yaml-v1 --force
+# Ships empty — no chapter has frozen a listing yet.
