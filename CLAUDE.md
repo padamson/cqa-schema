@@ -115,12 +115,26 @@ enabled it becomes a required preprocessor, so also add it to CI.
 - **Trunk-based on `main`.** Commit directly to `main`; don't propose
   feature branches as a workflow.
 - **Two sets of competency questions, kept apart.** This schema's domain
-  *is* competency-question evaluation, so the book holds two CQ sets that
-  are easy to confuse: `cqa`'s **own** competency questions (Step 1 — what
-  this ontology must answer about benchmarks) and the **worked example's**
-  (Appendix A — the benchmark a consumer authors). Never interleave them in
-  one section, and always say which set a question belongs to. This is the
-  one place the meta-subject can lose a reader.
+  *is* competency-question evaluation, so two CQ sets are easy to confuse:
+  `cqa`'s **own** competency questions (Step 1 — what this ontology must
+  answer about benchmarks) and the **worked example's** (the benchmark a
+  consumer authors, which is a set of `cqa` records rather than questions
+  about `cqa`). Never interleave them, and always say which set a question
+  belongs to. This is the one place the meta-subject can lose a reader.
+- **The worked example lives in the consuming repo, not here.** A benchmark
+  is meaningless without the graph it benchmarks, and this schema has no
+  domain graph — its instances are always a consumer's. So the demand driver
+  for every class and slot is the wine benchmark authored in
+  `ontology-authoring-template`, consumed during development with
+  `path = "../ontology-authoring-template"` and by version at release.
+  Appendix A embeds it as a listing frozen from that repo; `mdbook-listings
+  verify` checks frozen bytes against the manifest, never the original
+  source, so CI stays green without it.
+
+  **Placeholder anchors are not an acceptable substitute.** An invented IRI
+  can be minted to justify whatever slot was already wanted, which is the
+  reasoning-backward failure the method exists to prevent. Illustrative
+  snippets in spec prose may use them; nothing that drives the model may.
 - **`spike/` is a reference target, not a source.** It holds an earlier
   throwaway build of the schema and is gitignored. Chapters may consult it
   to see where the design landed, but nothing is copied from it wholesale —
@@ -131,9 +145,11 @@ enabled it becomes a required preprocessor, so also add it to CI.
   schema, freeze a new listing tag in the same change so the prose and
   the snapshot stay consistent.
 - **Demand-driven dogfood.** The schema grows because the worked
-  example (Appendix A) needs it, not speculatively. The worked example
+  example needs it, not speculatively. The worked example
   should drive the build from Step 1 — if a class or slot only earns
-  its keep at validation (Step 7), that is a smell.
+  its keep at validation (Step 7), that is a smell. Here the worked
+  example is cross-repo; see "The worked example lives in the consuming
+  repo" above.
 - **External grounding is by URI, not import.** BFO/CCO/etc. are
   referenced via `subclass_of` + prefixes, *not* LinkML `imports:`
   (which is for other LinkML schemas — only `linkml:types` is
