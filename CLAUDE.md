@@ -157,6 +157,16 @@ enabled it becomes a required preprocessor, so also add it to CI.
   its keep at validation (Step 7), that is a smell. Here the worked
   example is cross-repo; see "The worked example lives in the consuming
   repo" above.
+- **Schema comments explain why, not what.** The YAML is self-documenting
+  about what a line does: a prefix named `linkml` obviously declares the
+  LinkML metamodel, and an empty `classes:` is obviously empty. A comment
+  earns its place only when it records a decision or heads off a plausible
+  mistake — why BFO and CCO are reached by URI rather than added to
+  `imports:`, for instance. This bites harder here than in ordinary source,
+  because the schema ships as a frozen listing: every comment costs lines in
+  a listing that exists to show something else, and the scaffold's own
+  fill-in-the-blank comments are meant to be deleted once discharged (wine
+  keeps none of them).
 - **External grounding is by URI, not import.** BFO/CCO/etc. are
   referenced via `subclass_of` + prefixes, *not* LinkML `imports:`
   (which is for other LinkML schemas — only `linkml:types` is

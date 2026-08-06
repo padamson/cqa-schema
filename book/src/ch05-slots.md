@@ -29,7 +29,14 @@ SECTION OUTLINE:
   - Cardinality derived from the competency questions.
 
 CARRIED-IN DEFERRALS -> this step:
-  (land deferrals from earlier chapters here)
+  [ ] Keep the negative case expressible. For a "nothing on record"
+      answer (CQ-wine 3) the records a question names are not evidence
+      *for* the answer — they are the ground the absence is observed
+      against, and they must still be retrieved or an evaluator cannot
+      tell a correct negative from a system that retrieved nothing and
+      guessed. Whatever the retrieval slot is called, it has to carry
+      both readings. (source: ch01, "Testing the questions against a
+      real set")
 
 AUTHORING CHECKLIST:
   [ ] freeze a new cqa-yaml-vN listing tag in the same change

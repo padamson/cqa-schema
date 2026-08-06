@@ -50,7 +50,13 @@ SECTION OUTLINE:
     a bare edge cannot.
 
 CARRIED-IN DEFERRALS -> this step:
-  (land deferrals from earlier chapters here)
+  [ ] Re-run ch01's CQ-cqa/CQ-wine cross-check as a real test. ch01 states
+      plainly that its table is a by-eye reading of wine's prose, not a
+      machine check, and promises this step will make the same claims
+      testable: anchors resolve or they do not, and a question either
+      carries the fields its answer kind needs or it fails. Report what
+      the encoding actually found, including any row ch01 got wrong.
+      (source: ch01, "Checking them against a real set")
 
 AUTHORING CHECKLIST:
   [ ] worked example is a LinkML data file under data/, validated by

@@ -29,8 +29,9 @@ scratch.
 ## Competency questions: CQ-cqa and CQ-wine
 
 N&M's method begins with competency questions. At Step 1 you sketch the
-questions the ontology ought to be able to answer, which is how the domain
-gets bounded; at Step 7 you check whether it can, which is the litmus test.
+questions the ontology ought to be able to answer, and that sketch is what
+bounds the domain. At Step 7 you check whether it can answer them. That check
+is the litmus test.
 
 <a id="jargon-competency-question"></a>
 

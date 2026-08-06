@@ -1,7 +1,7 @@
 version = 1
 
-# Frozen mdbook-listings snapshots are appended here as each chapter
-# advances the schema. Freeze from the book root, e.g.:
-#   cd book && mdbook-listings freeze ../schema/cqa.yaml \
-#     --tag cqa-yaml-v1 --force
-# Ships empty — no chapter has frozen a listing yet.
+[[listing]]
+tag = "cqa-yaml-v1"
+source = "../schema/cqa.yaml"
+frozen = "src/listings/cqa-yaml-v1.yaml"
+sha256 = "fa7936430f0bdc1efb5cf443e3f730deb35f37a9ddfc0be7ff3d639b86609698"

@@ -27,7 +27,14 @@ SECTION OUTLINE:
   - The grounding pattern (subclass_of to the external URI).
 
 CARRIED-IN DEFERRALS -> this step:
-  (land deferrals from earlier chapters here)
+  [ ] Decide whether a question can anchor to a *schema element* rather
+      than to a record. CQ-wine 1 ("which characteristics should I
+      consider?") is answered by wine's schema, not by anything in its
+      graph, so a record-anchored benchmark cannot express it. Either
+      the classes grow a way to name a T-box element, or such questions
+      are declared out of scope and the book says so plainly. Do not
+      leave it silently uncovered. (source: ch01, "Testing the questions
+      against a real set")
 
 AUTHORING CHECKLIST:
   [ ] freeze a new cqa-yaml-vN listing tag in the same change

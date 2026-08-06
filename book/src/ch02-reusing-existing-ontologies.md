@@ -33,7 +33,20 @@ SECTION OUTLINE:
   - The grounding-by-URI pattern (prefixes manifest; never imports:).
 
 CARRIED-IN DEFERRALS -> this step:
-  (land deferrals from Chapter 1 here)
+  [ ] Convert the plain `# Only linkml:types is imported...` comment above
+      `imports:` in schema/cqa.yaml into a `# CALLOUT:` marker, and expand
+      the reasoning into this chapter's prose: why `imports:` is reserved
+      for other LinkML schemas, what `subclass_of` to an external IRI
+      asserts, and why not `class_uri`. The decision is Step 2's subject,
+      so it is explained here rather than at Step 1, where the comment
+      currently just states the rule. Re-freeze after the change.
+      (source: ch01 review — the comment is the one prose comment that
+      survived the "why, not what" trim, and it wants prose behind it)
+
+  NOTE: an unreferenced `# CALLOUT:` marker does NOT fail the build, but it
+  does render a badge with hover text that no prose picks up (verified
+  2026-08-05). So add the marker in the same change as the {{#callout}},
+  not before.
 
 AUTHORING CHECKLIST:
   [ ] IF this step changed the schema, freeze a new cqa-yaml-vN tag
