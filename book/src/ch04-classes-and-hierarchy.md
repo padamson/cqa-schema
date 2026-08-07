@@ -27,6 +27,14 @@ SECTION OUTLINE:
   - The grounding pattern (subclass_of to the external URI).
 
 CARRIED-IN DEFERRALS -> this step:
+  [ ] Apply ch02's reuse table. Attach `subclass_of: cco:ont00000958`
+      to the benchmark-item and benchmark-set classes, and the EARL
+      alignments as `close_mappings` (earl:TestCase on the item,
+      earl:TestRequirement on the set). ch02 committed to those
+      strengths on the strength of the definitions; if a grounding does
+      not fit once there is a real class under it, say so here rather
+      than quietly using a different one — ch02 ends by promising
+      exactly that. (source: ch02, "What Step 2 produced")
   [ ] Decide whether a question can anchor to a *schema element* rather
       than to a record. CQ-wine 1 ("which characteristics should I
       consider?") is answered by wine's schema, not by anything in its
