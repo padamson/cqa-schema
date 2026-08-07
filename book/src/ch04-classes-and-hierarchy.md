@@ -27,6 +27,14 @@ SECTION OUTLINE:
   - The grounding pattern (subclass_of to the external URI).
 
 CARRIED-IN DEFERRALS -> this step:
+  [ ] Answer CQ-cqa 7 ("what identifies a benchmark, and what
+      distinguishes one benchmark's questions from another's?"). The
+      benchmark has to be a named thing rather than a bare container:
+      two domains will both write `cq-01`, and those must not merge
+      into one record when both benchmarks are loaded. Decide the class
+      here; the id mechanics may land in Step 5. (source: ch03, "A term
+      with no question behind it" — the question was added at Step 3
+      because no ch01 question asked for it)
   [ ] Apply ch02's reuse table. Attach `subclass_of: cco:ont00000958`
       to the benchmark-item and benchmark-set classes, and the EARL
       alignments as `close_mappings` (earl:TestCase on the item,

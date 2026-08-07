@@ -113,8 +113,8 @@ choosing a wine?" is answered by wine's *schema* (the slots a `Wine`
 declares), not by any record in its graph. A benchmark built out of record
 references cannot express it, because there are no records to retrieve.
 Either the vocabulary grows a way to point at a schema element, or questions
-of that kind are out of scope and the book says so. Step 4 decides, once
-there are classes to decide with.
+of that kind are out of scope and the book says so. We decide at Step 4,
+once there are classes to decide with.
 
 **The negative case constrains the model more than expected.** A correct
 answer of "nothing on record" still has to retrieve something: the wine and

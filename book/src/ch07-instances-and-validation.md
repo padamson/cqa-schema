@@ -57,6 +57,12 @@ CARRIED-IN DEFERRALS -> this step:
       carries the fields its answer kind needs or it fails. Report what
       the encoding actually found, including any row ch01 got wrong.
       (source: ch01, "Checking them against a real set")
+  [ ] Run the litmus over **seven** CQ-cqa, not six. ch01 sketched six;
+      ch03 added CQ-cqa 7 (what identifies a benchmark) after the term
+      brainstorm found a term no question asked for. The seventh is the
+      one most likely to be under-tested, since it is about the set
+      rather than about any record in it. (source: ch03, "A term with
+      no question behind it")
 
 AUTHORING CHECKLIST:
   [ ] worked example is a LinkML data file under data/, validated by
