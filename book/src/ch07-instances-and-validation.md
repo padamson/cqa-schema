@@ -57,12 +57,15 @@ CARRIED-IN DEFERRALS -> this step:
       carries the fields its answer kind needs or it fails. Report what
       the encoding actually found, including any row ch01 got wrong.
       (source: ch01, "Checking them against a real set")
-  [ ] Run the litmus over **seven** CQ-cqa, not six. ch01 sketched six;
+  [ ] Run the litmus over **eight** CQ-cqa, not six. ch01 sketched six;
       ch03 added CQ-cqa 7 (what identifies a benchmark) after the term
-      brainstorm found a term no question asked for. The seventh is the
-      one most likely to be under-tested, since it is about the set
-      rather than about any record in it. (source: ch03, "A term with
-      no question behind it")
+      brainstorm found a term no question asked for, and ch04 added
+      CQ-cqa 8 (which schema, version and dataset the anchors are valid
+      against) after asking whether the target deserved a class. Both
+      late arrivals are about the benchmark as a whole rather than any
+      record in it, which is what makes them the two most likely to be
+      under-tested. (source: ch03, "A term with no question behind it";
+      ch04, "A target is not a class")
 
 AUTHORING CHECKLIST:
   [ ] worked example is a LinkML data file under data/, validated by

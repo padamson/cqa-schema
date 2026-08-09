@@ -37,6 +37,45 @@ CARRIED-IN DEFERRALS -> this step:
       guessed. Whatever the retrieval slot is called, it has to carry
       both readings. (source: ch01, "Testing the questions against a
       real set")
+  [ ] Carry CQ-cqa 7 into the slots. ch04 made `Benchmark` a class so
+      one benchmark's `cq-01` and another's stay distinct, and left the
+      mechanism here: which slot bears the identifier, and what that
+      does to the identifiers of the questions beneath it. Note the
+      charter's rule — the root's id is `identifier: true` (globally one
+      thing) and a question's id is `key: true` (unique within its
+      benchmark), which is what makes questions mint beneath their
+      benchmark. panschema honours `key` set through `slot_usage` as of
+      `fdf7632`, so a shared `id` slot refined per class works.
+      (source: ch04, "Why the benchmark is a class")
+  [ ] Decide whether `answer_kind` is single- or multivalued. Choosing
+      kinds for wine's questions turned up a question that is genuinely
+      two kinds at once: CQ-wine 7 ("what were good vintages for Napa
+      Zinfandel?") is an `attribution` — the answer is worse without
+      "the regional vintage chart rates 2018 good" — and also a
+      `comparison`, since 2018 `good` against 2017 `average` is what
+      makes a vintage good. CQ-wine 4 has the same shape at lower
+      stakes. ch03 wrote "an evaluator switches on the kind", which
+      implies single-valued. Single is defensible if the rule is "name
+      the strictest check", but then that rule has to be in the slot's
+      description rather than left to the author to guess.
+      (source: wine's answer-kind selection, 2026-08-07)
+  [ ] Answer CQ-cqa 8 with slots on `Benchmark`: which schema, at which
+      version, and which dataset the anchors are valid against. ch04
+      ruled out a target class (no identity apart from the benchmark
+      naming it) and left the slots here. Both failure modes are real —
+      wine's later release moves the judgment IRIs that three of its
+      questions must cite, and wine's four-record preview is a strict
+      subset of its thirty-seven-record worked example, so
+      `wine:bordeaux-wine` resolves against one dataset and not the
+      other with schema and version identical. Decide whether the
+      version is the schema's or the dataset's, since they can differ.
+      (source: ch04, "A target is not a class")
+  [ ] Discharge the island check ch04 deferred. With the anchor and
+      citation slots in place the class graph should have edges, and
+      every class should be reachable — `CompetencyQuestionAnswer` to
+      `DomainRecord`, `Benchmark` to its questions. A node still
+      disconnected at the end of Step 5 is a bug to explain or remove.
+      (source: ch04, "The hierarchy, such as it is")
 
 AUTHORING CHECKLIST:
   [ ] freeze a new cqa-yaml-vN listing tag in the same change
