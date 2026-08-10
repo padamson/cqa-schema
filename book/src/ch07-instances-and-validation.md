@@ -66,6 +66,15 @@ CARRIED-IN DEFERRALS -> this step:
       record in it, which is what makes them the two most likely to be
       under-tested. (source: ch03, "A term with no question behind it";
       ch04, "A target is not a class")
+  [ ] Re-check that slot types are enforced. Six of eight datatype slots
+      take their type from `default_range` rather than an explicit
+      `range:`, and panschema currently resolves that in the JSON Schema
+      writer only — RDF omits `rdfs:range`, SHACL omits `sh:datatype`,
+      and `validate` accepts `question: 42`. The convention is
+      deliberate and the gap is filed upstream, so once a panschema
+      build lands with it fixed, add a wrong-typed record to the
+      negative fixtures and confirm it is rejected.
+      (source: ch05, and the schema-authoring convention in CLAUDE.md)
 
 AUTHORING CHECKLIST:
   [ ] worked example is a LinkML data file under data/, validated by

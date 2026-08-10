@@ -26,7 +26,30 @@ SECTION OUTLINE:
   - Property characteristics (symmetric, transitive, ...).
 
 CARRIED-IN DEFERRALS -> this step:
-  (land deferrals from earlier chapters here)
+  [ ] Enforce "every citation is also an anchor", or record why not.
+      ch05 states it as a fact in `expected_citations`' description and
+      nothing checks it, so a benchmark can cite a record it never
+      required retrieving — which would pass validation and be
+      meaningless to an evaluator. A class-level `rules` block is the
+      candidate (panschema enforces rules natively as of `6339b40`);
+      the alternative is to leave it to the reference validator and say
+      so. (source: ch05, "The anchors carry two readings")
+  [ ] Reconsider the three target slots if the target dataset is
+      identified. ch05 records target_schema, target_version and
+      target_dataset because wine's `WineCatalog` is a vessel and its
+      datasets have no IRI to point at. A dataset whose root carries an
+      identifier is a node, and for those a single reference says all
+      three. Do not add a second way to express the same thing on
+      speculation — this is a note for when a real target arrives
+      identified, most likely a schema that already publishes its data
+      for citation. (source: ch05, "What the target should be, and what
+      it is")
+
+  NOTE (verified 2026-08-08, so nobody re-checks it): `answer_kind`
+  needs no `minimum_cardinality`. On a multivalued slot, `required`
+  already rejects an empty list —
+  `answer_kind: []` fails with "required slot `answer_kind` is absent".
+  The citation rule above is a real hole; this one is not.
 
 AUTHORING CHECKLIST:
   [ ] freeze a new cqa-yaml-vN listing tag in the same change

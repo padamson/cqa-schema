@@ -167,6 +167,19 @@ enabled it becomes a required preprocessor, so also add it to CI.
   a listing that exists to show something else, and the scaffold's own
   fill-in-the-blank comments are meant to be deleted once discharged (wine
   keeps none of them).
+- **Declare `default_range`; do not repeat it per slot.** An explicit
+  `range:` appears only where a slot differs from the default — an enum, a
+  class, a `uri`, a number. Stating the default once keeps it from drifting,
+  and a slot list where every string slot repeats `range: string` buries the
+  two or three slots whose range is the interesting part. This is deliberate
+  and differs from wine's style, which declares a range on every slot.
+
+  **Known gap, do not "fix" it by adding ranges back.** panschema currently
+  resolves `default_range` in the JSON Schema writer only: RDF omits
+  `rdfs:range`, SHACL omits `sh:datatype`, and `validate` does not enforce
+  the type, so `question: 42` conforms today. Filed upstream; this repo is
+  holding rather than working around it. If a slot's type looks unenforced,
+  that is the known gap and not a modelling error.
 - **External grounding is by URI, not import.** BFO/CCO/etc. are
   referenced via `subclass_of` + prefixes, *not* LinkML `imports:`
   (which is for other LinkML schemas — only `linkml:types` is

@@ -16,74 +16,203 @@ the class and other items (e.g., the maker of a wine, representing a
 relationship between a wine and a winery, and the grape it is made from).
 ```
 
-<!--
-CHARTER: Give the classes their properties — overwhelmingly N&M's
-fourth kind, relationships to other individuals. Settle the
-per-relation policies (typing, inverses, store-vs-derive, naming) once,
-then walk the relations cluster by cluster.
+Step 4 left four questions open and one check undischarged. This step answers
+all five, so most of the chapter is those decisions rather than a walk
+through the slot list.
 
-SECTION OUTLINE:
-  - The policies (name vs. genericize; inverse; store vs. derive).
-  - Relations (the provenance wiring), walked cluster by cluster.
-  - Ranges for each slot.
-  - Cardinality derived from the competency questions.
+One rule runs underneath them. A slot is required when a competency question
+cannot be answered without it, and optional otherwise; nothing is required
+for tidiness.
 
-CARRIED-IN DEFERRALS -> this step:
-  [ ] Keep the negative case expressible. For a "nothing on record"
-      answer (CQ-wine 3) the records a question names are not evidence
-      *for* the answer — they are the ground the absence is observed
-      against, and they must still be retrieved or an evaluator cannot
-      tell a correct negative from a system that retrieved nothing and
-      guessed. Whatever the retrieval slot is called, it has to carry
-      both readings. (source: ch01, "Testing the questions against a
-      real set")
-  [ ] Carry CQ-cqa 7 into the slots. ch04 made `Benchmark` a class so
-      one benchmark's `cq-01` and another's stay distinct, and left the
-      mechanism here: which slot bears the identifier, and what that
-      does to the identifiers of the questions beneath it. Note the
-      charter's rule — the root's id is `identifier: true` (globally one
-      thing) and a question's id is `key: true` (unique within its
-      benchmark), which is what makes questions mint beneath their
-      benchmark. panschema honours `key` set through `slot_usage` as of
-      `fdf7632`, so a shared `id` slot refined per class works.
-      (source: ch04, "Why the benchmark is a class")
-  [ ] Decide whether `answer_kind` is single- or multivalued. Choosing
-      kinds for wine's questions turned up a question that is genuinely
-      two kinds at once: CQ-wine 7 ("what were good vintages for Napa
-      Zinfandel?") is an `attribution` — the answer is worse without
-      "the regional vintage chart rates 2018 good" — and also a
-      `comparison`, since 2018 `good` against 2017 `average` is what
-      makes a vintage good. CQ-wine 4 has the same shape at lower
-      stakes. ch03 wrote "an evaluator switches on the kind", which
-      implies single-valued. Single is defensible if the rule is "name
-      the strictest check", but then that rule has to be in the slot's
-      description rather than left to the author to guess.
-      (source: wine's answer-kind selection, 2026-08-07)
-  [ ] Answer CQ-cqa 8 with slots on `Benchmark`: which schema, at which
-      version, and which dataset the anchors are valid against. ch04
-      ruled out a target class (no identity apart from the benchmark
-      naming it) and left the slots here. Both failure modes are real —
-      wine's later release moves the judgment IRIs that three of its
-      questions must cite, and wine's four-record preview is a strict
-      subset of its thirty-seven-record worked example, so
-      `wine:bordeaux-wine` resolves against one dataset and not the
-      other with schema and version identical. Decide whether the
-      version is the schema's or the dataset's, since they can differ.
-      (source: ch04, "A target is not a class")
-  [ ] Discharge the island check ch04 deferred. With the anchor and
-      citation slots in place the class graph should have edges, and
-      every class should be reachable — `CompetencyQuestionAnswer` to
-      `DomainRecord`, `Benchmark` to its questions. A node still
-      disconnected at the end of Step 5 is a bug to explain or remove.
-      (source: ch04, "The hierarchy, such as it is")
+{{#diff cqa-yaml-v3 cqa-yaml-v4 context=7 caption="Step 5: the slots"}}
 
-AUTHORING CHECKLIST:
-  [ ] freeze a new cqa-yaml-vN listing tag in the same change
-  [ ] {{#diff}} from the prior tag, with context=N sized so each hunk
-      shows its enclosing class/section header (note: stripped # CALLOUT
-      lines consume context, so add a couple extra)
-  [ ] jargon blocks at first use; every # CALLOUT gets a {{#callout}}
-  [ ] LESSON (Step 5): derive cardinality/required from the CQs;
-      lenient by default (PROV-O stance).
-  [ ] demand check: what does the worked example need at this step?
--->
+## Identity: one slot, refined per class
+
+CQ-cqa 7 asks what distinguishes one benchmark's questions from another's.
+ch04 made `Benchmark` a class; the mechanism is here, and it turns on the
+difference between LinkML's `identifier` and its `key`, which look
+interchangeable but are not.
+
+<a id="jargon-identifier-key"></a>
+
+```admonish note title="Jargon: identifier and key"
+**`identifier: true`** marks a slot whose value is unique *globally* — the
+record is the same thing wherever it appears, and its IRI is minted in the
+schema's namespace.
+
+**`key: true`** marks a slot whose value is unique *within its container* —
+the record belongs to the thing holding it, and its IRI is minted beneath
+the container's own IRI.
+```
+
+A benchmark is one thing everywhere, so its `id` is an `identifier`. A
+question belongs to its benchmark, so its `id` is a `key`. Both classes use
+the same `id` slot {{#callout scoped}}, refined on
+`CompetencyQuestionAnswer` through `slot_usage`.
+
+The result is what CQ-cqa 7 asked for. Two benchmarks each holding a `cq-01`
+produce:
+
+```turtle
+<https://w3id.org/cqa/alpha/cq-01>
+<https://w3id.org/cqa/beta/cq-01>
+```
+
+Distinct records, from identical local identifiers, because each mints
+beneath the benchmark that holds it.
+
+`DomainRecord` takes the plain `identifier` form. Its instances are records
+in someone else's graph, named by absolute IRIs, and nothing here mints them.
+
+## The anchors carry two readings
+
+In ch01 we found that a correct answer of "nothing on record" still has to
+retrieve something — the records whose *missing* connection is the answer.
+Without them an evaluator cannot tell a correct negative from a system that
+retrieved nothing at all.
+
+That constrains what this slot can be called. A name like `evidence` would be
+wrong for the negative case, where the records are not evidence for the
+answer but the ground its absence is observed against. `expected_anchors`
+{{#callout anchors}} names what retrieval must reach and stays silent about
+why, so one slot covers both readings.
+
+The description carries the rest, because a name cannot. An author writing a
+closed-world negative needs to be told that the slot is not optional for
+them, and that leaving it empty makes their question unevaluable rather than
+lenient.
+
+`expected_citations` is the narrower set: the records an answer must rest on,
+always among the anchors. Retrieving a record is not the same as answering
+from it, and only the second belongs in a citation. Empty is a real value —
+a closed-world negative cites nothing, because there is nothing to cite.
+
+## `answer_kind` is multivalued
+
+ch03 wrote that an evaluator "switches on the kind", which assumes a question
+has exactly one. Choosing kinds for CQ-wine — the seven competency questions
+of the wine ontology, this book's worked example, published with the
+[ontology-authoring-template](https://github.com/padamson/ontology-authoring-template) — showed that assumption is wrong.
+
+CQ-wine 7 asks what were good vintages for Napa Zinfandel. The answer rests
+on a vintage chart's verdict, so dropping the source makes it worse: that is
+`attribution`. It also reads 2018 `good` against 2017 `average`, and that
+contrast is what makes a vintage a good one: that is `comparison`. Both
+descriptions are accurate, and neither is a stretch to make the other fit.
+
+Forcing a single value would need a tie-break rule, and there is no honest
+one. "Name the strictest check" sounds decisive until you try to rank
+`attribution` against `comparison`, which measure different things.
+
+So the slot is multivalued {{#callout kinds}}, and every kind named is a
+check that must pass. That changes what ch03 said. Later steps learn things
+earlier steps could not, so ch03 stays as written and the change is recorded
+here.
+
+## The target takes four slots
+
+CQ-cqa 6 asked which graph a benchmark is asked against. CQ-cqa 8 is that
+question made precise, and ch04 answered it in three parts: which schema, at
+which version, and which dataset. At Step 5 we found a fourth part.
+
+Those three assume a schema and the data conforming to it move together.
+Sometimes they do. A schema published together with its own curated datasets
+releases them under one version, and that single version number describes
+both the model and the records.
+
+Sometimes they do not, and this is the ordinary case for anyone building on
+someone else's published schema. Their data lives in their own repository and
+moves on their own cadence, so the schema's version says nothing about which
+records exist in their graph. The two versions are independent, and CQ-cqa 8
+needs a fourth answer: at which version of that dataset.
+
+Here they are as slots on `Benchmark` {{#callout target}}.
+
+<a id="jargon-dataset"></a>
+
+```admonish note title="Jargon: dataset"
+A **dataset** is one instance graph — a body of records conforming to a
+schema. One schema can have several. Wine publishes a four-record teaching
+preview and a thirty-seven-record worked example, both conforming to
+`wine.yaml`, and they do not hold the same records.
+
+A dataset is what a benchmark is asked against. The schema matters because
+it determines what IRI each record gets; the dataset determines which
+records exist to be anchored at all.
+```
+
+`target_schema` names the vocabulary the records conform to, and
+`target_schema_version` which release of it, since a release can change how
+identifiers are minted. `target_dataset` names which body of records the
+anchors resolve in, and `target_dataset_version` which state of it, since
+records can be added, removed or corrected without the schema moving at
+all.
+
+Step 4 left one part of this undecided: whether the version recorded is the
+schema's or the dataset's. It is both, in separate slots, for the reason
+above.
+
+The dataset half matters more than it first appears. A record that disappears
+breaks an anchor loudly. A record that *changes* breaks nothing visible.
+Correct a vintage assessment's verdict from `good` to
+`average` and every anchor in the question about good vintages still
+resolves, every citation still resolves, validation passes, and the ground
+truth is quietly false. Recording the dataset's version is what lets that be
+noticed at all.
+
+Two things it does not do. It does not detect drift: an evaluator has to
+compare the version recorded here against the version it actually read, and
+nothing in this schema makes it. And it has nothing to say for a benchmark
+aimed at a moving branch rather than a release, where there is no version to
+record and no promise that anything holds still.
+
+## Four slots, two of them often redundant
+
+We considered making `target_schema` and `target_schema_version` optional. A
+benchmark published alongside the schema it targets already carries both
+facts: one package, one version. Wine's benchmark will ship beside
+`wine.yaml`, and for it those two slots restate what the package says.
+
+They are required anyway, and so is `target_dataset_version`. A benchmark
+should be readable without knowing where it was published. Third-party
+publishing decides it: someone benchmarking a graph they do not own has no
+shared package to appeal to, and neither does anyone reading that benchmark
+afterwards. Requiring all four makes every benchmark state its target in
+full.
+
+The cost is redundancy, and it is worth naming rather than explaining away.
+When a benchmark, its example instance graph, and the schema all move on one
+version, `target_schema_version` and `target_dataset_version` hold the same
+string as each other and as the package, and a reader could have derived
+both. We overspecify on purpose: a fact written in the record survives the
+record being moved, and a derived one does not.
+
+Two of the four are not redundant in any arrangement. `target_dataset` is
+needed because one schema can have several graphs. `target_schema` is needed
+because the anchors are IRIs in the schema's base namespace, so holding it
+lets a tool check that a benchmark's anchors belong to the schema it claims,
+using nothing but the benchmark.
+
+## What this would look like if datasets were addressable
+
+Four slots is a fallback. If a target graph were an identified resource — an
+IRI resolving to something that declares its own schema and version — a
+benchmark would name it once and stop, because those are facts about the
+dataset rather than about the benchmark.
+
+A dataset becomes a node with an IRI as soon as its root class carries an
+identifier. `Benchmark` carries one, so every benchmark is already such a
+resource. Wine's `WineCatalog` deliberately is not: its two curated graphs
+share records and are meant to merge, and identifying the root would scope
+them apart. So these slots say in the benchmark what the dataset cannot say
+about itself, and when a target does arrive identified, one reference should
+replace the four. That change is in how data is published, not in how
+benchmarks are written.
+
+## The island check
+
+Every class in the generated graph is reachable:
+`CompetencyQuestionAnswer` reaches `DomainRecord` through the anchor and
+citation slots, and `Benchmark` reaches `CompetencyQuestionAnswer` through
+the questions it holds. No class sits alone, so there is nothing here to
+explain or remove.
