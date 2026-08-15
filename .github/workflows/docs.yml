@@ -79,15 +79,14 @@ jobs:
 
       - name: Install panschema binaries from main
         if: steps.cache-panschema.outputs.cache-hit != 'true'
+        # One install, two binaries: the `panschema` crate ships both
+        # `panschema` and `mdbook-panschema`. Installing the preprocessor
+        # separately fails — there is no `mdbook-panschema` crate to find.
         run: |
           cargo install --git https://github.com/padamson/panschema \
             --rev ${{ steps.panschema.outputs.sha }} \
             --locked --force \
             panschema
-          cargo install --git https://github.com/padamson/panschema \
-            --rev ${{ steps.panschema.outputs.sha }} \
-            --locked --force \
-            mdbook-panschema
 
       # --- mdbook + preprocessors ---
 
