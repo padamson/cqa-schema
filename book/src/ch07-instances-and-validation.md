@@ -66,14 +66,24 @@ CARRIED-IN DEFERRALS -> this step:
       record in it, which is what makes them the two most likely to be
       under-tested. (source: ch03, "A term with no question behind it";
       ch04, "A target is not a class")
+  [ ] Confirm the target still needs four slots when wine is encoded.
+      ch05 recorded target_schema, target_schema_version, target_dataset
+      and target_dataset_version because wine's `WineCatalog` is a vessel
+      whose graphs deliberately carry no identifier, so the benchmark has
+      to state what the dataset cannot say about itself. ch06 could not
+      settle it — no facet expresses "these four collapse to one" — so
+      the check belongs here, where a real target is encoded for the
+      first time. If wine's catalog turns out to carry an identifier, or
+      gains one, say so: a single reference then replaces the four, and
+      the redundancy ch05 accepted on purpose stops being worth its cost.
+      (source: ch05, "What the target should be, and what it is";
+      re-deferred from ch06, "What Step 6 could not settle")
   [ ] Re-check that slot types are enforced. Six of eight datatype slots
       take their type from `default_range` rather than an explicit
-      `range:`, and panschema currently resolves that in the JSON Schema
-      writer only — RDF omits `rdfs:range`, SHACL omits `sh:datatype`,
-      and `validate` accepts `question: 42`. The convention is
-      deliberate and the gap is filed upstream, so once a panschema
-      build lands with it fixed, add a wrong-typed record to the
-      negative fixtures and confirm it is rejected.
+      `range:`, which is deliberate. Add a wrong-typed record to the
+      negative fixtures and confirm `question: 42` is rejected — and
+      that it is rejected in every output that should carry the type,
+      not only the one that happens to.
       (source: ch05, and the schema-authoring convention in CLAUDE.md)
 
 AUTHORING CHECKLIST:
