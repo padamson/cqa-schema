@@ -113,9 +113,6 @@ narrow `id` to lower-case words joined by hyphens {{#callout minted}}.
 `DomainRecord` gets no pattern: its identifiers are absolute IRIs from the
 graph being evaluated, which the pattern would reject.
 
-This is what `slot_usage` is for — one slot, narrowed differently per class,
-and left alone where neither narrowing fits.
-
 ## The cardinality sweep
 
 We added no cardinality facets. Three were considered.

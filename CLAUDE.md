@@ -173,13 +173,15 @@ enabled it becomes a required preprocessor, so also add it to CI.
   and a slot list where every string slot repeats `range: string` buries the
   two or three slots whose range is the interesting part. This is deliberate
   and differs from wine's style, which declares a range on every slot.
-
-  **Known gap, do not "fix" it by adding ranges back.** panschema currently
-  resolves `default_range` in the JSON Schema writer only: RDF omits
-  `rdfs:range`, SHACL omits `sh:datatype`, and `validate` does not enforce
-  the type, so `question: 42` conforms today. Filed upstream; this repo is
-  holding rather than working around it. If a slot's type looks unenforced,
-  that is the known gap and not a modelling error.
+- **panschema is a dependency we own, not a constraint to design around.**
+  The book takes its capabilities for granted. It never cites panschema
+  issue numbers, never reports that a feature is missing, and never explains
+  a workaround in prose: when a schema needs something panschema cannot yet
+  do, block here, implement it there, and come back. Naming a capability the
+  work *used* is fine ("every CCO IRI was resolved through panschema's label
+  lookup"); narrating what it lacked is not, and neither is letting a
+  chapter read as though the tooling shaped the model. The same holds for
+  scaffold TODOs — write the check to perform, not the gap to wait on.
 - **External grounding is by URI, not import.** BFO/CCO/etc. are
   referenced via `subclass_of` + prefixes, *not* LinkML `imports:`
   (which is for other LinkML schemas — only `linkml:types` is
