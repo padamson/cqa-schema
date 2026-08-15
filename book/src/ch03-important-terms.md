@@ -68,11 +68,12 @@ CQ-wine proposes two terms that the questions above do not.
 
 **Source** appears throughout CQ-wine 4 and CQ-wine 7 ("what were good
 vintages for Napa Zinfandel?") — the sommelier, the vintage chart, the
-confidence attached to each. It does not become a cqa term. The
-source is a property of the wine record being cited, and it lives in wine's
-schema. cqa needs only to say *which record must be cited*; whatever
-attribution that record carries is the domain's business. This is the ch01
-scoping decision doing its work: the graph is named, not modeled.
+confidence attached to each. It does not become a cqa term. The source is a
+property of the wine record being cited, and it lives in wine's schema. cqa
+needs only to say *which record must be cited*; whatever attribution that
+record carries is the domain's business. This is the [Chapter
+1](ch01-domain-and-scope.md) scoping decision doing its work: the graph is
+named, not modeled.
 
 **Rationale** proposes itself the same way through CQ-wine 4 and CQ-wine 5
 ("which characteristics of a wine affect its appropriateness for a dish?"),
@@ -82,8 +83,10 @@ and is declined for the same reason.
 
 **Benchmark** is the term for a set of these records taken together — the
 thing a consumer authors, names, and hands to an evaluation tool. It is in
-ch01's domain statement, in the ch02 reuse table as `earl:TestRequirement`, and
-it is the word this book has used since the Introduction.
+Chapter 1's domain statement, in the [Chapter
+2](ch02-reusing-existing-ontologies.md) reuse table as
+`earl:TestRequirement`, and it is the word this book has used since the
+Introduction.
 
 No competency question asks anything about it. CQ-cqa 1 through 5 are all
 about a single record. CQ-cqa 6 mentions a benchmark only to ask which graph
@@ -94,7 +97,7 @@ That gap is not cosmetic. Two domains will both write `cq-01`, and those are
 different questions that must not merge into one record when their benchmarks
 are loaded together. Keeping them apart requires the benchmark to be a named
 thing in its own right rather than a bare container, which is a modeling
-requirement that no question in ch01 asks for.
+requirement that no question in Chapter 1 asks for.
 
 So the question list was incomplete. Adding it:
 
@@ -103,26 +106,26 @@ So the question list was incomplete. Adding it:
 
 This is Step 1 work arriving at Step 3, which N&M anticipate — they call the
 competency questions a sketch, and the term brainstorm is what catches where
-the sketch was thin. ch01 stays as written, because the book is a log rather
-than a summary. The question is recorded here, where we found it, and Step 7
-tests all seven.
+the sketch was thin. Chapter 1 stays as written, because the book is a log
+rather than a summary. The question is recorded here, where we found it, and
+Step 7 tests all seven.
 
 ## Terms we explain but do not model
 
 N&M's list includes terms to *explain to a user* as well as terms to make
 statements about. Three sit in that first group and nowhere in the schema.
 
-**Evaluator** is whatever runs a benchmark. CQ-cqa 5 mentions one, and ch01
-put it out of scope: cqa says what a correct answer must contain, not what
-software checks it.
+**Evaluator** is whatever runs a benchmark. CQ-cqa 5 mentions one, and
+Chapter 1 put it out of scope: cqa says what a correct answer must contain,
+not what software checks it.
 
 **Retrieval** is how a system reaches the anchors. cqa specifies which records
 must be reached, never how, so that a benchmark stays neutral about the
 implementation being tested.
 
-**Evaluation result** is a system's scored attempt. ch01 excluded it, and in
-ch02 we found that EARL agrees, modeling `earl:Assertion` separately from its
-test criteria.
+**Evaluation result** is a system's scored attempt. Chapter 1 excluded it,
+and in Chapter 2 we found that EARL agrees, modeling `earl:Assertion`
+separately from its test criteria.
 
 ## What Step 3 produced
 
@@ -130,5 +133,5 @@ No schema change. The terms become classes and slots in Steps 4 and 5, and
 until then a list in prose is the whole deliverable.
 
 What did change is the question list, which is one longer than it was in
-ch01. In Step 4, we build classes for these terms, and the first thing we have
-to decide is which of them are classes at all.
+Chapter 1. In Step 4, we build classes for these terms, and the first thing
+we have to decide is which of them are classes at all.

@@ -29,11 +29,9 @@ for tidiness.
 ## Identity: one slot, refined per class
 
 CQ-cqa 7 asks what distinguishes one benchmark's questions from another's.
-ch04 made `Benchmark` a class; the mechanism is here, and it turns on the
-difference between LinkML's `identifier` and its `key`, which look
-interchangeable but are not.
-
-<a id="jargon-identifier-key"></a>
+[Chapter 4](ch04-classes-and-hierarchy.md) made `Benchmark` a class; the
+mechanism is here, and it turns on the difference between LinkML's
+`identifier` and its `key`, which look interchangeable but are not.
 
 ```admonish note title="Jargon: identifier and key"
 **`identifier: true`** marks a slot whose value is unique *globally* — the
@@ -66,10 +64,10 @@ in someone else's graph, named by absolute IRIs, and nothing here mints them.
 
 ## The anchors carry two readings
 
-In ch01 we found that a correct answer of "nothing on record" still has to
-retrieve something — the records whose *missing* connection is the answer.
-Without them an evaluator cannot tell a correct negative from a system that
-retrieved nothing at all.
+In [Chapter 1](ch01-domain-and-scope.md) we found that a correct answer of
+"nothing on record" still has to retrieve something — the records whose
+*missing* connection is the answer. Without them an evaluator cannot tell a
+correct negative from a system that retrieved nothing at all.
 
 That constrains what this slot can be called. A name like `evidence` would be
 wrong for the negative case, where the records are not evidence for the
@@ -89,10 +87,12 @@ a closed-world negative cites nothing, because there is nothing to cite.
 
 ## `answer_kind` is multivalued
 
-ch03 wrote that an evaluator "switches on the kind", which assumes a question
-has exactly one. Choosing kinds for CQ-wine — the seven competency questions
-of the wine ontology, this book's worked example, published with the
-[ontology-authoring-template](https://github.com/padamson/ontology-authoring-template) — showed that assumption is wrong.
+[Chapter 3](ch03-important-terms.md) wrote that an evaluator "switches on
+the kind", which assumes a question has exactly one. Choosing kinds for
+CQ-wine — the seven competency questions of the wine ontology, this book's
+worked example, published with the
+[ontology-authoring-template](https://github.com/padamson/ontology-authoring-template)
+— showed that assumption is wrong.
 
 CQ-wine 7 asks what were good vintages for Napa Zinfandel. The answer rests
 on a vintage chart's verdict, so dropping the source makes it worse: that is
@@ -105,15 +105,16 @@ one. "Name the strictest check" sounds decisive until you try to rank
 `attribution` against `comparison`, which measure different things.
 
 So the slot is multivalued {{#callout kinds}}, and every kind named is a
-check that must pass. That changes what ch03 said. Later steps learn things
-earlier steps could not, so ch03 stays as written and the change is recorded
-here.
+check that must pass. That changes what Chapter 3 said. Later steps learn
+things earlier steps could not, so Chapter 3 stays as written and the change
+is recorded here.
 
 ## The target takes four slots
 
 CQ-cqa 6 asked which graph a benchmark is asked against. CQ-cqa 8 is that
-question made precise, and ch04 answered it in three parts: which schema, at
-which version, and which dataset. At Step 5 we found a fourth part.
+question made precise, and Chapter 4 answered it in three parts: which
+schema, at which version, and which dataset. At Step 5 we found a fourth
+part.
 
 Those three assume a schema and the data conforming to it move together.
 Sometimes they do. A schema published together with its own curated datasets
@@ -127,8 +128,6 @@ records exist in their graph. The two versions are independent, and CQ-cqa 8
 needs a fourth answer: at which version of that dataset.
 
 Here they are as slots on `Benchmark` {{#callout target}}.
-
-<a id="jargon-dataset"></a>
 
 ```admonish note title="Jargon: dataset"
 A **dataset** is one instance graph — a body of records conforming to a

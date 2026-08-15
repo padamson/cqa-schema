@@ -27,8 +27,9 @@ they become slots in Step 5.
 name is a decision rather than a description. It names the data you evaluate
 *against*, so a scored attempt at answering stays a separate thing that an
 evaluation run produces. A name like `CompetencyQuestionEval` would have
-claimed the opposite, and ch01 put the scored attempt out of scope precisely
-so one benchmark can outlive many attempts at it.
+claimed the opposite, and [Chapter 1](ch01-domain-and-scope.md) put the
+scored attempt out of scope precisely so one benchmark can outlive many
+attempts at it.
 
 **`Benchmark`** {{#callout set}} is the set of them, and it exists as a class
 because CQ-cqa 7 asked for one.
@@ -56,11 +57,11 @@ in Step 5.
 
 ## The one class we cannot ground
 
-`CompetencyQuestionAnswer` and `Benchmark` both ground in
-`cco:ont00000958`, Information Content Entity, as ch02's reuse table
-committed them to, with the EARL correspondences recorded as
-`skos:closeMatch`. Both fit: a question with its answer is content, and a set
-of them is content too.
+`CompetencyQuestionAnswer` and `Benchmark` both ground in `cco:ont00000958`,
+Information Content Entity, as [Chapter
+2](ch02-reusing-existing-ontologies.md)'s reuse table committed them to,
+with the EARL correspondences recorded as `skos:closeMatch`. Both fit: a
+question with its answer is content, and a set of them is content too.
 
 `DomainRecord` has no `subclass_of` at all, and that absence is the honest
 answer rather than an omission. The reason is what `subclass_of` does once
@@ -95,13 +96,13 @@ introduce an uninstantiated, ungrounded class without explanation.
 
 ## Not every competency question fits a benchmark
 
-In ch01 we found that CQ-wine 1 ("which wine characteristics should I
+In Chapter 1 we found that CQ-wine 1 ("which wine characteristics should I
 consider when choosing a wine?") gets no row in the table, because wine's
 *schema* answers it and no record in wine's graph does. Wine's own chapter 7
-says as much when it answers the question: "the `Wine` class carries `color`,
-`body`, `flavor`, and `sugar`" — the class, before any instance. ch01 left
-the choice to this step: either the classes grow a way to name a schema
-element, or such questions are out of scope.
+says as much when it answers the question: "the `Wine` class carries
+`color`, `body`, `flavor`, and `sugar`" — the class, before any instance.
+Chapter 1 left the choice to this step: either the classes grow a way to
+name a schema element, or such questions are out of scope.
 
 **They are out of scope, and the framework should say so rather than
 half-cover them.**

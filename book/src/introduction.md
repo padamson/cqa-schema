@@ -15,8 +15,6 @@ Core Ontologies (CCO). Grounding is by URI: each class is referenced through
 `subclass_of` and the prefixes, not pulled in with LinkML `imports:` (which
 is reserved for other LinkML schemas).
 
-<a id="jargon-bfo-and-cco"></a>
-
 ```admonish note title="Jargon: BFO and CCO"
 **BFO** (the Basic Formal Ontology, ISO/IEC 21838-2:2020) is a small
 top-level ontology of the most general categories: objects, qualities,
@@ -32,8 +30,6 @@ N&M's method begins with competency questions. At Step 1 you sketch the
 questions the ontology ought to be able to answer, and that sketch is what
 bounds the domain. At Step 7 you check whether it can answer them. That check
 is the litmus test.
-
-<a id="jargon-competency-question"></a>
 
 ```admonish note title="Jargon: competency question"
 A **competency question** is a question the ontology exists to answer.

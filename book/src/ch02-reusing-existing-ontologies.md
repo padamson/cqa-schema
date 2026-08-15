@@ -46,8 +46,6 @@ correspondence is.
 **DCAT** and **PROV-O** were considered and set aside, for reasons in "What
 we are not reusing yet" below.
 
-<a id="jargon-earl"></a>
-
 ```admonish note title="Jargon: EARL"
 **EARL** is a small RDF vocabulary for stating test outcomes: who ran a
 test (`Assertor`), what was tested (`TestSubject`), what it was tested
@@ -60,8 +58,6 @@ Tools Working Group reached the end of its charter, and its
 "fairly complete but at this time there are not sufficient implementations to
 finalize this work." Nothing has superseded it since.
 ```
-
-<a id="jargon-skos"></a>
 
 ```admonish note title="Jargon: SKOS mapping properties"
 **SKOS** is a W3C **Recommendation** (18 August 2009) for publishing
@@ -135,12 +131,13 @@ from an assertion made by people who have never seen this schema.
 `closeMatch` is not transitive, so it cannot chain that way, and the alignment
 stays a statement about exactly the two terms it names.
 
-**The two out-of-scope rows.** ch01 excluded a system's attempt at an answer
-and the graph under evaluation, on the argument that a benchmark should
-outlive many attempts at it. EARL has terms for both, and models them
-separately from its test criteria, so it draws its boundary in the same two
-places. That does not prove ch01's exclusions are correct, but it does mean
-they match an existing vocabulary's rather than only an argument made here.
+**The two out-of-scope rows.** [Chapter 1](ch01-domain-and-scope.md)
+excluded a system's attempt at an answer and the graph under evaluation, on
+the argument that a benchmark should outlive many attempts at it. EARL has
+terms for both, and models them separately from its test criteria, so it
+draws its boundary in the same two places. That does not prove Chapter 1's
+exclusions are correct, but it does mean they match an existing vocabulary's
+rather than only an argument made here.
 
 ## The grounding-by-URI pattern
 
@@ -180,7 +177,7 @@ relationship that would be wrong for half the rows.
 **DCAT.** A published benchmark is, in a real sense, a dataset, and
 `dcat:Dataset` would say so. But DCAT is a cataloguing vocabulary, concerned
 with distributions, access URLs, and publishers, and none of the competency
-questions in ch01 asks for any of that. It becomes worth adding when
+questions in Chapter 1 asks for any of that. It becomes worth adding when
 benchmarks are published and catalogued rather than authored and read.
 
 **PROV-O.** Who wrote a benchmark, when, and from what source is real
