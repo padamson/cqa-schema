@@ -47,11 +47,26 @@ classes:
       - answer_kind
       - expected_anchors
       - expected_citations
+      - unconnected_anchors
+      - connecting_class
     # CALLOUT: scoped Unique within its benchmark, not globally: two benchmarks may each hold a cq-01 and they are different questions.
     slot_usage:
       id:
         key: true
         pattern: '^[a-z0-9]+(-[a-z0-9]+)*$'
+    # CALLOUT: rule The one constraint spanning two slots: a question answered by an absence has to say which absence, or nothing downstream can check that the answer is still correct.
+    rules:
+      - description: >-
+          A closed-world negative states the connection it claims is
+          absent.
+        preconditions:
+          slot_conditions:
+            answer_kind:
+              equals_string: closed-world-negative
+        postconditions:
+          slot_conditions:
+            unconnected_anchors:
+              value_presence: PRESENT
 
   # CALLOUT: set A class in its own right rather than a bare container, because two benchmarks will both hold a question called cq-01 and those must stay distinct.
   Benchmark:
@@ -146,6 +161,27 @@ slots:
     is_a: expected_anchors
     range: DomainRecord
     multivalued: true
+
+  # CALLOUT: absence What the negative claims, not just that it claims one. Without it an evaluator knows an answer of "nothing on record" was expected and cannot check that it is still true.
+  unconnected_anchors:
+    description: >-
+      The anchors that no single record joins, for an answer whose
+      correctness is that the graph holds no such connection. A subset of
+      the anchors: a claim about a record retrieval was never required to
+      reach cannot be checked against what was retrieved. Records held by
+      a container do not count as joined by it.
+    is_a: expected_anchors
+    range: DomainRecord
+    multivalued: true
+
+  connecting_class:
+    description: >-
+      The class a joining record would belong to, as a URI in the target
+      schema. Optional, because a benchmark can be written against a graph
+      whose schema its author does not have: without it the claim is that
+      no record of any kind joins the anchors, and with it the claim is
+      narrowed to one kind.
+    range: uri
 
   target_schema:
     description: >-

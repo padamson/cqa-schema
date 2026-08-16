@@ -1,0 +1,14 @@
+id: broken-benchmark
+target_schema: https://w3id.org/wine-linkml/
+target_schema_version: 0.2.0
+target_dataset: worked-example
+target_dataset_version: 0.2.0
+competency_question_answers:
+  - id: cq-01
+    question: Does Cabernet Sauvignon go well with seafood?
+    ground_truth: None on record.
+    answer_kind: [closed-world-negative]
+    expected_anchors:
+      - https://w3id.org/wine-linkml/cabernet-sauvignon
+    unconnected_anchors:
+      - https://w3id.org/wine-linkml/seafood-dish

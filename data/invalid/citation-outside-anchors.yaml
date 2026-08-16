@@ -1,0 +1,14 @@
+id: broken-benchmark
+target_schema: https://w3id.org/wine-linkml/
+target_schema_version: 0.2.0
+target_dataset: worked-example
+target_dataset_version: 0.2.0
+competency_question_answers:
+  - id: cq-01
+    question: What is the best choice of wine for grilled meat?
+    ground_truth: The Cabernet Sauvignon.
+    answer_kind: [attribution]
+    expected_anchors:
+      - https://w3id.org/wine-linkml/cabernet-sauvignon
+    expected_citations:
+      - https://w3id.org/wine-linkml/napa-chardonnay
