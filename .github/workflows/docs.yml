@@ -154,6 +154,20 @@ jobs:
             panschema validate --schema "$schema" --data "$f"
           done
 
+      - name: Validate the frozen worked example (panschema)
+        # Appendix A embeds wine's benchmark, frozen from the repository that
+        # authors it, and ch07 states that it conforms. The loop above cannot
+        # cover it: it globs data/*.yaml and the frozen listing lives under
+        # book/src/. Without this step the chapter's conformance claim goes
+        # unchecked and rots silently the next time the schema tightens.
+        run: |
+          shopt -s nullglob
+          schema="$(scripts/schema-path.sh)"
+          for f in book/src/listings/*-benchmark-*.yaml; do
+            echo "validate $f"
+            panschema validate --schema "$schema" --data "$f"
+          done
+
       - name: Assert invalid fixtures are rejected (panschema)
         # The negative half of validation: every data/invalid/*.yaml MUST
         # fail. If one conforms, the schema stopped catching that error and

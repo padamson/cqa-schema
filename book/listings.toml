@@ -29,3 +29,15 @@ tag = "cqa-yaml-v5"
 source = "../schema/cqa.yaml"
 frozen = "src/listings/cqa-yaml-v5.yaml"
 sha256 = "8235b40ac245bb037cc998b7510cbfffd782493cded4b8cbdb92582477fc9efd"
+
+[[listing]]
+tag = "wine-benchmark-v1"
+source = "../../ontology-authoring-template/data/wine-benchmark.yaml"
+frozen = "src/listings/wine-benchmark-v1.yaml"
+sha256 = "04d6b867da3c003fa6c757f7628f1a80807c4df6ddd581947bda8c70458bc5d2"
+
+[[listing]]
+tag = "cqa-yaml-v6"
+source = "../schema/cqa.yaml"
+frozen = "src/listings/cqa-yaml-v6.yaml"
+sha256 = "77932e3907588cc61c73c29fcf6c74d85c33589bf9955e4672dcdbebaada8ed9"

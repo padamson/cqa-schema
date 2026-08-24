@@ -39,13 +39,16 @@ repos:
         # A curated A-box that feature 37 publishes to the docs site is a
         # conformance claim; publish only warns, so gate it here. Validates
         # every data/*.yaml against the schema; non-zero on any violation.
+        # Also covers the frozen worked example under book/src/listings/,
+        # which Appendix A embeds and ch07 claims conforms; the data/*.yaml
+        # glob does not reach it.
         entry: >-
           bash -c 'shopt -s nullglob;
           schema="$(scripts/schema-path.sh)";
-          for f in data/*.yaml; do
+          for f in data/*.yaml book/src/listings/*-benchmark-*.yaml; do
           echo "validate $f";
           panschema validate --schema "$schema" --data "$f" || exit 1;
           done'
         language: system
         pass_filenames: false
-        files: ^(schema/[^/]+\.yaml|data/.*\.yaml)$
+        files: ^(schema/[^/]+\.yaml|data/.*\.yaml|book/src/listings/.*-benchmark-.*\.yaml)$

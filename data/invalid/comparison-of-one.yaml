@@ -1,0 +1,11 @@
+id: broken-benchmark
+target_schema: https://w3id.org/wine-linkml/
+target_schema_version: "0.2.0"
+target_dataset: worked-example
+target_dataset_version: "0.2.0"
+competency_question_answers:
+  - id: cq-01
+    question: Which vintage is better?
+    ground_truth: "The 2018."
+    answer_kind: [comparison]
+    expected_anchors: [https://w3id.org/wine-linkml/napa-zinfandel-2018]
