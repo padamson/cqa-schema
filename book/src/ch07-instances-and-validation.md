@@ -21,11 +21,14 @@ into the graph it evaluates, and cqa declares no such graph.
 [Chapter 4](ch04-classes-and-hierarchy.md) left `DomainRecord` ungrounded for
 that reason.
 
-The test case is wine: the schema and instance graph published by the
+The test case is wine: the worked example that the
 [ontology-authoring-template](https://github.com/padamson/ontology-authoring-template)
-repository, which has been cqa's demand driver since Step 1. Wine's benchmark
-is authored there, beside the catalog its anchors resolve into, and frozen
-here as [Appendix A](appendix-a-worked-example.md) at [commit `9f898b2`](https://github.com/padamson/ontology-authoring-template/commit/9f898b2cde87bf760602a8499661fc8208d13d75).
+repository builds by the same method this book follows, and cqa's demand
+driver since Step 1. That repository is the template this one was created
+from, and wine was built there before cqa existed, for its own purposes. Its
+benchmark is authored there too, beside the catalog its anchors resolve into,
+and frozen here as [Appendix A](appendix-a-worked-example.md) at
+[commit `9f898b2`](https://github.com/padamson/ontology-authoring-template/commit/9f898b2cde87bf760602a8499661fc8208d13d75).
 
 ## What the encoding found
 
@@ -203,7 +206,94 @@ without also knowing where the file came from.
 A benchmark holds IRIs, not the records they name. Load it alongside the
 graph it evaluates and those references resolve, so the question, its
 expected answer, and the records the answer rests on all sit in one graph,
-addressable in the same vocabulary as the data being evaluated.
+addressable in the same vocabulary as the data being evaluated. While a set 
+of competency questions in a design document cannot be run, this one can be.
 
-A set of competency questions in a design document cannot be run. This one
-can.
+## What running it changed
+
+Everything above was written before anyone had used cqa. Adopting it for wine,
+which meant wiring the checks in that repository against that graph, found
+three places where the contract was underspecified, and the schema changed
+before its first release.
+
+{{#diff cqa-yaml-v6 cqa-yaml-v7 context=22 caption="What adoption demanded"}}
+
+**The absence claim moved onto the slot.** Wine's manifest had been telling
+the toolchain which slot carried absence claims and which slot narrowed them.
+That is a fact about what `unconnected_anchors` *means*, and it was living in
+one consumer's configuration, where the next adopter would restate it and
+could restate it more weakly. Omitting the narrowing slot silently widens the
+check from "no `PairingRecommendation` joins these" to "no record of any
+kind". The slot now says it itself.
+
+**`required` moved from the slot to the class.** `expected_anchors` was
+required, and `expected_citations` specializes it. Under LinkML, a
+specialization inherits its parent's `required`, so the citation slot was
+optional only by accident of how the toolchain resolved it, and a
+closed-world negative cites nothing. Declaring the requirement on
+`CompetencyQuestionAnswer` instead {{#callout obliged}} removes the inherited
+value rather than cancelling it, so a slot added to that family later is
+optional by default.
+It is also the truer statement: a competency question answer must name
+anchors, which is a fact about the question, not about the slot wherever it
+appears.
+
+**`target_dataset` says where its value comes from.** Wine's benchmark says
+`target_dataset: worked-example`. The slot already described what it was for,
+which instance graph the anchors resolve in, but not what kind of name that is
+or who assigns it. It now says: a dataset name as the target package publishes
+it, from that package's publish manifest. That is a refinement to a
+description, not a check. Whether the tooling resolves anchors against the
+dataset a benchmark names, rather than against every dataset the target
+publishes, is a separate question and still open.
+
+## What the checks cannot see
+
+The checks confirm the benchmark is well formed and that its claims still
+hold against the graph. They do not confirm the answers are right.
+
+Chapter 5 predicted how that fails: correct a vintage assessment's verdict,
+and every anchor still resolves, every citation still resolves, validation
+passes, and the ground truth is false. We tried it. One line of
+`data/wine-instances.yaml`, in the repository that holds both graphs:
+
+```diff
+   - id: va-napa-zin-2018
+     wine: napa-zinfandel-2018
+-    verdict: good
++    verdict: average
+```
+
+`cq-07` cites that assessment, and its ground truth says the chart rates 2018
+good. The chart now rates it average. The checks report:
+
+```console
+$ panschema validate --strict
+note: schema `cqa`: 28 of 28 cross-graph reference(s) into `wine` namespace(s) resolve
+note: schema `cqa`: 1 of 1 stated absence claim(s) hold against `wine`
+```
+
+Exit code zero. Every anchor resolves, the absence claim holds, and the
+benchmark states something the graph contradicts.
+
+The version slots do not help here. `target_dataset_version` records which
+release of the data a benchmark was written against, and this correction did
+not change the release; it changed a record inside one. A benchmark can be
+conformant, resolve every anchor, and still be wrong about what the graph
+says.
+
+One prediction did not hold. Wine's benchmark anchors twelve judgment-side
+records, and scoping their classes to their container was expected to move
+those records and break three of the six questions. It leaves the generated
+graph byte-identical, because a scoped record mints beneath its container's
+IRI and wine's catalog carries no identifier. Giving the catalog one would
+collapse the four target slots into one, which Chapter 6 wanted, and move half
+the benchmark's anchors at the same time.
+
+## What is left
+
+No system has been evaluated against this benchmark. Everything here checks
+the benchmark itself: that it is well formed, that its anchors exist, that
+what it claims is absent is absent. None of it scores an answer, which is what
+a benchmark is for. That needs a retrieval system to run against, and cqa does
+not have one yet.

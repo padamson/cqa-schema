@@ -124,9 +124,7 @@ already rejects `answer_kind: []`.
 
 `expected_anchors` is required and `expected_citations` is not. That is
 deliberate — a closed-world negative cites nothing and must still validate —
-and making `expected_citations` a subslot did not quietly change it. A
-subslot inherits its parent's unset fields, such as `range` and `pattern`,
-but not whether the parent is required.
+and making `expected_citations` a subslot did not quietly change it.
 
 N&M raise a third case.
 
