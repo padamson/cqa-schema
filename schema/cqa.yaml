@@ -184,6 +184,8 @@ slots:
       that retrieved nothing.
     range: DomainRecord
     multivalued: true
+    annotations:
+      expand_against: target_schema
 
   # CALLOUT: subset A subslot, so "among the anchors" is a fact about the data rather than a request in prose: every citation is an anchor by the relation itself, and stating it here is what makes it checkable.
   expected_citations:
@@ -194,6 +196,8 @@ slots:
     is_a: expected_anchors
     range: DomainRecord
     multivalued: true
+    annotations:
+      expand_against: target_schema
 
   # CALLOUT: absence What the negative claims, not just that it claims one. Without it an evaluator knows an answer of "nothing on record" was expected and cannot check that it is still true.
   unconnected_anchors:
@@ -207,6 +211,7 @@ slots:
     range: DomainRecord
     multivalued: true
     annotations:
+      expand_against: target_schema
       asserts_absence:
         value:
           via_slot: connecting_class
