@@ -1,9 +1,11 @@
 # The worked example: wine's competency questions as a cqa benchmark.
 #
-# Every anchor is an IRI into wine's published worked-example graph. No
-# wine record is copied here — this file states what a correct answer must
-# reach, and the graph it reaches into lives in another repository at the
-# version named below.
+# Every anchor names a record in wine's published worked-example graph.
+# No wine record is copied here — this file states what a correct answer
+# must reach, and the graph it reaches into lives in another repository
+# at the version named below. Anchors are written short: the target
+# schema's namespace is declared once, and each bare id expands against
+# it.
 #
 # CQ-wine 1 is absent on purpose. It asks which characteristics to consider
 # when choosing a wine, which wine's schema answers before any instance
@@ -15,6 +17,7 @@ description: >-
   schema answers, each paired with the specification of its correct answer
   over wine's worked-example graph.
 
+# CALLOUT: target The claims below are about one graph at one version — and the schema URI, stated once, is the base every short anchor in this file expands against. Without the pins, a correct edit to the catalog could silently falsify a ground truth.
 target_schema: https://w3id.org/wine-linkml/
 target_schema_version: 0.2.0
 target_dataset: worked-example
@@ -27,10 +30,12 @@ competency_question_answers:
     ground_truth: >-
       Red. The bordeaux-wine record carries color: red — a lookup by name,
       one hop to a value.
+    # CALLOUT: kind The kind names the check a correct answer must survive.
     answer_kind:
       - lookup
+    # CALLOUT: anchor An anchor names a record in the target graph. Written bare, it expands against the declared target_schema — the contract's slot definition says so, which is what keeps twenty-odd repetitions of the namespace out of this file.
     expected_anchors:
-      - https://w3id.org/wine-linkml/bordeaux-wine
+      - bordeaux-wine
 
   - id: cq-03
     name: Cabernet Sauvignon with seafood
@@ -43,11 +48,13 @@ competency_question_answers:
     answer_kind:
       - closed-world-negative
     expected_anchors:
-      - https://w3id.org/wine-linkml/cabernet-sauvignon
-      - https://w3id.org/wine-linkml/seafood-dish
+      - cabernet-sauvignon
+      - seafood-dish
+    # CALLOUT: absence A negative states which absence it claims: no single record references both of these anchors. That this slot carries an absence claim is declared in the contract's schema, not configured per consumer.
     unconnected_anchors:
-      - https://w3id.org/wine-linkml/cabernet-sauvignon
-      - https://w3id.org/wine-linkml/seafood-dish
+      - cabernet-sauvignon
+      - seafood-dish
+    # CALLOUT: via Naming the connecting class narrows the claim to what the ground truth says: no PairingRecommendation joins them. A class is named by its full URI — expansion is for record anchors, not schema terms.
     connecting_class: https://w3id.org/wine-linkml/PairingRecommendation
 
   - id: cq-04
@@ -60,11 +67,12 @@ competency_question_answers:
     answer_kind:
       - attribution
     expected_anchors:
-      - https://w3id.org/wine-linkml/grilled-meat
-      - https://w3id.org/wine-linkml/cabernet-sauvignon
-      - https://w3id.org/wine-linkml/pr-cabsauv-grilledmeat
+      - grilled-meat
+      - cabernet-sauvignon
+      - pr-cabsauv-grilledmeat
+    # CALLOUT: citation A citation must also be an anchor, and it is always a judgment-side record — the recommendation is what carries the rationale, source, and confidence the answer rests on.
     expected_citations:
-      - https://w3id.org/wine-linkml/pr-cabsauv-grilledmeat
+      - pr-cabsauv-grilledmeat
 
   - id: cq-05
     name: Characteristics affecting a pairing
@@ -78,16 +86,16 @@ competency_question_answers:
     answer_kind:
       - synthesis
     expected_anchors:
-      - https://w3id.org/wine-linkml/pr-cabsauv-grilledmeat
-      - https://w3id.org/wine-linkml/pr-chardonnay-seafood
-      - https://w3id.org/wine-linkml/pr-beaujolais-chicken
-      - https://w3id.org/wine-linkml/cabernet-sauvignon
-      - https://w3id.org/wine-linkml/napa-chardonnay
-      - https://w3id.org/wine-linkml/chateau-morgon-beaujolais
+      - pr-cabsauv-grilledmeat
+      - pr-chardonnay-seafood
+      - pr-beaujolais-chicken
+      - cabernet-sauvignon
+      - napa-chardonnay
+      - chateau-morgon-beaujolais
     expected_citations:
-      - https://w3id.org/wine-linkml/pr-cabsauv-grilledmeat
-      - https://w3id.org/wine-linkml/pr-chardonnay-seafood
-      - https://w3id.org/wine-linkml/pr-beaujolais-chicken
+      - pr-cabsauv-grilledmeat
+      - pr-chardonnay-seafood
+      - pr-beaujolais-chicken
 
   - id: cq-06
     name: Vintage variation
@@ -98,10 +106,10 @@ competency_question_answers:
     answer_kind:
       - comparison
     expected_anchors:
-      - https://w3id.org/wine-linkml/napa-zinfandel-2017
-      - https://w3id.org/wine-linkml/napa-zinfandel-2018
-      - https://w3id.org/wine-linkml/vy-2017
-      - https://w3id.org/wine-linkml/vy-2018
+      - napa-zinfandel-2017
+      - napa-zinfandel-2018
+      - vy-2017
+      - vy-2018
 
   - id: cq-07
     name: Good vintages for Napa Zinfandel
@@ -110,14 +118,15 @@ competency_question_answers:
       2018. The regional vintage chart rates 2018 good and 2017 average,
       each with its source and confidence. The answer carries attribution:
       not "2018 was good" but "the regional vintage chart rates 2018 good."
+    # CALLOUT: two-kinds An attribution and a comparison at once — no honest rule ranks them, which is what made the slot multivalued.
     answer_kind:
       - attribution
       - comparison
     expected_anchors:
-      - https://w3id.org/wine-linkml/napa-zinfandel-2018
-      - https://w3id.org/wine-linkml/napa-zinfandel-2017
-      - https://w3id.org/wine-linkml/va-napa-zin-2018
-      - https://w3id.org/wine-linkml/va-napa-zin-2017
+      - napa-zinfandel-2018
+      - napa-zinfandel-2017
+      - va-napa-zin-2018
+      - va-napa-zin-2017
     expected_citations:
-      - https://w3id.org/wine-linkml/va-napa-zin-2018
-      - https://w3id.org/wine-linkml/va-napa-zin-2017
+      - va-napa-zin-2018
+      - va-napa-zin-2017

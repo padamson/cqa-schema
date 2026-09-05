@@ -7,9 +7,13 @@ absence.
 This file is authored in the
 [ontology-authoring-template](https://github.com/padamson/ontology-authoring-template)
 repository, beside the graph its anchors point into, and frozen here at
-[commit `9f898b2`](https://github.com/padamson/ontology-authoring-template/commit/9f898b2cde87bf760602a8499661fc8208d13d75). Reading it in that repository shows something this copy
-cannot: every anchor below resolves to a record wine actually mints, and
-`cq-03`'s stated absence is checked against wine's catalog rather than taken
-on trust.
+[commit `20cac5f`](https://github.com/padamson/ontology-authoring-template/commit/20cac5fc7996f05be24ab84e96d463b655452216).
+Its anchors are written bare {{#callout anchor}} and expand against the
+target schema it declares once {{#callout target}};
+[Chapter 7](ch07-instances-and-validation.md#what-running-it-changed) records
+why the contract says so. Reading the file in that repository shows something
+this copy cannot: every anchor below resolves to a record wine actually mints,
+and `cq-03`'s stated absence {{#callout absence}} is checked against wine's
+catalog rather than taken on trust.
 
 {{#include listings/wine-benchmark-v1.yaml}}

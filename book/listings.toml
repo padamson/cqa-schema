@@ -34,7 +34,7 @@ sha256 = "8235b40ac245bb037cc998b7510cbfffd782493cded4b8cbdb92582477fc9efd"
 tag = "wine-benchmark-v1"
 source = "../../ontology-authoring-template/data/wine-benchmark.yaml"
 frozen = "src/listings/wine-benchmark-v1.yaml"
-sha256 = "04d6b867da3c003fa6c757f7628f1a80807c4df6ddd581947bda8c70458bc5d2"
+sha256 = "d330681b446cfa0de53f7a90c26d10e6dc3915d9af6e68f659de8246fca05b11"
 
 [[listing]]
 tag = "cqa-yaml-v6"
@@ -47,3 +47,9 @@ tag = "cqa-yaml-v7"
 source = "../schema/cqa.yaml"
 frozen = "src/listings/cqa-yaml-v7.yaml"
 sha256 = "2832584e4efdfd102508b15430cd627bf4b3e1b03e10347609f02a712034d7eb"
+
+[[listing]]
+tag = "cqa-yaml-v8"
+source = "../schema/cqa.yaml"
+frozen = "src/listings/cqa-yaml-v8.yaml"
+sha256 = "e7475ea3fc575648e1cc003d52b7a2f3dc5162f6eae5c3db7f141234f2e29d32"

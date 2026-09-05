@@ -28,7 +28,7 @@ driver since Step 1. That repository is the template this one was created
 from, and wine was built there before cqa existed, for its own purposes. Its
 benchmark is authored there too, beside the catalog its anchors resolve into,
 and frozen here as [Appendix A](appendix-a-worked-example.md) at
-[commit `9f898b2`](https://github.com/padamson/ontology-authoring-template/commit/9f898b2cde87bf760602a8499661fc8208d13d75).
+[commit `20cac5f`](https://github.com/padamson/ontology-authoring-template/commit/20cac5fc7996f05be24ab84e96d463b655452216).
 
 ## What the encoding found
 
@@ -109,14 +109,24 @@ traverse records to reach the one it reads, and anchoring those is honest
 retrieval rather than padding. The enum describes where the answer is found,
 not how few records a correct retrieval touches.
 
-## Validation happens in two places, and cannot happen in one
+## Verification happens in two places, and cannot happen in one
 
-`panschema validate` reports that the benchmark conforms: every required slot
+`panschema verify` reports that the benchmark conforms: every required slot
 present, every `answer_kind` a permissible value, every id matching the
 pattern [Chapter 6](ch06-slot-usage-and-facets.md) set, every citation and
 every stated absence drawn from the anchors, every answer kind holding to the
 promise its own definition makes, and every value carrying the type its slot
 declares.
+
+The command was `panschema validate` when this chapter was first written, and
+this section said validation. We renamed the verb while adopting cqa for wine.
+Verification asks whether an artifact matches its specification, validation
+whether the right artifact was built
+([Roache 1997](https://doi.org/10.1146/annurev.fluid.29.1.123)), and every
+check above is the first kind: a record against a schema, a reference against
+a graph. Validation is kept for the litmus below, which asks whether the schema
+answers the questions it was built to answer, and it is what the chapter's
+title refers to.
 
 One of those checks rests on a convention that can look like an omission.
 Eight of this schema's ten datatype slots declare no `range:` at all, taking
@@ -125,8 +135,8 @@ whether an untyped slot is an unchecked one. It is checked: `question: 42`
 is rejected as "an integer, but the slot's range `string` expects a string."
 The type is stated once and enforced everywhere it applies.
 
-What it cannot report is whether the anchors exist. Every one of them is an
-absolute IRI into a graph that is not here, and a cross-graph reference is
+What it cannot report is whether the anchors exist. Every one of them names
+a record in a graph that is not here, and a cross-graph reference is
 exempt from the dangling-reference check by design; without that exemption
 every benchmark would be one long list of errors. Conformance and resolution
 are different questions, and only the first can be answered in this
@@ -213,7 +223,7 @@ of competency questions in a design document cannot be run, this one can be.
 
 Everything above was written before anyone had used cqa. Adopting it for wine,
 which meant wiring the checks in that repository against that graph, found
-three places where the contract was underspecified, and the schema changed
+four places where the contract was underspecified, and the schema changed
 before its first release.
 
 {{#diff cqa-yaml-v6 cqa-yaml-v7 context=22 caption="What adoption demanded"}}
@@ -247,28 +257,47 @@ description, not a check. Whether the tooling resolves anchors against the
 dataset a benchmark names, rather than against every dataset the target
 publishes, is a separate question and still open.
 
+{{#diff cqa-yaml-v7 cqa-yaml-v8 context=3 caption="Anchors expand against the target"}}
+
+**Anchors are written short.** Wine's benchmark spelled out the full IRI of
+every record it named, and all twenty-eight share the namespace that
+`target_schema` already declares. The three slots that hold anchors now say
+that a bare value expands against it {{#callout base}}, so `bordeaux-wine` in
+a benchmark targeting wine's schema names the same record the full IRI did,
+and an absolute IRI is still read as written. The base sits on the benchmark
+and the anchors on the questions beneath it, so expansion takes the base from
+the nearest containing record that carries one: a benchmark states its target
+once. The convention assumes the target graph mints its records under its
+schema's namespace, which holds for wine and need not hold for a graph
+published elsewhere; a benchmark against such a graph writes its anchors in
+full.
+
 ## What the checks cannot see
 
 The checks confirm the benchmark is well formed and that its claims still
 hold against the graph. They do not confirm the answers are right.
 
 Chapter 5 predicted how that fails: correct a vintage assessment's verdict,
-and every anchor still resolves, every citation still resolves, validation
-passes, and the ground truth is false. We tried it. One line of
-`data/wine-instances.yaml`, in the repository that holds both graphs:
+and every anchor still resolves, every citation still resolves, verification
+passes, and the ground truth is false. Reproducing it takes one edit. Clone
+wine's repository at [commit `20cac5f`](https://github.com/padamson/ontology-authoring-template/commit/20cac5fc7996f05be24ab84e96d463b655452216)
+beside a clone of this one, because its manifest reaches cqa's schema as a
+sibling checkout, and change one line of `data/wine-instances.yaml`:
 
 ```diff
    - id: va-napa-zin-2018
+     name: Napa Zinfandel 2018 assessment
      wine: napa-zinfandel-2018
 -    verdict: good
 +    verdict: average
 ```
 
 `cq-07` cites that assessment, and its ground truth says the chart rates 2018
-good. The chart now rates it average. The checks report:
+good. The chart now rates it average. Run the checks from wine's repository;
+the report ends:
 
 ```console
-$ panschema validate --strict
+$ panschema verify --strict
 note: schema `cqa`: 28 of 28 cross-graph reference(s) into `wine` namespace(s) resolve
 note: schema `cqa`: 1 of 1 stated absence claim(s) hold against `wine`
 ```
