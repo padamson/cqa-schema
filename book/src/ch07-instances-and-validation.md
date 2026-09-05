@@ -118,16 +118,6 @@ every stated absence drawn from the anchors, every answer kind holding to the
 promise its own definition makes, and every value carrying the type its slot
 declares.
 
-The command was `panschema validate` when this chapter was first written, and
-this section said validation. We renamed the verb while adopting cqa for wine.
-Verification asks whether an artifact matches its specification, validation
-whether the right artifact was built
-([Roache 1997](https://doi.org/10.1146/annurev.fluid.29.1.123)), and every
-check above is the first kind: a record against a schema, a reference against
-a graph. Validation is kept for the litmus below, which asks whether the schema
-answers the questions it was built to answer, and it is what the chapter's
-title refers to.
-
 One of those checks rests on a convention that can look like an omission.
 Eight of this schema's ten datatype slots declare no `range:` at all, taking
 their type from `default_range` instead, so a reader might reasonably wonder
