@@ -134,11 +134,12 @@ repository.
 
 The second is answered where both graphs sit together. In wine's repository
 the benchmark and the catalog are siblings in one manifest, so the same
-toolchain resolves each anchor against the records wine actually mints, and
+toolchain resolves each anchor against the records wine actually mints,
 checks each stated absence by looking for a record that joins the anchors it
-claims are unjoined. A false claim fails there. Both checks are three lines
-of manifest configuration, and the hand-written script they replaced has been
-deleted.
+claims are unjoined, and compares the versions the benchmark declares with
+the versions wine is at. A false claim fails there. The manifest
+configuration is two lines naming the sibling, and the hand-written script
+it replaced has been deleted.
 
 The division follows from what a benchmark is: a set of claims about
 someone else's graph, well-formed here and true only there.
@@ -213,7 +214,7 @@ of competency questions in a design document cannot be run, this one can be.
 
 Everything above was written before anyone had used cqa. Adopting it for wine,
 which meant wiring the checks in that repository against that graph, found
-four places where the contract was underspecified, and the schema changed
+five places where the contract was underspecified, and the schema changed
 before its first release.
 
 {{#diff cqa-yaml-v6 cqa-yaml-v7 context=22 caption="What adoption demanded"}}
@@ -261,6 +262,27 @@ once. The convention assumes the target graph mints its records under its
 schema's namespace, which holds for wine and need not hold for a graph
 published elsewhere; a benchmark against such a graph writes its anchors in
 full.
+
+{{#diff cqa-yaml-v8 cqa-yaml-v9 context=3 caption="Version slots that are checked"}}
+
+**The version slots are checked.** Chapter 5 gave `Benchmark` two version
+slots, and until now they recorded a fact nothing read. A benchmark written
+against one release of its target read green when checked against any later
+one, so nothing distinguished a benchmark checked against the release it was
+written for from one checked against whatever was installed. Each version
+slot now says which sibling's version it records {{#callout pin}}:
+`target_schema_version` is the version of the package `target_schema` names,
+and `target_dataset_version` of the one `target_dataset` names. Where both
+graphs sit together, the declared version is compared with the version the
+target resolved to, and a mismatch is reported per record, naming the slot,
+both versions, and the sibling. Bumping wine to `0.3.0` while the benchmark
+still says `0.2.0` ends the report with:
+
+```console
+$ panschema verify --strict
+note: schema `cqa`: 0 of 2 version pin(s) agree with `wine`
+Error: 2 version pin(s) disagree with the sibling they name; failing because --strict is set
+```
 
 ## What the checks cannot see
 

@@ -53,3 +53,9 @@ tag = "cqa-yaml-v8"
 source = "../schema/cqa.yaml"
 frozen = "src/listings/cqa-yaml-v8.yaml"
 sha256 = "e7475ea3fc575648e1cc003d52b7a2f3dc5162f6eae5c3db7f141234f2e29d32"
+
+[[listing]]
+tag = "cqa-yaml-v9"
+source = "../schema/cqa.yaml"
+frozen = "src/listings/cqa-yaml-v9.yaml"
+sha256 = "0be77829dfe6873cea6350ab4359f7a756a6bc32a29378c99f27d360bfb94f08"
