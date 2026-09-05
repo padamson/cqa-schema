@@ -16,4 +16,11 @@ this copy cannot: every anchor below resolves to a record wine actually mints,
 and `cq-03`'s stated absence {{#callout absence}} is checked against wine's
 catalog rather than taken on trust.
 
+Each question names the kinds of answering it calls for {{#callout kind}},
+and `cq-07` names two {{#callout two-kinds}}, which is why
+[Chapter 5](ch05-slots.md) made the slot multivalued. Where an answer must
+rest on a record rather than only reach it, the citation is one of the
+anchors {{#callout citation}}. The one negative narrows its claim to the
+class of record that would have joined the anchors {{#callout via}}.
+
 {{#include listings/wine-benchmark-v1.yaml}}
