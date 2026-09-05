@@ -8,7 +8,7 @@
 # PATH, matching the dogfood setup (see README "Dogfooding the tooling"), so
 # no remote hook repos are pulled. Required on PATH:
 #   - mdbook-listings (main HEAD — dogfood; see the dogfood-loop notes)
-#   - panschema (main HEAD — validates the curated instance data)
+#   - panschema (main HEAD — verifies the curated instance data)
 #   - awk + git (for the line-width gate; both standard)
 repos:
   - repo: local
@@ -34,10 +34,10 @@ repos:
         pass_filenames: false
         files: ^schema/[^/]+\.yaml$
 
-      - id: panschema-validate
-        name: panschema validate (curated instance data conforms)
+      - id: panschema-verify
+        name: panschema verify (curated instance data conforms)
         # A curated A-box that feature 37 publishes to the docs site is a
-        # conformance claim; publish only warns, so gate it here. Validates
+        # conformance claim; publish only warns, so gate it here. Verifies
         # every data/*.yaml against the schema; non-zero on any violation.
         # Also covers the frozen worked example under book/src/listings/,
         # which Appendix A embeds and ch07 claims conforms; the data/*.yaml
@@ -46,8 +46,8 @@ repos:
           bash -c 'shopt -s nullglob;
           schema="$(scripts/schema-path.sh)";
           for f in data/*.yaml book/src/listings/*-benchmark-*.yaml; do
-          echo "validate $f";
-          panschema validate --schema "$schema" --data "$f" || exit 1;
+          echo "verify $f";
+          panschema verify --schema "$schema" --data "$f" || exit 1;
           done'
         language: system
         pass_filenames: false
