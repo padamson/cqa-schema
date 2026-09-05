@@ -9,7 +9,7 @@ description: |-
   and cite. The graph being evaluated is external — its records are
   referenced by IRI rather than held here.
 license: https://creativecommons.org/licenses/by/4.0/
-version: 0.1.0-dev
+version: 0.1.0
 
 # CALLOUT: reuse The Step 2 decisions, in machine-readable form: every vocabulary this schema reuses is declared here and reached by URI.
 prefixes:
