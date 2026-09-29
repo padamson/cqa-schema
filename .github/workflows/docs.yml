@@ -16,10 +16,11 @@ concurrency:
 
 # Opt the JS-based actions (actions/cache, actions/checkout,
 # actions/upload-artifact, ...) into Node 24 ahead of the June 2026
-# default flip. Removes the deprecation warnings; safe to drop this
-# env block once Node 24 becomes the runner default.
+# default flip. Removes the deprecation warnings; safe to drop the
+# FORCE_ line once Node 24 becomes the runner default.
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+  MDBOOK_LISTINGS_VERSION: "0.2.2"
 
 jobs:
   build:
@@ -114,7 +115,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cargo/bin/mdbook-listings
-          key: mdbook-listings-${{ runner.os }}-0.2.0
+          key: mdbook-listings-${{ runner.os }}-${{ env.MDBOOK_LISTINGS_VERSION }}
 
       - name: Install mdbook-listings from crates.io
         # Switched off git-main to the released crate (v0.1.1, 2026-08-01):
@@ -122,7 +123,7 @@ jobs:
         # captions, list-of-listings, the soft-wrap/font-load badge fixes —
         # is in the release, so there's no reason left to track git.
         if: steps.cache-mdbook-listings.outputs.cache-hit != 'true'
-        run: cargo install mdbook-listings --version 0.2.0 --locked
+        run: cargo install mdbook-listings --version "$MDBOOK_LISTINGS_VERSION" --locked
 
       - name: Cache mdbook-admonish binary
         id: cache-mdbook-admonish
