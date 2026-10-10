@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "skills": {
+    "mdbook-listings": {
+      "source": "padamson/mdbook-listings",
+      "sourceType": "github",
+      "skillPath": "skills/mdbook-listings/SKILL.md",
+      "computedHash": "69cb45c4cb7f0ec5e4a8245d7c596aec74e3471a9351d2703398b7185407e63c"
+    },
+    "ontology-authoring-advance-step": {
+      "source": "padamson/ontology-authoring-template",
+      "sourceType": "github",
+      "skillPath": "skills/ontology-authoring-advance-step/SKILL.md",
+      "computedHash": "8f53fe360ec30ca7e5f567343c220d5a086953765115bf55b3d307a2cac3e01b"
+    },
+    "panschema-development": {
+      "source": "padamson/panschema",
+      "sourceType": "github",
+      "skillPath": "skills/panschema-development/SKILL.md",
+      "computedHash": "0c0cb723ac16c2c5a8b163b2d0303d58eb33b857c586d20c3fcb866a1a560b87"
+    }
+  }
+}

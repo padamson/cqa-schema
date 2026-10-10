@@ -15,3 +15,11 @@ book/schema-link.js
 
 # Throwaway pre-template build kept as a reference target (see CLAUDE.md).
 spike/
+
+# Agent skills, fetched by `npx skills add` and pinned in skills-lock.json
+# (committed), so not vendored here. With `-a claude-code` the CLI writes
+# each skill as a directory under .claude/skills/; other agent targets
+# write a hub under .agents/ and symlink it, so both are ignored. A skill
+# authored in this repo would need a `!` negation here.
+/.agents/skills/
+/.claude/skills/

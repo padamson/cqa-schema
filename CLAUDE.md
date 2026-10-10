@@ -39,9 +39,8 @@ external claims backed by citations.
 
 ## Authoring with mdbook-listings
 
-This repo uses the **mdbook-listings** plugin, installed at project
-scope (see `.claude/settings.json`). Its bundled skill documents the
-full mechanics — `freeze`/`list`, the `{{#include}}` / `{{#callout}}`
+This repo uses **mdbook-listings**. Its `mdbook-listings` skill
+(installed per "Agent skills" below) documents the full mechanics — `freeze`/`list`, the `{{#include}}` / `{{#callout}}`
 / `{{#diff}}` directives, inline `# CALLOUT:` markers vs. sidecar
 TOML, and the tag/SHA-256 identity model. **Consult that skill
 (`references/cli.md`, `references/directives.md`) for how the tool
@@ -49,7 +48,7 @@ works** — this section records only what's specific to *this* repo.
 
 The book embeds **frozen snapshots** of `schema/cqa.yaml` so a
 later edit can't silently change what a chapter renders. Repo
-conventions on top of the plugin:
+conventions on top of the tool:
 
 - **Freeze from `book/`**, source `../schema/cqa.yaml`, tag
   `cqa-yaml-v<N>`. Each chapter that advances the schema bumps
@@ -86,8 +85,8 @@ If callouts seem missing, suspect a **stale `site/`** first: confirm
 the freshly built `book/build/<chapter>.html` has `callout-badge`
 elements before debugging anything deeper.
 
-For anything not covered above, defer to the installed mdbook-listings
-plugin skill, then `mdbook-listings <cmd> --help`.
+For anything not covered above, defer to the installed `mdbook-listings`
+skill, then `mdbook-listings <cmd> --help`.
 
 ## Building
 
@@ -109,6 +108,35 @@ Math is **opt-in** and not shipped in the stock template: to write `$…$`
 in chapters, enable `mdbook-katex` (pin `0.10.0-alpha`, ordered
 `after = ["admonish"]`) per the README "Math (optional)" section. Once
 enabled it becomes a required preprocessor, so also add it to CI.
+
+## Agent skills
+
+Agent skills are pinned dependencies, like the schema dependencies in
+`panschema.lock`. `skills-lock.json` (committed) records each skill's
+source and a content hash; `npx skills add` fetches the content into
+`.claude/skills/<name>/`, which is gitignored. Run the install once
+after cloning, from a plain terminal (Claude Code's sandbox denies
+writes under `.claude/skills/`, and the CLI then exits without
+installing):
+
+```
+npx skills add padamson/mdbook-listings -s mdbook-listings -a claude-code -y
+npx skills add padamson/ontology-authoring-template -s ontology-authoring-advance-step -a claude-code -y
+npx skills add padamson/panschema -s panschema-development -a claude-code -y
+```
+
+Name the skill with `-s`: a bare `npx skills add <repo>` installs every
+skill the repo offers. The CLI prints a success line even when the write
+was denied, so check the install rather than the message: `ls
+.claude/skills/` shows one directory per skill above, and
+`metadata.version` in each `SKILL.md` is the version installed. Refresh
+with `npx skills update`, choosing **Project** at its prompt (it
+defaults to Global), then re-read `metadata.version`. `git ls-files
+.claude/skills/ .agents/` must print nothing.
+
+The authoring skill is installed, not copied: ontology-authoring-template
+publishes it as `ontology-authoring-advance-step`, so this repo keeps no
+copy of it to fall out of date.
 
 ## Conventions
 
