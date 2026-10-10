@@ -22,6 +22,9 @@ number-listings = true
 # page's listings nested under their section in the sidebar.
 list-of-listings = true
 list-of-listings-sidebar = "nested"
+# A line under each caption naming the source and its tag, so a diff
+# says which two snapshots it compares.
+show-listing-provenance = true
 
 [output]
 

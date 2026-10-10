@@ -23,4 +23,4 @@ rest on a record rather than only reach it, the citation is one of the
 anchors {{#callout citation}}. The one negative narrows its claim to the
 class of record that would have joined the anchors {{#callout via}}.
 
-{{#include listings/wine-benchmark-v1.yaml}}
+{{#include listings/wine-benchmark-v1.yaml show-provenance="false"}}
