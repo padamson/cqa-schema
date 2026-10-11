@@ -9,7 +9,7 @@ description: |-
   and cite. The graph being evaluated is external — its records are
   referenced by IRI rather than held here.
 license: https://creativecommons.org/licenses/by/4.0/
-version: 0.1.0
+version: 0.1.1
 
 # CALLOUT: reuse The Step 2 decisions, in machine-readable form: every vocabulary this schema reuses is declared here and reached by URI.
 prefixes:
@@ -111,9 +111,11 @@ classes:
     close_mappings:
       - earl:TestRequirement
     tree_root: true
-    # CALLOUT: minted The same id slot, narrowed on the two classes cqa mints identifiers for and left alone on the one it does not.
+    # CALLOUT: minted The same id slot, narrowed to a pattern on the two classes cqa mints identifiers for.
     slot_usage:
       id:
+        # CALLOUT: global A benchmark is one thing everywhere, so its id is an identifier.
+        identifier: true
         pattern: '^[a-z0-9]+(-[a-z0-9]+)*$'
     slots:
       - id
@@ -138,13 +140,16 @@ classes:
       against. Its instances belong to that graph, not to this schema.
     slots:
       - id
+    slot_usage:
+      id:
+        identifier: true
 
 slots:
 
+  # CALLOUT: neither No identifier or key on the shared slot. A class's slot_usage adds to the slot rather than replacing it, so a flag here plus the other flag on a class is a slot that is both, which LinkML forbids.
   id:
     description: >-
       The short, stable identifier a record is known by.
-    identifier: true
 
   name:
     description: >-
@@ -235,8 +240,10 @@ slots:
   target_schema_version:
     description: >-
       The version of the target schema the anchors were written
-      against. It fixes how identifiers are minted, which can change
-      between releases.
+      against: the release identifier of whatever publishes the schema,
+      which can differ from the version the schema file declares. It
+      fixes how identifiers are minted, which can change between
+      releases.
     required: true
     # CALLOUT: pin The slot says which sibling's version it records, so a benchmark checked against a release other than the one it was written for fails instead of reading green. Without the declaration the four target slots are documentation.
     annotations:

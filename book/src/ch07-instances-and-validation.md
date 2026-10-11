@@ -331,6 +331,42 @@ IRI and wine's catalog carries no identifier. Giving the catalog one would
 collapse the four target slots into one, which Chapter 6 wanted, and move half
 the benchmark's anchors at the same time.
 
+## One flag per class
+
+The schema released as `0.1.0` was not one LinkML could load. In Chapter 5
+we made the shared `id` slot an `identifier` and narrowed it to a `key` on
+`CompetencyQuestionAnswer` through `slot_usage`, reading the class's flag as
+replacing the slot's. LinkML's `slot_usage` refines a slot rather than
+replacing it, so the question's `id` carried both flags, and a slot cannot be
+both. LinkML 1.12 rejects the released schema at load, and every generator
+built on its loader fails with it:
+
+```console
+$ git show v0.1.0:schema/cqa.yaml > cqa.yaml
+$ gen-python cqa.yaml
+ValueError:  slot: CompetencyQuestionAnswer_id - A slot cannot be both a key and identifier at the same time
+```
+
+For `0.1.1` we took the flag off the shared slot {{#callout neither}} and
+declared one on each class: `identifier` on `Benchmark` {{#callout global}}
+and `DomainRecord`, and `key` alone on `CompetencyQuestionAnswer`. The
+version line in the diff moves from `0.1.0-dev`, because the listing before
+it was frozen ahead of the `0.1.0` release.
+
+{{#diff cqa-yaml-v9 cqa-yaml-v10 context=3 caption="One flag per class"}}
+
+No record IRI changes. Turtle generated from wine's benchmark when `0.1.0`
+shipped and Turtle generated from it under `0.1.1` both name the benchmark
+`cqa:wine-benchmark` and its six questions beneath it, and the benchmark
+conforms to `0.1.1` unedited. Adopters change the pin and nothing else.
+
+We also reworded `target_schema_version`. It described the version of the
+target schema, and an adopter whose schema file declares `0.1.0-dev`
+while its package publishes `0.1.0` wrote the file's version and got a pin
+that failed. The pin is compared with the package's release identifier, as
+`target_dataset_version` already said of its own sibling, and the
+description now says so.
+
 ## What is left
 
 No system has been evaluated against this benchmark. Everything here checks
