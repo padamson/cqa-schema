@@ -102,7 +102,8 @@ gitignored book→schema toolbar-link assets that `book.toml` references
 (`scripts/install-assets.sh` runs all three installers). The published
 docs site (schema HTML + the book) is built and deployed by
 `.github/workflows/docs.yml` via the panschema toolchain on push to
-`main` and on `v*` tags.
+`main` (there is no tag trigger, so push a release tag together with the
+commit that lists it: `git push --atomic origin main <tag>`).
 
 Math is **opt-in** and not shipped in the stock template: to write `$…$`
 in chapters, enable `mdbook-katex` (pin `0.10.0-alpha`, ordered
