@@ -20,7 +20,14 @@ concurrency:
 # FORCE_ line once Node 24 becomes the runner default.
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+  # Exact pins for the tools that build the book and the schema pages: a
+  # patch release can change rendered output, and the book's premise is
+  # frozen listings.
+  # panschema and mdbook-admonish install from their branch tips on
+  # purpose (the dogfood loop) and are not pinned here.
+  MDBOOK_VERSION: "0.5.2"
   MDBOOK_LISTINGS_VERSION: "0.2.2"
+  WASM_PACK_VERSION: "0.14.0"
 
 jobs:
   build:
@@ -72,11 +79,11 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cargo/bin/wasm-pack
-          key: wasm-pack-${{ runner.os }}
+          key: wasm-pack-${{ runner.os }}-${{ env.WASM_PACK_VERSION }}
 
       - name: Install wasm-pack
         if: steps.cache-panschema.outputs.cache-hit != 'true' && steps.cache-wasm-pack.outputs.cache-hit != 'true'
-        run: cargo install wasm-pack --locked
+        run: cargo install wasm-pack --version "$WASM_PACK_VERSION" --locked
 
       - name: Install panschema binaries from main
         if: steps.cache-panschema.outputs.cache-hit != 'true'
@@ -91,24 +98,16 @@ jobs:
 
       # --- mdbook + preprocessors ---
 
-      - name: Resolve latest mdbook release version
-        id: mdbook-ver
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          version=$(gh api repos/rust-lang/mdBook/releases/latest --jq .tag_name | sed 's/^v//')
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-
       - name: Cache mdbook binary
         id: cache-mdbook
         uses: actions/cache@v4
         with:
           path: ~/.cargo/bin/mdbook
-          key: mdbook-${{ runner.os }}-${{ steps.mdbook-ver.outputs.version }}
+          key: mdbook-${{ runner.os }}-${{ env.MDBOOK_VERSION }}
 
       - name: Install mdbook
         if: steps.cache-mdbook.outputs.cache-hit != 'true'
-        run: cargo install mdbook --version ${{ steps.mdbook-ver.outputs.version }} --locked
+        run: cargo install mdbook --version "$MDBOOK_VERSION" --locked
 
       - name: Cache mdbook-listings binary
         id: cache-mdbook-listings
