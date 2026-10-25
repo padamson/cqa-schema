@@ -9,7 +9,7 @@
 # no remote hook repos are pulled. Required on PATH:
 #   - mdbook-listings (main HEAD — dogfood; see the dogfood-loop notes)
 #   - panschema (main HEAD — verifies the curated instance data)
-#   - awk + git (for the line-width gate; both standard)
+#   - perl + git (for the line-width gate; both standard)
 repos:
   - repo: local
     hooks:
