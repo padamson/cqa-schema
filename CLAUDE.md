@@ -269,7 +269,9 @@ on it), covering the releases from its `from` up to the
 next edition's `from`; the newest edition also covers `main`. Every
 edition is published at `book/<id>/`, and the current one (the edition
 holding the newest release) is copied to the site root. Edition 1 starts
-at `v0.1.0`.
+at `v0.1.0`. Edition 2 starts at `v0.2.0`, unreleased, and is the
+authoring edition; its chapters began as copies of edition 1's and are
+revised in place.
 
 - **Within an edition, the book is a log.** Narrate reversals and dead
   ends as they happened, and do not retro-edit earlier chapters to hide a

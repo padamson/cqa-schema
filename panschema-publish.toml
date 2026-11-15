@@ -25,6 +25,13 @@ name = "First edition"
 book = "book/editions/1"
 from = "v0.1.0"
 
+[[editions.edition]]
+id = "2"
+name = "Second edition"
+book = "book/editions/2"
+from = "v0.2.0"
+authoring = true
+
 # Unpinned, so each plugin comes from PATH: the dogfood debug builds
 # locally, the docs.yml installs in CI. Listed only for their `install`,
 # which writes the gitignored assets into each edition's checkout.

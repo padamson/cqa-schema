@@ -1,0 +1,61 @@
+id: https://w3id.org/cqa/
+name: cqa
+# CALLOUT: domain The domain and scope settled in this chapter, recorded in the schema itself.
+description: |-
+  A vocabulary for competency question benchmarks over a knowledge
+  graph. One record pairs a question with the specification of its
+  correct answer: the answer in prose, the kind of answering the
+  question demands, and the records a correct answer must retrieve
+  and cite. The graph being evaluated is external — its records are
+  referenced by IRI rather than held here.
+license: https://creativecommons.org/licenses/by/4.0/
+version: 0.1.0-dev
+
+# CALLOUT: reuse The Step 2 decisions, in machine-readable form: every vocabulary this schema reuses is declared here and reached by URI.
+prefixes:
+  linkml: https://w3id.org/linkml/
+  cqa: https://w3id.org/cqa/
+
+  obo: http://purl.obolibrary.org/obo/
+  cco: https://www.commoncoreontologies.org/
+
+  earl: http://www.w3.org/ns/earl#
+  skos: http://www.w3.org/2004/02/skos/core#
+
+default_prefix: cqa
+default_range: string
+
+# CALLOUT: imports Only linkml:types is imported. The reused vocabularies above are reached by URI, never pulled in here: imports: is for other LinkML schemas.
+imports:
+  - linkml:types
+
+classes:
+
+  # CALLOUT: item The central class. It names the data you evaluate against, not the act of evaluating: a scored attempt is a separate record an evaluation run produces.
+  CompetencyQuestionAnswer:
+    description: >-
+      A competency question paired with the specification of its
+      correct answer.
+    subclass_of: cco:ont00000958
+    close_mappings:
+      - earl:TestCase
+
+  # CALLOUT: set A class in its own right rather than a bare container, because two benchmarks will both hold a question called cq-01 and those must stay distinct.
+  Benchmark:
+    description: >-
+      A named set of competency question answers, evaluated against one
+      knowledge graph.
+    subclass_of: cco:ont00000958
+    close_mappings:
+      - earl:TestRequirement
+    tree_root: true
+
+  # CALLOUT: placeholder The one class with no grounding: it stands for a record in someone else's graph, and what that record is varies by domain.
+  DomainRecord:
+    description: >-
+      A record in the knowledge graph that a benchmark is evaluated
+      against. Its instances belong to that graph, not to this schema.
+
+slots:
+
+enums:

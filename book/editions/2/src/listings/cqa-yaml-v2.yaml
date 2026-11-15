@@ -1,0 +1,37 @@
+id: https://w3id.org/cqa/
+name: cqa
+# CALLOUT: domain The domain and scope settled in this chapter, recorded in the schema itself.
+description: |-
+  A vocabulary for competency question benchmarks over a knowledge
+  graph. One record pairs a question with the specification of its
+  correct answer: the answer in prose, the kind of answering the
+  question demands, and the records a correct answer must retrieve
+  and cite. The graph being evaluated is external — its records are
+  referenced by IRI rather than held here.
+license: https://creativecommons.org/licenses/by/4.0/
+version: 0.1.0-dev
+
+# CALLOUT: reuse The Step 2 decisions, in machine-readable form: every vocabulary this schema reuses is declared here and reached by URI.
+prefixes:
+  linkml: https://w3id.org/linkml/
+  cqa: https://w3id.org/cqa/
+
+  obo: http://purl.obolibrary.org/obo/
+  cco: https://www.commoncoreontologies.org/
+
+  earl: http://www.w3.org/ns/earl#
+  skos: http://www.w3.org/2004/02/skos/core#
+
+default_prefix: cqa
+default_range: string
+
+# CALLOUT: imports Only linkml:types is imported. The reused vocabularies above are reached by URI, never pulled in here: imports: is for other LinkML schemas.
+imports:
+  - linkml:types
+
+# CALLOUT: empty Step 1 fixes what the ontology is about, not what is in it.
+classes:
+
+slots:
+
+enums:
