@@ -2,66 +2,66 @@ version = 1
 
 [[listing]]
 tag = "cqa-yaml-v1"
-source = "../schema/cqa.yaml"
+source = "../../../schema/cqa.yaml"
 frozen = "src/listings/cqa-yaml-v1.yaml"
 sha256 = "fa7936430f0bdc1efb5cf443e3f730deb35f37a9ddfc0be7ff3d639b86609698"
 
 [[listing]]
 tag = "cqa-yaml-v2"
-source = "../schema/cqa.yaml"
+source = "../../../schema/cqa.yaml"
 frozen = "src/listings/cqa-yaml-v2.yaml"
 sha256 = "8a9b8bca4d3c795046fa63134a09a6536d1850a020ffd8915befc6257b9f8ffa"
 
 [[listing]]
 tag = "cqa-yaml-v3"
-source = "../schema/cqa.yaml"
+source = "../../../schema/cqa.yaml"
 frozen = "src/listings/cqa-yaml-v3.yaml"
 sha256 = "427afcc3f0a9c15b1556d469276d1bff9a5b7157bf02d124611cb27a6732f0b6"
 
 [[listing]]
 tag = "cqa-yaml-v4"
-source = "../schema/cqa.yaml"
+source = "../../../schema/cqa.yaml"
 frozen = "src/listings/cqa-yaml-v4.yaml"
 sha256 = "be9b5d28a7739da73ef194b7eb94b7f78534033bab208dd8b115bac1e76abace"
 
 [[listing]]
 tag = "cqa-yaml-v5"
-source = "../schema/cqa.yaml"
+source = "../../../schema/cqa.yaml"
 frozen = "src/listings/cqa-yaml-v5.yaml"
 sha256 = "8235b40ac245bb037cc998b7510cbfffd782493cded4b8cbdb92582477fc9efd"
 
 [[listing]]
 tag = "wine-benchmark-v1"
-source = "../../ontology-authoring-template/data/wine-benchmark.yaml"
+source = "../../../../ontology-authoring-template/data/wine-benchmark.yaml"
 frozen = "src/listings/wine-benchmark-v1.yaml"
 sha256 = "d330681b446cfa0de53f7a90c26d10e6dc3915d9af6e68f659de8246fca05b11"
 
 [[listing]]
 tag = "cqa-yaml-v6"
-source = "../schema/cqa.yaml"
+source = "../../../schema/cqa.yaml"
 frozen = "src/listings/cqa-yaml-v6.yaml"
 sha256 = "77932e3907588cc61c73c29fcf6c74d85c33589bf9955e4672dcdbebaada8ed9"
 
 [[listing]]
 tag = "cqa-yaml-v7"
-source = "../schema/cqa.yaml"
+source = "../../../schema/cqa.yaml"
 frozen = "src/listings/cqa-yaml-v7.yaml"
 sha256 = "2832584e4efdfd102508b15430cd627bf4b3e1b03e10347609f02a712034d7eb"
 
 [[listing]]
 tag = "cqa-yaml-v8"
-source = "../schema/cqa.yaml"
+source = "../../../schema/cqa.yaml"
 frozen = "src/listings/cqa-yaml-v8.yaml"
 sha256 = "e7475ea3fc575648e1cc003d52b7a2f3dc5162f6eae5c3db7f141234f2e29d32"
 
 [[listing]]
 tag = "cqa-yaml-v9"
-source = "../schema/cqa.yaml"
+source = "../../../schema/cqa.yaml"
 frozen = "src/listings/cqa-yaml-v9.yaml"
 sha256 = "0be77829dfe6873cea6350ab4359f7a756a6bc32a29378c99f27d360bfb94f08"
 
 [[listing]]
 tag = "cqa-yaml-v10"
-source = "../schema/cqa.yaml"
+source = "../../../schema/cqa.yaml"
 frozen = "src/listings/cqa-yaml-v10.yaml"
 sha256 = "de3065407b33ca1e532f6dd32198eab6f9111e00d5100d80736abe1aa3639cab"

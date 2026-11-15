@@ -3,7 +3,7 @@
 #
 # Simulate GitHub Pages locally with hot reload across:
 #   - the schema source (`schema/`)
-#   - the book source (`book/src/`, `book/*.toml`)
+#   - each edition's book source (`book/editions/*/src/`, its `*.toml`)
 #   - PRODUCER source code (panschema, mdbook-listings, mdbook-admonish)
 #
 # Editing any of these triggers a full rebuild: refreshes producer debug
@@ -16,10 +16,11 @@
 # each rebuild. Otherwise falls back to `python3 -m http.server`, where
 # you refresh manually.
 #
-# NOT watched: the generated book assets (book/*.js, book/*.css from the
-# admonish/listings/schema-link installers) — rebuild.sh regenerates them,
-# so watching them would loop the watcher. If you hand-edit one to test,
-# nudge a rebuild with `touch book/book.toml`.
+# NOT watched: the generated book assets (*.js, *.css at an edition's root,
+# from the admonish/listings/schema-link installers) — rebuild.sh
+# regenerates them, so watching them would loop the watcher. If you
+# hand-edit one to test, nudge a rebuild by touching the edition's
+# book.toml.
 #
 # Usage:
 #   ./scripts/dev.sh                 # PORT=8000 (default)
@@ -126,11 +127,15 @@ fi
 # This repo's source/config files.
 watch_args=(
   --watch schema
-  --watch book/src
-  --watch book/book.toml
-  --watch book/listings.toml
   --watch panschema-publish.toml
 )
+for book in book/editions/*/; do
+  watch_args+=(
+    --watch "${book}src"
+    --watch "${book}book.toml"
+    --watch "${book}listings.toml"
+  )
+done
 
 # Producer source paths. For each producer repo present locally, watch:
 #   - top-level Cargo.toml
@@ -202,7 +207,7 @@ trap cleanup EXIT
 
 echo ""
 echo "Watching for changes in:"
-echo "  schema/, book/src/, book/*.toml, panschema-publish.toml"
+echo "  schema/, book/editions/*/{src/,*.toml}, panschema-publish.toml"
 # `${arr[@]+"${arr[@]}"}` not `"${arr[@]}"`: under `set -u`, bash < 4.4 —
 # including the /bin/bash 3.2 that ships with macOS — errors "unbound
 # variable" on an empty array, and this array IS empty in the default case

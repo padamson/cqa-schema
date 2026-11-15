@@ -13,10 +13,11 @@ than filed as a design note.
 The repo is two things at once:
 
 - **`schema/cqa.yaml`** — the schema artifact itself.
-- **`book/`** — *Building cqa*, an mdbook that is the public log of
-  building the schema from scratch, following N&M adapted to LinkML.
-  Each N&M step gets a chapter; the schema grows incrementally with
-  **frozen listings** embedded at each stage.
+- **`book/editions/<id>/`** — *Building cqa*, an mdbook that is the
+  public log of building the schema from scratch, following N&M adapted
+  to LinkML, published in editions ("Book editions" below). Each N&M
+  step gets a chapter; the schema grows incrementally with **frozen
+  listings** embedded at each stage.
 
 The schema starts at `version: 0.1.0-dev`; prior releases, once cut, are
 reachable via their git tags.
@@ -24,7 +25,8 @@ reachable via their git tags.
 ## Chapter ↔ N&M step
 
 Chapters map to the seven N&M steps and live at
-`book/src/chNN-<kebab-title>.md`, listed in `book/src/SUMMARY.md`:
+`book/editions/<id>/src/chNN-<kebab-title>.md`, listed in that
+edition's `src/SUMMARY.md`:
 
 1. Determine domain and scope · 2. Reuse existing ontologies ·
 3. Enumerate important terms · 4. Define classes and hierarchy ·
@@ -50,16 +52,20 @@ The book embeds **frozen snapshots** of `schema/cqa.yaml` so a
 later edit can't silently change what a chapter renders. Repo
 conventions on top of the tool:
 
-- **Freeze from `book/`**, source `../schema/cqa.yaml`, tag
-  `cqa-yaml-v<N>`. Each chapter that advances the schema bumps
-  the tag so earlier chapters keep pointing at the snapshot they
-  froze:
-  `cd book && mdbook-listings freeze ../schema/cqa.yaml --tag cqa-yaml-v2 --force`
+- **Freeze from the authoring edition's book root**, source
+  `../../../schema/cqa.yaml`, tag `cqa-yaml-v<N>`. Each chapter that
+  advances the schema bumps the tag so earlier chapters keep pointing
+  at the snapshot they froze:
+  `cd "$(mdbook-panschema editions --authoring)" && mdbook-listings freeze ../../../schema/cqa.yaml --tag cqa-yaml-v2 --force`
+  Each edition has its own `listings.toml`, so tags cannot collide
+  across editions. This replaces the `cd book` form of the freeze and
+  build commands in the installed authoring skill.
 - **Callouts on files we author here** (e.g. `schema/cqa.yaml`)
   go *inline* as `# CALLOUT:` markers — never sidecar TOML, which is
   reserved for generated/third-party/no-comment-syntax listings.
 - **Integrity check:** two gates run. `mdbook-listings verify
-  --book-root book` fails on a frozen snapshot whose bytes no longer
+  --book-root book/editions/<id>`, run for every edition, fails on a
+  frozen snapshot whose bytes no longer
   match `listings.toml` (edited but not re-frozen) or a broken
   `{{#include}}` / `{{#callout}}`; it is wired into both the
   `.pre-commit-config.yaml` hook and the `docs.yml` CI (before the
@@ -68,21 +74,22 @@ conventions on top of the tool:
 
 ### Dev loop (`scripts/dev.sh`) and the freeze foot-gun
 
-`scripts/dev.sh` watches `schema/`, `book/src/`, and `book/*.toml`
-and rebuilds the combined `site/` on change (via `scripts/rebuild.sh`,
-which also runs `mdbook-listings install` to refresh callout CSS/JS).
+`scripts/dev.sh` watches `schema/` and each edition's `src/` and
+`*.toml`, and on change rebuilds the authoring edition from the working
+tree into the combined `site/` (via `scripts/rebuild.sh`, which also
+runs `mdbook-listings install` to refresh callout CSS/JS).
 But **editing `schema/cqa.yaml` does not re-freeze the listing**
 — a frozen listing is a point-in-time snapshot by design. The watcher
 will rebuild from the *old* frozen bytes, so callout/listing changes
 won't appear until you re-freeze. The loop:
 
 1. Edit `schema/cqa.yaml` (markers and all).
-2. `cd book && mdbook-listings freeze ../schema/cqa.yaml --tag <tag> --force`
-   (writing `book/src/listings/<tag>.yaml` — itself watched — triggers the rebuild).
+2. `cd "$(mdbook-panschema editions --authoring)" && mdbook-listings freeze ../../../schema/cqa.yaml --tag <tag> --force`
+   (writing `src/listings/<tag>.yaml` — itself watched — triggers the rebuild).
 3. Hard-refresh the browser (Cmd+Shift+R) to bust cached CSS/JS/HTML.
 
 If callouts seem missing, suspect a **stale `site/`** first: confirm
-the freshly built `book/build/<chapter>.html` has `callout-badge`
+the freshly built `book/editions/<id>/build/<chapter>.html` has `callout-badge`
 elements before debugging anything deeper.
 
 For anything not covered above, defer to the installed `mdbook-listings`
@@ -91,19 +98,23 @@ skill, then `mdbook-listings <cmd> --help`.
 ## Building
 
 ```
-cd book && mdbook serve   # local preview with live reload
-cd book && mdbook build   # output to book/build/
+mdbook serve "$(mdbook-panschema editions --authoring)"   # local preview with live reload
+mdbook build "$(mdbook-panschema editions --authoring)"   # output to its build/
+mdbook-panschema editions   # every edition from main, as CI publishes it
 ```
 
 Preprocessors must be on `PATH`: `mdbook-listings`, and the
 `mdbook-admonish` fork (`feat/mdbook-0.5-compat`); `mdbook-panschema`
 (from the panschema workspace) must be there too — it generates the
 gitignored book→schema toolbar-link assets that `book.toml` references
-(`scripts/install-assets.sh` runs all three installers). The published
-docs site (schema HTML + the book) is built and deployed by
-`.github/workflows/docs.yml` via the panschema toolchain on push to
-`main` (there is no tag trigger, so push a release tag together with the
-commit that lists it: `git push --atomic origin main <tag>`).
+(`scripts/install-assets.sh` runs all three installers in every
+edition). `mdbook-panschema editions` builds from the committed `main`,
+never the working tree, and runs those installs in its own checkout.
+The published docs site (schema HTML + every edition) is built and
+deployed by `.github/workflows/docs.yml` via the panschema toolchain on
+push to `main`. The release list is read from the tags, so a release is
+the version bump on `main` plus its tag, pushed together: `git push
+--atomic origin main <tag>`.
 
 Math is **opt-in** and not shipped in the stock template: to write `$…$`
 in chapters, enable `mdbook-katex` (pin `0.10.0-alpha`, ordered
@@ -249,6 +260,44 @@ copy of it to fall out of date.
   deferrals live in the *later* chapters' scaffolds, not its own, so
   deleting its scaffold loses nothing.
 
+## Book editions
+
+The book is published in editions, declared in `panschema-publish.toml`
+under `[editions]`. Each edition is a book directory on `main`,
+`book/editions/<id>/` (the id is the directory name; the dev loop relies
+on it), covering the releases from its `from` up to the
+next edition's `from`; the newest edition also covers `main`. Every
+edition is published at `book/<id>/`, and the current one (the edition
+holding the newest release) is copied to the site root. Edition 1 starts
+at `v0.1.0`.
+
+- **Within an edition, the book is a log.** Narrate reversals and dead
+  ends as they happened, and do not retro-edit earlier chapters to hide a
+  path that was later abandoned. A release that needs no retelling is
+  narrated in a section of its own, the way ch07's "One flag per class"
+  narrates `v0.1.1`.
+- **A release starts a new edition when the log would mislead.** If it
+  reverses a decision earlier chapters build on, a reader who follows
+  the book from Chapter 1 ends up with a model the schema no longer has,
+  and a section at the back does not fix that. The new edition is a new
+  directory and a new `[[editions.edition]]` whose `from` is that
+  release. It derives the new model from Chapter 1, opens with a short
+  preface saying what changed from the previous edition, and is a log
+  from then on. The default is not to start one, and an edition can only
+  start at a release.
+- **New chapters and listings go into the authoring edition**: the one
+  marked `authoring = true`, else the last. `mdbook-panschema editions
+  --authoring` prints its book directory, and the dev scripts and the
+  freeze commands above use it.
+- **An older edition is fixed on `main`.** A commit to its directory
+  republishes it for every release in its span. A schema patch to an
+  older line (`v0.1.2` while `main` carries a later minor) is a commit on
+  that line's newest tag, tagged and pushed on its own. A tag runs the
+  workflow in its own commit, which on an older line predates the
+  current one, so publish it by running the docs workflow on `main`:
+  `gh workflow run docs.yml --ref main`. There is no long-lived release
+  branch.
+
 ## Lessons
 
 These are lessons-learned baked into the template; each step-chapter
@@ -266,9 +315,10 @@ checklist.
 - **A concern that fights the layer wants a companion ontology.** If a
   concept keeps resisting the foundational grounding, that is a signal
   it belongs in a separate companion ontology, not bolted on here.
-- **The book is a chronological log, not a snapshot.** Narrate
+- **The book is a chronological log within an edition.** Narrate
   reversals and dead-ends as they happened; do not retro-edit earlier
-  chapters to hide a path that was later abandoned.
+  chapters to hide a path that was later abandoned. Only a new edition,
+  started at a release, rewrites them ("Book editions").
 - **Speculative forward-references stay in private notes.** Keep
   future-repo names, roadmap, and speculative plans out of the public
   book and commits.

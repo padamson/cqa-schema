@@ -6,25 +6,38 @@ linkml = "1.7.0"
 [files]
 main = "schema/cqa.yaml"
 
+# No `versions` or `current`: every `v<semver>` tag is a version and the
+# newest release is current, so a release is the version bump on main plus
+# its tag.
 [publishing]
-versions = ["v0.1.0", "v0.1.1"]
 edge = "main"
-# On each release: append the new tag to `versions` above and set
-# `current` to it, so `/schema/current/` aliases to the latest release
-# while `/schema/main/` stays the bleeding edge.
-current = "v0.1.1"
 output_dir = "site/schema"
 format = "html"
-# Header brand/home link target. Our publish dir is site/schema/<version>/,
-# so "../../" escapes back to the book root (works in both localhost dev
-# and the github.io deploy). The panschema default "../current/" assumes a
-# standalone schema-only deploy and is wrong for this book-nested layout.
-site_root_url = "../../"
 
-# Book→schema toolbar link (the reverse of site_root_url above): a button
-# in the book's toolbar pointing at the published schema docs. Assets are
-# installed by `mdbook-panschema install book` (see scripts/install-assets.sh)
-# and are gitignored like the other generated book assets.
+# A new edition starts at a release: add its book directory and an entry
+# whose `from` is that release.
+[editions]
+output_dir = "site"
+
+[[editions.edition]]
+id = "1"
+name = "First edition"
+book = "book/editions/1"
+from = "v0.1.0"
+
+# Unpinned, so each plugin comes from PATH: the dogfood debug builds
+# locally, the docs.yml installs in CI. Listed only for their `install`,
+# which writes the gitignored assets into each edition's checkout.
+[editions.toolchain]
+
+[[editions.toolchain.plugin]]
+name = "mdbook-admonish"
+install = ["install", "."]
+
+[[editions.toolchain.plugin]]
+name = "mdbook-listings"
+install = ["install"]
+
 [book_link]
 enabled = true
 schema_path = "schema/current/"

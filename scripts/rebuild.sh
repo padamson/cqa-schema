@@ -78,9 +78,12 @@ fi
 echo ""
 echo "==> [$(ts)] Rebuild the combined site:"
 
-# 1. Book — outputs to book/build/
+# 1. Book — the authoring edition, from the working tree. CI publishes
+# every edition from main with `mdbook-panschema editions`, which never
+# reads uncommitted edits, so the loop builds the one being written.
+book="$(mdbook-panschema editions --authoring)"
 (
-  cd book
+  cd "$book"
   # Admonish and schema-link CSS/JS are gitignored (produced assets).
   # Generate each once if missing so a fresh-clone dev loop is green —
   # guarded, not every cycle, because both installers can rewrite book.toml
@@ -101,8 +104,11 @@ echo "==> [$(ts)] Rebuild the combined site:"
 # omits this flag so deployed docs always reflect committed state.
 panschema publish --edge-from-worktree
 
-# 3. Combine — book at site/ root, schema docs already at site/schema/
-mkdir -p site
-cp -r book/build/* site/
+# 3. Combine — the book at the site root and at its edition's path, where
+# the schema pages' brand link points (edition ids are their directory
+# names here); schema docs already at site/schema/.
+mkdir -p "site/book/$(basename "$book")"
+cp -r "$book"/build/* site/
+cp -r "$book"/build/* "site/book/$(basename "$book")/"
 
 echo "==> [$(ts)] Done. Reload http://localhost:${PORT:-8000}/"

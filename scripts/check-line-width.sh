@@ -5,7 +5,7 @@
 # (see .yamllint). Long `description:` values must be folded with a `>-`
 # block scalar.
 #
-# Why a budget at all, now that book/soft-wrap.css wraps long listing lines
+# Why a budget at all, now that each edition's soft-wrap.css wraps long listing lines
 # instead of scrolling them: soft-wrapped YAML reads worse than soft-wrapped
 # code. Indentation carries the meaning, and a wrapped continuation has no
 # indent marker, so a long `description:` can wrap into something that scans

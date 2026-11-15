@@ -12,36 +12,43 @@ schema is for the other approach — pair each question with the full
 specification of its correct answer, and the set becomes something you can
 run.
 
-The build is in progress. See [the book](book/src/) for how far it has got.
+The build is in progress. See [the book](book/editions/) for how far it has got.
 
 ## Authoring the ontology
 
 Work one N&M step at a time with the **`ontology-authoring-advance-step`**
-skill (*"do Step 1"*; install it per `CLAUDE.md` "Agent skills"): write `book/src/introduction.md`, then `book/src/ch01`…
-`ch07`, so the rendered Chapter N is N&M Step N. Each step advances
+skill (*"do Step 1"*; install it per `CLAUDE.md` "Agent skills"): write `introduction.md`, then `ch01`…
+`ch07` in the authoring edition's `src/`, so the rendered Chapter N is N&M Step N. Each step advances
 `schema/cqa.yaml` only as its worked example demands and freezes a
 listing snapshot the chapter embeds. Grounding is by URI — reference reuse
 vocabularies as prefixes, never LinkML `imports:`.
 
 ## Building the book
 
+The book is published in editions, each a directory under
+`book/editions/` covering a span of releases (`[editions]` in
+`panschema-publish.toml`). New chapters go into the authoring edition,
+whose directory `mdbook-panschema editions --authoring` prints:
+
 ```
-cd book && mdbook serve   # local preview with live reload
-cd book && mdbook build   # output to book/build/
+mdbook serve "$(mdbook-panschema editions --authoring)"   # local preview with live reload
+mdbook build "$(mdbook-panschema editions --authoring)"   # output to its build/
+mdbook-panschema editions   # every edition from main into site/, as CI does
 ```
 
 Preprocessors must be on `PATH`: `mdbook-listings`, the `mdbook-admonish`
-fork, and `mdbook-panschema` — `scripts/install-assets.sh` installs all
-three. CI (`.github/workflows/docs.yml`) verifies the instance data,
-generates the machine-readable formats (via `panschema.toml`), builds the
-book, and deploys the combined site to Pages.
+fork, and `mdbook-panschema`. `scripts/install-assets.sh` generates their
+book assets in every edition. CI (`.github/workflows/docs.yml`) verifies
+the instance data, generates the machine-readable formats (via
+`panschema.toml`), builds every edition, and deploys the combined site to
+Pages.
 
 ## Layout
 
 ```
 schema/
   cqa.yaml           # source of truth (LinkML)
-book/                     # mdbook documenting the N&M build
+book/editions/<id>/       # the mdbook documenting the N&M build, one per edition
 scripts/                  # dev loop, rebuild, line-width + schema-path helpers
 panschema.toml            # panschema generate manifest (ttl/shacl/json-schema/...)
 panschema-publish.toml    # panschema's release + publish manifest
