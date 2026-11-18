@@ -32,7 +32,7 @@ and frozen here as [Appendix A](appendix-a-worked-example.md) at
 
 ## What the encoding found
 
-{{#diff cqa-yaml-v5 cqa-yaml-v6 context=16 caption="Step 7: what encoding demanded"}}
+<!-- LISTING cqa-yaml-v6: diff from cqa-yaml-v5, context 16, caption "Step 7: what encoding demanded". Placeholder until the forward freeze. -->
 
 Six of wine's seven questions are encoded here. Five went in without
 touching the schema; CQ-wine 3 did not.
@@ -53,7 +53,7 @@ A benchmark that cannot state its own claim cannot have it checked
 generically. Every adopter with a negative question would write that check
 again, in their own terms, against their own graph.
 
-So the negative gained a way to say what it claims {{#callout absence}}.
+So the negative gained a way to say what it claims <!-- callout absence -->.
 `unconnected_anchors` names the anchors no single record joins, and
 `connecting_class` optionally narrows the claim to one kind of joining
 record: "no `PairingRecommendation` joins these" instead of "no record of
@@ -67,7 +67,7 @@ absence must be drawn from the anchors. The subslot makes that structural.
 Stating the absence is not enough on its own, because a benchmark can
 declare a negative and then omit it, which is the state this section started
 in. So a question whose `answer_kind` includes `closed-world-negative` must
-carry `unconnected_anchors`, enforced by a rule {{#callout rule}}. That is
+carry `unconnected_anchors`, enforced by a rule <!-- callout rule -->. That is
 the rung Chapter 6 named and had no use for at the time.
 
 ```admonish warning title="A slot that arrived at Step 7"
@@ -217,7 +217,7 @@ which meant wiring the checks in that repository against that graph, found
 five places where the contract was underspecified, and the schema changed
 before its first release.
 
-{{#diff cqa-yaml-v6 cqa-yaml-v7 context=22 caption="What adoption demanded"}}
+<!-- LISTING cqa-yaml-v7: diff from cqa-yaml-v6, context 22, caption "What adoption demanded". Placeholder until the forward freeze. -->
 
 **The absence claim moved onto the slot.** Wine's manifest had been telling
 the toolchain which slot carried absence claims and which slot narrowed them.
@@ -232,7 +232,7 @@ required, and `expected_citations` specializes it. Under LinkML, a
 specialization inherits its parent's `required`, so the citation slot was
 optional only by accident of how the toolchain resolved it, and a
 closed-world negative cites nothing. Declaring the requirement on
-`CompetencyQuestionAnswer` instead {{#callout obliged}} removes the inherited
+`CompetencyQuestionAnswer` instead <!-- callout obliged --> removes the inherited
 value rather than cancelling it, so a slot added to that family later is
 optional by default.
 It is also the truer statement: a competency question answer must name
@@ -248,12 +248,12 @@ description, not a check. Whether the tooling resolves anchors against the
 dataset a benchmark names, rather than against every dataset the target
 publishes, is a separate question and still open.
 
-{{#diff cqa-yaml-v7 cqa-yaml-v8 context=3 caption="Anchors expand against the target"}}
+<!-- LISTING cqa-yaml-v8: diff from cqa-yaml-v7, context 3, caption "Anchors expand against the target". Placeholder until the forward freeze. -->
 
 **Anchors are written short.** Wine's benchmark spelled out the full IRI of
 every record it named, and all twenty-eight share the namespace that
 `target_schema` already declares. The three slots that hold anchors now say
-that a bare value expands against it {{#callout base}}, so `bordeaux-wine` in
+that a bare value expands against it <!-- callout base -->, so `bordeaux-wine` in
 a benchmark targeting wine's schema names the same record the full IRI did,
 and an absolute IRI is still read as written. The base sits on the benchmark
 and the anchors on the questions beneath it, so expansion takes the base from
@@ -263,14 +263,14 @@ schema's namespace, which holds for wine and need not hold for a graph
 published elsewhere; a benchmark against such a graph writes its anchors in
 full.
 
-{{#diff cqa-yaml-v8 cqa-yaml-v9 context=3 caption="Version slots that are checked"}}
+<!-- LISTING cqa-yaml-v9: diff from cqa-yaml-v8, context 3, caption "Version slots that are checked". Placeholder until the forward freeze. -->
 
 **The version slots are checked.** Chapter 5 gave `Benchmark` two version
 slots, and until now they recorded a fact nothing read. A benchmark written
 against one release of its target read green when checked against any later
 one, so nothing distinguished a benchmark checked against the release it was
 written for from one checked against whatever was installed. Each version
-slot now says which sibling's version it records {{#callout pin}}:
+slot now says which sibling's version it records <!-- callout pin -->:
 `target_schema_version` is the version of the package `target_schema` names,
 and `target_dataset_version` of the one `target_dataset` names. Where both
 graphs sit together, the declared version is compared with the version the
@@ -347,13 +347,13 @@ $ gen-python cqa.yaml
 ValueError:  slot: CompetencyQuestionAnswer_id - A slot cannot be both a key and identifier at the same time
 ```
 
-For `0.1.1` we took the flag off the shared slot {{#callout neither}} and
-declared one on each class: `identifier` on `Benchmark` {{#callout global}}
+For `0.1.1` we took the flag off the shared slot <!-- callout neither --> and
+declared one on each class: `identifier` on `Benchmark` <!-- callout global -->
 and `DomainRecord`, and `key` alone on `CompetencyQuestionAnswer`. The
 version line in the diff moves from `0.1.0-dev`, because the listing before
 it was frozen ahead of the `0.1.0` release.
 
-{{#diff cqa-yaml-v9 cqa-yaml-v10 context=3 caption="One flag per class"}}
+<!-- LISTING cqa-yaml-v10: diff from cqa-yaml-v9, context 3, caption "One flag per class". Placeholder until the forward freeze. -->
 
 No record IRI changes. Turtle generated from wine's benchmark when `0.1.0`
 shipped and Turtle generated from it under `0.1.1` both name the benchmark

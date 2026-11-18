@@ -28,4 +28,12 @@ chapters it touches, all in this edition.
       example's labels and what Appendix A embeds.
 Out of scope for v0.2.0, by ruling: quantities with tolerance and unit,
 an answer kind for closures, marking a record partial.
+
+REWIND (2026-11-17): listings from cqa-yaml-v3 on are placeholders. The
+slices above change the schema and prose only; none of them freezes.
+- [ ] Forward freeze, ch04 to ch07, once the v0.2.0 model is final:
+      each `LISTING` comment becomes its include or diff directive again
+      and each `callout` comment its badge, the prose that names a diff
+      or a listing re-read against what was frozen. Before the release
+      slice.
 -->

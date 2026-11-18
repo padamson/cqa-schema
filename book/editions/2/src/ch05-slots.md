@@ -24,7 +24,7 @@ One rule runs underneath them. A slot is required when a competency question
 cannot be answered without it, and optional otherwise; nothing is required
 for tidiness.
 
-{{#diff cqa-yaml-v3 cqa-yaml-v4 context=7 caption="Step 5: the slots"}}
+<!-- LISTING cqa-yaml-v4: diff from cqa-yaml-v3, context 7, caption "Step 5: the slots". Placeholder until the forward freeze. -->
 
 ## Identity: one slot, refined per class
 
@@ -45,7 +45,7 @@ the container's own IRI.
 
 A benchmark is one thing everywhere, so its `id` is an `identifier`. A
 question belongs to its benchmark, so its `id` is a `key`. Both classes use
-the same `id` slot {{#callout scoped}}, refined on
+the same `id` slot <!-- callout scoped -->, refined on
 `CompetencyQuestionAnswer` through `slot_usage`.
 
 The result is what CQ-cqa 7 asked for. Two benchmarks each holding a `cq-01`
@@ -72,7 +72,7 @@ correct negative from a system that retrieved nothing at all.
 That constrains what this slot can be called. A name like `evidence` would be
 wrong for the negative case, where the records are not evidence for the
 answer but the ground its absence is observed against. `expected_anchors`
-{{#callout anchors}} names what retrieval must reach and stays silent about
+<!-- callout anchors --> names what retrieval must reach and stays silent about
 why, so one slot covers both readings.
 
 The description carries the rest, because a name cannot. An author writing a
@@ -104,7 +104,7 @@ Forcing a single value would need a tie-break rule, and there is no honest
 one. "Name the strictest check" sounds decisive until you try to rank
 `attribution` against `comparison`, which measure different things.
 
-So the slot is multivalued {{#callout kinds}}, and every kind named is a
+So the slot is multivalued <!-- callout kinds -->, and every kind named is a
 check that must pass. That changes what Chapter 3 said. Later steps learn
 things earlier steps could not, so Chapter 3 stays as written and the change
 is recorded here.
@@ -127,7 +127,7 @@ moves on their own cadence, so the schema's version says nothing about which
 records exist in their graph. The two versions are independent, and CQ-cqa 8
 needs a fourth answer: at which version of that dataset.
 
-Here they are as slots on `Benchmark` {{#callout target}}.
+Here they are as slots on `Benchmark` <!-- callout target -->.
 
 ```admonish note title="Jargon: dataset"
 A **dataset** is one instance graph — a body of records conforming to a

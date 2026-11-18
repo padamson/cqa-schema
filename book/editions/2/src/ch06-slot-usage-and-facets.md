@@ -14,7 +14,7 @@ widening them or adding new slots. Few slots needed narrowing. Most of the
 work went to what [Chapter 5](ch05-slots.md) deferred here: every citation
 must also be an anchor. That turned out not to be a facet at all.
 
-{{#diff cqa-yaml-v4 cqa-yaml-v5 context=20 caption="Step 6: facets"}}
+<!-- LISTING cqa-yaml-v5: diff from cqa-yaml-v4, context 20, caption "Step 6: facets". Placeholder until the forward freeze. -->
 
 ## Every citation is an anchor
 
@@ -82,7 +82,7 @@ reasoner reads the entailment and adds the missing triple.
 ```
 
 So `expected_citations` becomes a subslot of `expected_anchors`
-{{#callout subset}}, and the schema now states the relation instead of
+<!-- callout subset -->, and the schema now states the relation instead of
 describing it:
 
 ```turtle
@@ -108,7 +108,7 @@ same shape.
 IRIs — Chapter 5 showed `alpha/cq-01` and `beta/cq-01` resolving apart
 beneath the benchmarks holding them. An identifier with a space or a slash
 in it either breaks that or silently changes what it means, so both classes
-narrow `id` to lower-case words joined by hyphens {{#callout minted}}.
+narrow `id` to lower-case words joined by hyphens <!-- callout minted -->.
 
 `DomainRecord` gets no pattern: its identifiers are absolute IRIs from the
 graph being evaluated, which the pattern would reject.

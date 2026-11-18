@@ -21,9 +21,9 @@ they become slots in Step 5.
 
 ## The three classes
 
-{{#diff cqa-yaml-v2 cqa-yaml-v3 context=4 caption="Step 4: the classes"}}
+<!-- LISTING cqa-yaml-v3: diff from cqa-yaml-v2, context 4, caption "Step 4: the classes". Placeholder until the forward freeze. -->
 
-**`CompetencyQuestionAnswer`** {{#callout item}} is the central class, and its
+**`CompetencyQuestionAnswer`** <!-- callout item --> is the central class, and its
 name is a decision rather than a description. It names the data you evaluate
 *against*, so a scored attempt at answering stays a separate thing that an
 evaluation run produces. A name like `CompetencyQuestionEval` would have
@@ -31,10 +31,10 @@ claimed the opposite, and [Chapter 1](ch01-domain-and-scope.md) put the
 scored attempt out of scope precisely so one benchmark can outlive many
 attempts at it.
 
-**`Benchmark`** {{#callout set}} is the set of them, and it exists as a class
+**`Benchmark`** <!-- callout set --> is the set of them, and it exists as a class
 because CQ-cqa 7 asked for one.
 
-**`DomainRecord`** {{#callout placeholder}} stands for a record in the graph
+**`DomainRecord`** <!-- callout placeholder --> stands for a record in the graph
 being evaluated. Nothing here ever instantiates it.
 
 ## Why the benchmark is a class

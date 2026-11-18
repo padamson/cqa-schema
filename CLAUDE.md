@@ -287,6 +287,33 @@ revised in place.
   preface saying what changed from the previous edition, and is a log
   from then on. The default is not to start one, and an edition can only
   start at a release.
+- **A new edition's listings are rewound, then frozen forward once.** An
+  edition starts as a copy of the last one, frozen listings included, but
+  its schema is already ahead of every stage those listings snapshot.
+  Re-freezing a stage means rebuilding what `schema/cqa.yaml` looked like
+  at that chapter, and every later listing carries the same edit, so
+  re-freezing per change repeats that work for each listing after it.
+  Instead, pick the rewind point: the earliest listing the new model
+  changes. Delete it and every listing after it from the edition's
+  `listings.toml` and `src/listings/`. In the chapters, replace each
+  `{{#include}}` or `{{#diff}}` that named one with an HTML comment
+  starting `LISTING <tag>:` that records its parameters, and each inline
+  `{{#callout X}}` with `<!-- callout X -->` where it stood (never a
+  directive inside a comment, since the preprocessors may still expand
+  it). Record the rewind and a forward-freeze TODO in the preface's
+  `CARRIED-IN DEFERRALS`. Changes then touch the schema and prose only.
+  The forward freeze, chapter by chapter from the rewind point, comes once
+  the edition's model is final and before its release: for each stage,
+  rewrite `schema/cqa.yaml` to that stage in the working tree, freeze it
+  from there, and restore it.
+
+  The rewind point can move earlier at any time. Authoring a new edition
+  is how you find out which decisions the new model reverses, so finding
+  one earlier than the rewind point is expected, not a mistake. Rewinding
+  again is the same operation from the earlier listing, and it only
+  deletes listings copied from the last edition, because nothing after the
+  rewind point is frozen until the end. After the forward freeze, a
+  further rewind is the same operation followed by another forward freeze.
 - **New chapters and listings go into the authoring edition**: the one
   marked `authoring = true`, else the last. `mdbook-panschema editions
   --authoring` prints its book directory, and the dev scripts and the
