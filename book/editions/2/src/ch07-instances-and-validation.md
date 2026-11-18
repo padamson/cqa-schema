@@ -158,9 +158,9 @@ carrying a value:
 | CQ-cqa 3 | `unconnected_anchors`, `connecting_class` | `cq-03`, the one negative |
 | CQ-cqa 4 | `expected_citations` | three of the six: `cq-04`, `cq-05`, `cq-07` |
 | CQ-cqa 5 | `answer_kind` | all five kinds used |
-| CQ-cqa 6 | `target_dataset` | `worked-example` |
+| CQ-cqa 6 | `target_datasets` | one, `worked-example` |
 | CQ-cqa 7 | benchmark `id`, question `id` | `wine-benchmark`, six questions |
-| CQ-cqa 8 | `target_schema`, `target_schema_version`, `target_dataset`, `target_dataset_version` | all four present |
+| CQ-cqa 8 | `target_schema`, `target_schema_version`, and each target dataset's `dataset` and `version` | all present |
 
 **All five answer kinds are exercised by six questions**, which is the
 closest thing to evidence that the enum is neither too coarse nor padded.
@@ -182,25 +182,27 @@ ruling either holds or shows itself to be an evasion. It holds: there is no
 record to anchor, and inventing one would produce a question that scores a
 retrieval that no correct answer performs.
 
-## The four target slots, checked against a real target
+## The target slots, checked against a real target
 
-Chapter 5 gave `Benchmark` four slots to say what it is asked against:
-`target_schema` and `target_schema_version` name the vocabulary the records
-conform to and the release of it, `target_dataset` and
-`target_dataset_version` name which body of records the anchors resolve in
-and which state of it. Chapter 5 also recorded that a dataset carrying its
-own IRI would need only one of the four, and Chapter 6 could not settle that,
-because no facet collapses four slots into one.
+Chapter 5 gave `Benchmark` two slots for the schema it is asked against and a
+list for the datasets. `target_schema` and `target_schema_version` name the
+vocabulary the records conform to and the release of it, and each entry in
+`target_datasets` names a body of records the anchors resolve in and the
+state of it. Chapter 5 also recorded that a dataset carrying its own IRI
+could be pointed at rather than named, and Chapter 6 could not settle that,
+because no facet turns a name into a reference.
 
 Encoding wine's benchmark answers that question for now, in the negative.
 `WineCatalog` is a `tree_root` holding collections, and it carries no
 identifier, so neither of wine's two graphs has an IRI a benchmark could
-point at. All four facts have to be written into the benchmark itself.
+point at. Wine's benchmark names its one dataset, `worked-example`, and
+states its version.
 
-Chapter 5 accepted that cost deliberately. When a benchmark ships beside the
-schema it targets, two of the four slots repeat what the package already
-records. The return is that a reader can tell what a benchmark targets
-without also knowing where the file came from.
+Chapter 5 accepted the cost of stating everything. When a benchmark ships
+beside the schema it targets, `target_schema_version` and the dataset's
+`version` repeat what the package already records. The return is that a
+reader can tell what a benchmark targets without also knowing where the
+file came from.
 
 ## What the schema is for
 
@@ -239,8 +241,8 @@ It is also the truer statement: a competency question answer must name
 anchors, which is a fact about the question, not about the slot wherever it
 appears.
 
-**`target_dataset` says where its value comes from.** Wine's benchmark says
-`target_dataset: worked-example`. The slot already described what it was for,
+**`dataset` says where its value comes from.** Wine's benchmark names its
+dataset `worked-example`. The slot already described what it was for,
 which instance graph the anchors resolve in, but not what kind of name that is
 or who assigns it. It now says: a dataset name as the target package publishes
 it, from that package's publish manifest. That is a refinement to a
@@ -272,7 +274,8 @@ one, so nothing distinguished a benchmark checked against the release it was
 written for from one checked against whatever was installed. Each version
 slot now says which sibling's version it records <!-- callout pin -->:
 `target_schema_version` is the version of the package `target_schema` names,
-and `target_dataset_version` of the one `target_dataset` names. Where both
+and a target dataset's `version` is the version of the one its `dataset`
+names. Where both
 graphs sit together, the declared version is compared with the version the
 target resolved to, and a mismatch is reported per record, naming the slot,
 both versions, and the sibling. Bumping wine to `0.3.0` while the benchmark
@@ -317,7 +320,7 @@ note: schema `cqa`: 1 of 1 stated absence claim(s) hold against `wine`
 Exit code zero. Every anchor resolves, the absence claim holds, and the
 benchmark states something the graph contradicts.
 
-The version slots do not help here. `target_dataset_version` records which
+The version slots do not help here. A dataset's `version` records which
 release of the data a benchmark was written against, and this correction did
 not change the release; it changed a record inside one. A benchmark can be
 conformant, resolve every anchor, and still be wrong about what the graph
@@ -328,8 +331,8 @@ records, and scoping their classes to their container was expected to move
 those records and break three of the six questions. It leaves the generated
 graph byte-identical, because a scoped record mints beneath its container's
 IRI and wine's catalog carries no identifier. Giving the catalog one would
-collapse the four target slots into one, which Chapter 6 wanted, and move half
-the benchmark's anchors at the same time.
+let a benchmark point at its dataset rather than name it, which Chapter 6
+wanted, and move half the benchmark's anchors at the same time.
 
 ## One flag per class
 
@@ -364,7 +367,7 @@ We also reworded `target_schema_version`. It described the version of the
 target schema, and an adopter whose schema file declares `0.1.0-dev`
 while its package publishes `0.1.0` wrote the file's version and got a pin
 that failed. The pin is compared with the package's release identifier, as
-`target_dataset_version` already said of its own sibling, and the
+a dataset's `version` already said of its own sibling, and the
 description now says so.
 
 ## What is left

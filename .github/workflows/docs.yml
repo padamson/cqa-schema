@@ -164,13 +164,9 @@ jobs:
         # the edition's src/. Without this step the chapter's conformance
         # claim goes unchecked and rots silently the next time the schema
         # tightens.
-        run: |
-          shopt -s nullglob
-          schema="$(scripts/schema-path.sh)"
-          for f in book/editions/*/src/listings/*-benchmark-*.yaml; do
-            echo "verify $f"
-            panschema verify --schema "$schema" --data "$f"
-          done
+        # Each is held to the schema it was written for, not to main, so an
+        # edition's claim survives the schema moving on.
+        run: scripts/verify-frozen-benchmarks.sh
 
       - name: Assert invalid fixtures are rejected (panschema)
         # The negative half of verification: every data/invalid/*.yaml MUST

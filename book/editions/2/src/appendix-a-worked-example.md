@@ -16,6 +16,11 @@ this copy cannot: every anchor below resolves to a record wine actually mints,
 and `cq-03`'s stated absence {{#callout absence}} is checked against wine's
 catalog rather than taken on trust.
 
+This copy was encoded for cqa `0.1.1`, before a benchmark listed its
+datasets, so it names its one dataset in `target_dataset` and that dataset's
+version in `target_dataset_version`, where `0.2.0` writes one entry under
+`target_datasets`.
+
 Each question names the kinds of answering it calls for {{#callout kind}},
 and `cq-07` names two {{#callout two-kinds}}, which is why
 [Chapter 5](ch05-slots.md) made the slot multivalued. Where an answer must

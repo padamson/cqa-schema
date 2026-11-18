@@ -42,16 +42,23 @@ repos:
         # A curated A-box that feature 37 publishes to the docs site is a
         # conformance claim; publish only warns, so gate it here. Verifies
         # every data/*.yaml against the schema; non-zero on any violation.
-        # Also covers the frozen worked example in each edition's listings,
-        # which Appendix A embeds and ch07 claims conforms; the data/*.yaml
-        # glob does not reach it.
         entry: >-
           bash -c 'shopt -s nullglob;
           schema="$(scripts/schema-path.sh)";
-          for f in data/*.yaml book/editions/*/src/listings/*-benchmark-*.yaml; do
+          for f in data/*.yaml; do
           echo "verify $f";
           panschema verify --schema "$schema" --data "$f" || exit 1;
           done'
         language: system
         pass_filenames: false
-        files: ^(schema/[^/]+\.yaml|data/.*\.yaml|book/editions/[^/]+/src/listings/.*-benchmark-.*\.yaml)$
+        files: ^(schema/[^/]+\.yaml|data/.*\.yaml)$
+
+      - id: frozen-benchmarks-verify
+        name: panschema verify (frozen benchmarks conform to their schema)
+        # The frozen worked example in each edition's listings, which
+        # Appendix A embeds and ch07 claims conforms. Each is checked
+        # against the schema it was written for, paired in the script.
+        entry: scripts/verify-frozen-benchmarks.sh
+        language: system
+        pass_filenames: false
+        files: ^(scripts/verify-frozen-benchmarks\.sh|book/editions/[^/]+/src/listings/.*\.yaml)$

@@ -15,11 +15,12 @@ the more salient concepts first and then generalizes and specializes
 them appropriately.
 ```
 
-Step 3 listed eleven terms. Three of them become classes here; the rest
-describe a competency question answer rather than standing on their own, and
-they become slots in Step 5.
+Step 3 listed eleven terms. Three of them become classes here, and a fourth
+comes from finding that one term, *target schema*, names more than one thing.
+The rest describe a competency question answer rather than standing on their
+own, and they become slots in Step 5.
 
-## The three classes
+## The four classes
 
 <!-- LISTING cqa-yaml-v3: diff from cqa-yaml-v2, context 4, caption "Step 4: the classes". Placeholder until the forward freeze. -->
 
@@ -36,6 +37,10 @@ because CQ-cqa 7 asked for one.
 
 **`DomainRecord`** <!-- callout placeholder --> stands for a record in the graph
 being evaluated. Nothing here ever instantiates it.
+
+**`TargetDataset`** <!-- callout dataset --> is one of the instance graphs a
+benchmark is asked against. Why it is a class, and why it has no identifier,
+is under "The target, and the datasets in it" below.
 
 ## Why the benchmark is a class
 
@@ -62,6 +67,8 @@ Information Content Entity, as [Chapter
 2](ch02-reusing-existing-ontologies.md)'s reuse table committed them to,
 with the EARL correspondences recorded as `skos:closeMatch`. Both fit: a
 question with its answer is content, and a set of them is content too.
+`TargetDataset` grounds in the same node. A dataset is a body of records,
+which is content as well, and EARL has no term for it to correspond to.
 
 `DomainRecord` has no `subclass_of` at all, and that absence is the honest
 answer rather than an omission. The reason is what `subclass_of` does once
@@ -124,12 +131,11 @@ the T-box is a different kind of evaluation, and mixing it in would blur what
 So a benchmark covers the competency questions a graph answers, and not the
 ones its schema answers.
 
-## A target is not a class
+## The target, and the datasets in it
 
 CQ-cqa 6 asks which graph a benchmark is asked against, and Step 3 turned
 that into a single term, *target schema*. Checking whether it needed a class
-of its own showed that the term was too small, in two ways that can both be
-demonstrated against wine.
+of its own showed that the term was too small, in three ways.
 
 **A schema is not a version.** Wine's identifiers are not fixed. A later wine
 release scopes its judgment records — the pairing recommendations and vintage
@@ -147,35 +153,59 @@ the worked example and not in the preview. A benchmark anchoring to it
 resolves against one and fails against the other, with the schema and the
 version identical in both cases.
 
-Neither failure is hypothetical, and neither is visible to a benchmark that
-records only a schema. So the question list is short one question again:
+**A target is not always one dataset.** Wine's records are of two kinds.
+Grapes, regions, wineries, wines, and foods are reference facts. Pairing
+recommendations and vintage assessments are judgments about them, each with
+a source, a confidence, and a rationale, and judgments are corrected on a
+schedule of their own: a verdict is revised, or a second critic's assessments
+of the same vintages are added. Wine publishes both kinds in one dataset, so
+correcting one verdict moves the version of the whole graph. Published as a
+dataset of their own over the reference records, the judgments could move
+without the reference records moving with them. Two of the graphs cqa
+already benchmarks are published that way, a shared catalog of reference
+records in one dataset and each owner's records over it in another. A
+question that cites a judgment and anchors the record it judges then has
+anchors in both datasets, and each dataset has its own version.
+
+The first two failures can be shown against wine as published, and the third
+against any graph published in parts. None of them is visible to a benchmark
+that records only a schema. So the question list is short one question again:
 
 > **CQ-cqa 8.** Which graph are these anchors valid against — which schema,
-> at which version, and which dataset?
+> at which version, and which datasets, each at which version?
 
-**The answer is not a class.** A target has no identity apart from the
-benchmark that names it: one benchmark, one target, and nothing else in the
-model refers to a target on its own. Making it a class would add a join no
-query would traverse. What it needs is for `Benchmark` to say three things
-instead of one, which is a slot question, and Step 5 takes it.
+**The schema is not a class.** It has no identity apart from the benchmark
+that names it: one benchmark, one schema, and nothing else in the model
+refers to it on its own. Making it a class would add a join no query would
+traverse. `Benchmark` needs to say which schema and which version, which is a
+slot question, and Step 5 takes it.
+
+**Each dataset is.** A benchmark can name several, and each comes with two
+facts that belong together, its name and its version. Written as two lists on
+`Benchmark`, which version goes with which dataset would rest on the order of
+the lists, and nothing checks an order. So a target dataset is a record of
+its own, holding both. It still has no identity apart from the benchmark that
+names it, so it carries no identifier and is written inside the benchmark,
+as a blank node rather than a record with an IRI of its own.
 
 ## The hierarchy, such as it is
 
-There is no `is_a` hierarchy among the three. They are siblings: two grounded
+There is no `is_a` hierarchy among the four. They are siblings: three grounded
 at the same CCO node, one grounded nowhere. N&M describe top-down, bottom-up,
 and combination approaches to building a hierarchy, and cqa has too few
 classes for the question to arise.
 
 A flat model is the right outcome here rather than a stage to grow out of.
 The domain has one thing (a question with its answer), one collection of that
-thing, and one placeholder for something it does not own. Specialization
+thing, one placeholder for something it does not own, and one record of
+where the collection is asked. Specialization
 would come from answer kinds if they became classes, and Step 5 keeps them as
 values of a slot instead, since a subclass per kind would multiply classes
 without adding anything a query could use.
 
 One check comes up nearly empty at this step, honestly so: the class graph.
-With no slots, nothing connects the three classes, so the island test — a
+With no slots, nothing connects the four classes, so the island test — a
 disconnected node is a bug to explain or remove — has nothing to catch until
 Chapter 5, when the anchor and citation slots wire `CompetencyQuestionAnswer`
-to `DomainRecord` and `Benchmark` to its questions. The classes are in place;
+to `DomainRecord`, and `Benchmark` to its questions and its target datasets. The classes are in place;
 Chapter 5 connects them.

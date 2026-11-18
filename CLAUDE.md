@@ -226,8 +226,8 @@ copy of it to fall out of date.
   referenced via `subclass_of` + prefixes, *not* LinkML `imports:`
   (which is for other LinkML schemas — only `linkml:types` is
   imported). (`class_uri` asserts identity, which ch04 rejects as too
-  strong; a slot that needs external grounding would use `slot_uri`,
-  but none do yet.)
+  strong; a slot uses `slot_uri` only where its meaning is the
+  external property's, as `version` is `pav:version`.)
 - **Schema descriptions state domain and purpose, nothing else.**
   `description:` fields ship with the artifact (generated docs, RDF,
   downstream graphs), so they carry only what a consumer of the *artifact*

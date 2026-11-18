@@ -109,25 +109,27 @@ check that must pass. That changes what Chapter 3 said. Later steps learn
 things earlier steps could not, so Chapter 3 stays as written and the change
 is recorded here.
 
-## The target takes four slots
+## The target takes three slots
 
 CQ-cqa 6 asked which graph a benchmark is asked against. CQ-cqa 8 is that
-question made precise, and Chapter 4 answered it in three parts: which
-schema, at which version, and which dataset. At Step 5 we found a fourth
-part.
+question made precise, and Chapter 4 answered it: which schema, at which
+version, and which datasets, each at which version. It also made each target
+dataset a record of its own, so a dataset's name and its version travel
+together.
 
-Those three assume a schema and the data conforming to it move together.
-Sometimes they do. A schema published together with its own curated datasets
-releases them under one version, and that single version number describes
-both the model and the records.
+That leaves one part to settle here: why a dataset needs a version separate
+from the schema's. Sometimes they are the same. A schema published together
+with its own curated datasets releases them under one version, and that
+single version number describes both the model and the records.
 
-Sometimes they do not, and this is the ordinary case for anyone building on
+Sometimes they are not, and this is the ordinary case for anyone building on
 someone else's published schema. Their data lives in their own repository and
 moves on their own cadence, so the schema's version says nothing about which
-records exist in their graph. The two versions are independent, and CQ-cqa 8
-needs a fourth answer: at which version of that dataset.
+records exist in their graph. The two versions are independent, and so are
+the versions of two datasets published apart.
 
-Here they are as slots on `Benchmark` <!-- callout target -->.
+Here they are as slots on `Benchmark` <!-- callout target -->, and the two
+that describe each `TargetDataset`.
 
 ```admonish note title="Jargon: dataset"
 A **dataset** is one instance graph — a body of records conforming to a
@@ -142,14 +144,28 @@ records exist to be anchored at all.
 
 `target_schema` names the vocabulary the records conform to, and
 `target_schema_version` which release of it, since a release can change how
-identifiers are minted. `target_dataset` names which body of records the
-anchors resolve in, and `target_dataset_version` which state of it, since
-records can be added, removed or corrected without the schema moving at
-all.
+identifiers are minted. `target_datasets` lists the bodies of records the
+anchors resolve in, inline, since a target dataset has no identifier to
+refer to it by. Each names its dataset in `dataset` and the state of it in
+`version`, since records can be added, removed or corrected without the
+schema moving at all.
 
-Step 4 left one part of this undecided: whether the version recorded is the
-schema's or the dataset's. It is both, in separate slots, for the reason
-above.
+`version` is the first slot in cqa whose predicate is not cqa's own. Every
+other slot emits a `cqa:` property, because what it states is particular to
+benchmarks. A version is not: it is the release identifier of something
+published, and the [Provenance, Authoring and Versioning
+ontology](https://pav-ontology.github.io/pav/) (PAV) already has the
+property for it, `pav:version`. The slot declares it as its `slot_uri`, so
+the generated RDF states the version with the predicate a consumer reading
+provenance already knows. That is an identity claim, which Chapter 4
+rejected for `class_uri` because an EARL class only corresponds to a cqa
+one. Here the meaning is the same, so identity is the right strength.
+
+[Chapter 2](ch02-reusing-existing-ontologies.md) set PROV-O aside because no
+competency question asked for provenance. PAV specializes PROV-O for
+authorship and versioning ([Ciccarese *et al.*,
+2013](https://doi.org/10.1186/2041-1480-4-37)), and CQ-cqa 8 now asks for a
+version. One property is all cqa takes from it.
 
 The dataset half matters more than it first appears. A record that disappears
 breaks an anchor loudly. A record that *changes* breaks nothing visible.
@@ -165,47 +181,49 @@ nothing in this schema makes it. And it has nothing to say for a benchmark
 aimed at a moving branch rather than a release, where there is no version to
 record and no promise that anything holds still.
 
-## Four slots, two of them often redundant
+## Required, and often redundant
 
 We considered making `target_schema` and `target_schema_version` optional. A
 benchmark published alongside the schema it targets already carries both
 facts: one package, one version. Wine's benchmark will ship beside
 `wine.yaml`, and for it those two slots restate what the package says.
 
-They are required anyway, and so is `target_dataset_version`. A benchmark
+They are required anyway, and so is each dataset's `version`. A benchmark
 should be readable without knowing where it was published. Third-party
 publishing decides it: someone benchmarking a graph they do not own has no
 shared package to appeal to, and neither does anyone reading that benchmark
-afterwards. Requiring all four makes every benchmark state its target in
+afterwards. Requiring all of them makes every benchmark state its target in
 full.
 
 The cost is redundancy, and it is worth naming rather than explaining away.
 When a benchmark, its example instance graph, and the schema all move on one
-version, `target_schema_version` and `target_dataset_version` hold the same
+version, `target_schema_version` and the dataset's `version` hold the same
 string as each other and as the package, and a reader could have derived
 both. We overspecify on purpose: a fact written in the record survives the
 record being moved, and a derived one does not.
 
-Two of the four are not redundant in any arrangement. `target_dataset` is
-needed because one schema can have several graphs. `target_schema` is needed
-because the anchors are IRIs in the schema's base namespace, so holding it
-lets a tool check that a benchmark's anchors belong to the schema it claims,
-using nothing but the benchmark.
+Two of the slots are not redundant in any arrangement. `target_datasets` is
+needed because one schema can have several datasets and a benchmark can need
+more than one of them. `target_schema` is needed because the anchors are IRIs
+in the schema's base namespace, so holding it lets a tool check that a
+benchmark's anchors belong to the schema it claims, using nothing but the
+benchmark.
 
 ## What this would look like if datasets were addressable
 
-Four slots is a fallback. If a target graph were an identified resource — an
-IRI resolving to something that declares its own schema and version — a
-benchmark would name it once and stop, because those are facts about the
+A target dataset is named, not referenced. If a dataset were an identified
+resource — an IRI resolving to something that declares its own schema and
+version — a benchmark could point at it, because those are facts about the
 dataset rather than about the benchmark.
 
 A dataset becomes a node with an IRI as soon as its root class carries an
 identifier. `Benchmark` carries one, so every benchmark is already such a
 resource. Wine's `WineCatalog` deliberately is not: its two curated graphs
 share records and are meant to merge, and identifying the root would scope
-them apart. So these slots say in the benchmark what the dataset cannot say
-about itself, and when a target does arrive identified, one reference should
-replace the four. That change is in how data is published, not in how
+them apart. So `dataset` holds the name the target package publishes the
+dataset under, and the benchmark says what the dataset cannot say about
+itself. When a target does arrive with identified datasets, `dataset` could
+hold the IRI instead. That change is in how data is published, not in how
 benchmarks are written.
 
 ## The island check
@@ -213,5 +231,5 @@ benchmarks are written.
 Every class in the generated graph is reachable:
 `CompetencyQuestionAnswer` reaches `DomainRecord` through the anchor and
 citation slots, and `Benchmark` reaches `CompetencyQuestionAnswer` through
-the questions it holds. No class sits alone, so there is nothing here to
-explain or remove.
+the questions it holds and `TargetDataset` through `target_datasets`. No
+class sits alone, so there is nothing here to explain or remove.

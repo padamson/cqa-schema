@@ -155,17 +155,17 @@ slot, and that relation is specialization, which `is_a` already carries.
 
 ## What Step 6 could not settle
 
-Chapter 5 gave `Benchmark` four slots to say what it is asked against: the
-schema, the schema's version, the dataset, and the dataset's version. It also
-recorded why four is more than it should take. A dataset with an IRI of its
-own would declare its schema and version itself, and a benchmark could name
-it once.
+Chapter 5 gave `Benchmark` two slots for the schema it is asked against and a
+list of target datasets, each a dataset's name and its version. It also
+recorded that a name is a fallback. A dataset with an IRI of its own would
+declare its schema and version itself, and a benchmark could point at it.
 
 Wine's datasets have no such IRI. Its `WineCatalog` root deliberately carries
 no identifier, so that the graphs it holds can merge instead of being scoped
-apart, and a benchmark has to spell out all four facts for itself.
+apart, and a benchmark has to name each dataset and state its version for
+itself.
 
-Step 6 cannot settle this. No facet collapses four slots into one — a facet
+Step 6 cannot settle this. No facet turns a name into a reference — a facet
 narrows what a single slot accepts, and this is a question about how a
 dataset is published. It stays open until a target arrives that publishes
-itself differently.
+its datasets with identifiers.

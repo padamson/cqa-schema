@@ -13,8 +13,17 @@ once the v0.2.0 constructs below have landed in the chapters.
 CARRIED-IN DEFERRALS (v0.2.0 scope, ruled 2026-11-15)
 Each item lands as its own change: schema, re-frozen listing, and the
 chapters it touches, all in this edition.
-- [ ] A benchmark over more than one target dataset
-      (target_dataset / target_dataset_version; ch04, ch05).
+- [x] A benchmark over more than one target dataset
+      (target_dataset / target_dataset_version; ch04, ch05). Landed as
+      target_datasets, a list of TargetDataset (dataset, version), in
+      ch04-ch07.
+- [ ] Re-freeze wine's benchmark for 0.2.0 into Appendix A once wine is
+      re-encoded (target_datasets, closed_world_negative); drop Appendix
+      A's "encoded for cqa 0.1.1" paragraph; re-pair the frozen benchmark
+      in scripts/verify-frozen-benchmarks.sh to the 0.2.0 listing; re-read
+      ch07's litmus table and target section against it. If wine splits
+      its judgments into a dataset of their own, ch04's third failure
+      gets a public example. From the multi-dataset slice.
 - [ ] Expected values: an anchor, a slot of the target schema, and the
       value it carries, including an enumerated value as the answer.
 - [ ] An absence narrowed by a slot value, and an empty slot as an
