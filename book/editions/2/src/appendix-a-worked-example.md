@@ -19,7 +19,8 @@ catalog rather than taken on trust.
 This copy was encoded for cqa `0.1.1`, before a benchmark listed its
 datasets, so it names its one dataset in `target_dataset` and that dataset's
 version in `target_dataset_version`, where `0.2.0` writes one entry under
-`target_datasets`.
+`target_datasets`. It also spells one answer kind `closed-world-negative`,
+which `0.2.0` spells `closed_world_negative`.
 
 Each question names the kinds of answering it calls for {{#callout kind}},
 and `cq-07` names two {{#callout two-kinds}}, which is why

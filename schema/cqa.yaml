@@ -66,7 +66,7 @@ classes:
         preconditions:
           slot_conditions:
             answer_kind:
-              equals_string: closed-world-negative
+              equals_string: closed_world_negative
         postconditions:
           slot_conditions:
             unconnected_anchors:
@@ -302,7 +302,7 @@ enums:
       lookup:
         description: >-
           A value read from a single record.
-      closed-world-negative:
+      closed_world_negative:
         description: >-
           The correct answer is that the graph holds no such record.
           Absence of a record is not evidence against the claim, only

@@ -66,7 +66,7 @@ absence must be drawn from the anchors. The subslot makes that structural.
 
 Stating the absence is not enough on its own, because a benchmark can
 declare a negative and then omit it, which is the state this section started
-in. So a question whose `answer_kind` includes `closed-world-negative` must
+in. So a question whose `answer_kind` includes `closed_world_negative` must
 carry `unconnected_anchors`, enforced by a rule <!-- callout rule -->. That is
 the rung Chapter 6 named and had no use for at the time.
 

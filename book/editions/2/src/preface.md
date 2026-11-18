@@ -33,6 +33,10 @@ chapters it touches, all in this edition.
       Benchmark.
 - [ ] Alternative evidence sets, only if a consumer record rests on two
       sets of records; otherwise dropped, with the reason.
+- [x] closed-world-negative -> closed_world_negative, the spelling
+      LinkML's standard_naming lint expects of a permissible value.
+      Breaking for every 0.1 record that uses it, so the preface, when
+      written, names it for first-edition readers.
 - [ ] ch01: re-derive CQ-cqa from the new demand; decide the worked
       example's labels and what Appendix A embeds.
 Out of scope for v0.2.0, by ruling: quantities with tolerance and unit,
