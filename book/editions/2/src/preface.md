@@ -21,11 +21,18 @@ chapters it touches, all in this edition.
       re-encoded (target_datasets, closed_world_negative); drop Appendix
       A's "encoded for cqa 0.1.1" paragraph; re-pair the frozen benchmark
       in scripts/verify-frozen-benchmarks.sh to the 0.2.0 listing; re-read
-      ch07's litmus table and target section against it. If wine splits
+      ch07's litmus table and target section against it. If wine's
+      re-encoded cq-07 states its verdicts, rewrite ch07's "What the checks
+      cannot see" reproduction against wine's benchmark instead of
+      data/claims/holds.yaml, and add expected_values to the litmus table's
+      CQ-cqa 1 row. If wine splits
       its judgments into a dataset of their own, ch04's third failure
       gets a public example. From the multi-dataset slice.
-- [ ] Expected values: an anchor, a slot of the target schema, and the
+- [x] Expected values: an anchor, a slot of the target schema, and the
       value it carries, including an enumerated value as the answer.
+      Landed as expected_values, a list of ExpectedValue (record, slot,
+      value), in ch04-ch07, checked by bare verify against wine 0.2.1
+      (data/claims/).
 - [ ] An absence narrowed by a slot value, and an empty slot as an
       answer.
 - [ ] An ordering claim over anchors.
@@ -38,7 +45,9 @@ chapters it touches, all in this edition.
       Breaking for every 0.1 record that uses it, so the preface, when
       written, names it for first-edition readers.
 - [ ] ch01: re-derive CQ-cqa from the new demand; decide the worked
-      example's labels and what Appendix A embeds.
+      example's labels and what Appendix A embeds. ch04 hangs expected
+      values on CQ-cqa 1 ("what is the correct answer?"); decide whether
+      that holds or a question of its own asks for a checkable answer.
 Out of scope for v0.2.0, by ruling: quantities with tolerance and unit,
 an answer kind for closures, marking a record partial.
 

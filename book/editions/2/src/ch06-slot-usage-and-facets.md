@@ -11,8 +11,9 @@ the slot can take.
 
 In this process, we focus on narrowing what existing slots accept, never
 widening them or adding new slots. Few slots needed narrowing. Most of the
-work went to what [Chapter 5](ch05-slots.md) deferred here: every citation
-must also be an anchor. That turned out not to be a facet at all.
+work went to two things [Chapter 5](ch05-slots.md) left here: every citation
+must also be an anchor, and so must every record an expected value is read
+from. Neither turned out to be a facet.
 
 <!-- LISTING cqa-yaml-v5: diff from cqa-yaml-v4, context 20, caption "Step 6: facets". Placeholder until the forward freeze. -->
 
@@ -98,6 +99,32 @@ and reports the citation that sits outside its parent. Entailment adds;
 validation rejects. Both are defensible readings of one relation, and which
 one a consumer gets depends on how it reads the benchmark — worth knowing
 before trusting either.
+
+## Every value is read from an anchor
+
+The record an expected value names must be among the question's anchors. A
+value a correct answer depends on comes from a record the answer has to
+retrieve, and a value read from a record retrieval was never required to
+reach is a fact no correct retrieval would have found.
+
+The citation rule became a subslot, and this one cannot. `record` sits on
+the `ExpectedValue`, one record down from the question that holds the
+anchors, so the two slots are on different nodes and `is_a` between them
+would relate nothing. By the jargon above this is an invariant: it spans two
+nodes. LinkML's rules cannot state it either, since a rule's conditions read
+the slots of the record it is declared on and not those of the record
+containing it.
+
+It is still a fact about what the slot means, so the slot declares it, as
+`unconnected_anchors` declares its absence claim in [Chapter
+7](ch07-instances-and-validation.md). `expected_values` carries an
+annotation <!-- callout values --> naming which of an entry's slots holds the
+record, which the slot, and which the value, and its `among` names the slot
+on the containing question the record must be found in. A citation counts,
+because `expected_citations` specializes `expected_anchors`. The annotation is
+read where the benchmark and the target graph sit together, by the same
+check that compares each value with the graph, and Chapter 7 shows what that
+check reports.
 
 ## One `id` slot, two patterns
 

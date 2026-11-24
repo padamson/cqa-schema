@@ -1,0 +1,18 @@
+# A Wine carries no verdict; a VintageAssessment does.
+# expect: value-claim/slot-not-carried
+id: broken-benchmark
+target_schema: https://w3id.org/wine-linkml/
+target_schema_version: 0.2.1
+target_datasets:
+  - dataset: worked-example
+    version: 0.2.1
+competency_question_answers:
+  - id: cq-01
+    question: Is Bordeaux a good wine?
+    ground_truth: Good.
+    answer_kind: [lookup]
+    expected_anchors: [bordeaux-wine]
+    expected_values:
+      - record: bordeaux-wine
+        slot: verdict
+        value: good

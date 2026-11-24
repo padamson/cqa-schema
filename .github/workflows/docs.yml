@@ -184,6 +184,10 @@ jobs:
             echo "ok, rejected: $f"
           done
 
+      - name: Check value claims against wine (panschema)
+        # The per-file loops above leave every value claim unchecked.
+        run: scripts/verify-claim-fixtures.sh
+
       - name: Generate machine-readable artifacts (panschema)
         # TTL (schema + A-box KG), SHACL shapes, JSON Schema, and the
         # instance-graph JSON — the "Other formats" the book names but the

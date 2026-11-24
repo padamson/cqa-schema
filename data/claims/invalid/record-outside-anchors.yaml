@@ -1,0 +1,18 @@
+# The value is read from a record the answer was never required to retrieve.
+# expect: value-claim/not-among
+id: broken-benchmark
+target_schema: https://w3id.org/wine-linkml/
+target_schema_version: 0.2.1
+target_datasets:
+  - dataset: worked-example
+    version: 0.2.1
+competency_question_answers:
+  - id: cq-01
+    question: Was 2018 a good year for Napa Zinfandel?
+    ground_truth: Good.
+    answer_kind: [lookup]
+    expected_anchors: [napa-zinfandel-2018]
+    expected_values:
+      - record: va-napa-zin-2018
+        slot: verdict
+        value: good

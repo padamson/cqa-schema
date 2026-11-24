@@ -1,12 +1,7 @@
 # panschema consumer manifest — `panschema generate` emits the machine-readable
 # formats to site/artifacts/ (deployed with the docs site). HTML comes from
-# `panschema publish` + panschema-publish.toml, not here.
-#
-# This blank-slate version lists only the schema-level (T-box) formats, since a
-# fresh ontology has no instance data yet. Once you have an A-box
-# (data/<name>-instances.yaml), add an `instances = ["data/<name>-instances.yaml"]`
-# line and an `instance-graph-json = "site/artifacts/<name>-instances.graph.json"`
-# key to also emit the knowledge graph.
+# `panschema publish` + panschema-publish.toml, not here. Bare `panschema
+# verify` checks everything declared here without writing outputs.
 #
 # `path = "."` references this repo's own package. Keys are deny_unknown_fields,
 # so a typo is a hard error: note `json_schema` (underscore).
@@ -17,3 +12,20 @@ path = "."
 shacl = "site/artifacts/cqa-shapes.ttl"
 json_schema = "site/artifacts/cqa.schema.json"
 ttl = "site/artifacts/cqa.ttl"
+
+# Wine's worked example is the graph the value-claim fixtures in
+# data/claims/ are written against; scripts/verify-claim-fixtures.sh
+# checks them.
+[schemas.wine]
+source = "github:padamson/ontology-authoring-template"
+version = "0.2.1"
+
+[generate.wine]
+datasets = ["worked-example"]
+
+# `instances` here is checked and never shipped: the claims that must
+# hold. The ones that must fail sit in data/claims/invalid/.
+[check.cqa]
+instances = ["data/claims/holds.yaml"]
+resolve_against = ["wine"]
+require_namespace_coverage = true

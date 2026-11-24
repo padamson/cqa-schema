@@ -119,7 +119,7 @@ promise its own definition makes, and every value carrying the type its slot
 declares.
 
 One of those checks rests on a convention that can look like an omission.
-Eight of this schema's ten datatype slots declare no `range:` at all, taking
+Ten of this schema's twelve datatype slots declare no `range:` at all, taking
 their type from `default_range` instead, so a reader might reasonably wonder
 whether an untyped slot is an unchecked one. It is checked: `question: 42`
 is rejected as "an integer, but the slot's range `string` expects a string."
@@ -136,13 +136,41 @@ The second is answered where both graphs sit together. In wine's repository
 the benchmark and the catalog are siblings in one manifest, so the same
 toolchain resolves each anchor against the records wine actually mints,
 checks each stated absence by looking for a record that joins the anchors it
-claims are unjoined, and compares the versions the benchmark declares with
-the versions wine is at. A false claim fails there. The manifest
+claims are unjoined, compares the versions the benchmark declares with the
+versions wine is at, and reads each expected value off the record it names.
+A false claim fails there. The manifest
 configuration is two lines naming the sibling, and the hand-written script
 it replaced has been deleted.
 
 The division follows from what a benchmark is: a set of claims about
 someone else's graph, well-formed here and true only there.
+
+Expected values depend on it most, because a false one conforms everywhere
+else. `slot` and `value` are text, so LinkML's own validator and an editor
+accept `slot: verdcit` and `value: purple` without comment. The per-file
+check reports that the file conforms and notes the claims it left
+unchecked, and only a check that loads the target graph reads them. Which
+tool answers which question:
+
+| Question | Command | Where it runs |
+|---|---|---|
+| Is the schema well-formed LinkML? | `linkml-lint schema/cqa.yaml` | this repository |
+| Does a benchmark conform to cqa? | `panschema verify --schema <schema> --data <file>` | wherever the file is |
+| Is the benchmark true of its graph: anchors resolve, absences hold, versions agree, values match? | `panschema verify --strict`, with `resolve_against` naming the target in `panschema.toml` | a repository holding both graphs |
+| Is this one file true of that graph? | `panschema verify --entry <name> --data <file> --strict` | the same repository |
+
+`panschema verify` checks instance data against a schema. It does not check
+the schema against LinkML's metamodel, which is what `linkml-lint` is for.
+
+This repository holds no graph of its own, so to test the value claims it
+pins wine's worked example at `0.2.1` as a dependency, beside a benchmark of
+four of wine's questions that states seven values wine carries. Bare `verify`
+reports all seven holding. Each benchmark meant to fail (a contradicted
+verdict, a slot the record's class does not carry, a slot the record leaves
+unset, a record outside the anchors, a wrong number, an unreadable one, a
+value outside the enum) is checked on its own with `--entry`, and each fails
+with the one finding it was written to produce, matched by its kind
+(`value-claim/differs`, `value-claim/not-among`, and so on).
 
 ## The litmus
 
@@ -325,6 +353,37 @@ release of the data a benchmark was written against, and this correction did
 not change the release; it changed a record inside one. A benchmark can be
 conformant, resolve every anchor, and still be wrong about what the graph
 says.
+
+Unless the question states the value. The benchmark this repository checks
+against wine has a `cq-07` that states both verdicts, and checked against a
+copy of wine with the same one-line edit, the report ends:
+
+```console
+$ panschema verify --strict
+warning: data/claims/holds.yaml: value claim `cq-07.expected_values[0]`: claims https://w3id.org/wine-linkml/va-napa-zin-2018 carries `good` at `verdict`, but in `wine` it carries `average`
+note: schema `cqa`: 22 of 22 cross-graph reference(s) into `wine` namespace(s) resolve
+note: schema `cqa`: 0 of 0 stated absence claim(s) hold against `wine`
+note: schema `cqa`: 2 of 2 version pin(s) agree with `wine`
+note: schema `cqa`: 6 of 7 value claim(s) hold against `wine`
+Error: 1 value claim(s) do not hold; failing because --strict is set
+```
+
+Every anchor still resolves and both versions still agree, and the check
+fails anyway. The finding names the entry by its place, `cq-07` and the
+first of its values.
+
+The check cannot tell which side is wrong. Here the graph changed and the
+claim is right. In the fixture that claims `average` against the unedited
+graph, the claim is wrong and the graph is right, and the finding is the
+same with the two values swapped. The quickest way to make either pass is to
+copy the graph's value into the claim, and then the check agrees with itself
+and tests nothing. A failed claim is settled from the source the answer
+rests on, never from the graph, for the same reason a ground truth is never
+read off the graph it is checked against.
+
+A question that states no value is still blind to the edit, and so is
+wine's benchmark as frozen in Appendix A, which was written before cqa had
+the slot.
 
 One prediction did not hold. Wine's benchmark anchors twelve judgment-side
 records, and scoping their classes to their container was expected to move

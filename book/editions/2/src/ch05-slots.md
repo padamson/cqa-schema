@@ -173,7 +173,9 @@ Correct a vintage assessment's verdict from `good` to
 `average` and every anchor in the question about good vintages still
 resolves, every citation still resolves, validation passes, and the ground
 truth is quietly false. Recording the dataset's version is what lets that be
-noticed at all.
+noticed when the correction is released, since the release moves the
+version. A correction made within a release moves nothing, and "Values a
+correct answer states" below covers that case.
 
 Two things it does not do. It does not detect drift: an evaluator has to
 compare the version recorded here against the version it actually read, and
@@ -226,10 +228,85 @@ itself. When a target does arrive with identified datasets, `dataset` could
 hold the IRI instead. That change is in how data is published, not in how
 benchmarks are written.
 
+## Values a correct answer states
+
+`expected_values` lists the facts a correct answer states, one
+`ExpectedValue` each. No check reads a system's answer against them. What
+they do is keep the answer key true: each entry is a claim about the target
+graph, and where the benchmark and the graph sit together, a claim the graph
+contradicts fails. A correction like the one above, which no version records,
+then fails a check instead of leaving the ground truth quietly false.
+
+CQ-wine 7 states two:
+
+```yaml
+expected_values:
+  - record: va-napa-zin-2018
+    slot: verdict
+    value: good
+  - record: va-napa-zin-2017
+    slot: verdict
+    value: average
+```
+
+`record` is written like an anchor. It is ranged on `DomainRecord` and
+expands against `target_schema` the same way, so `va-napa-zin-2018` here
+names the record the question's anchors name. It must also be among them,
+which [Chapter 6](ch06-slot-usage-and-facets.md) takes up.
+
+`slot` is the slot's name as the target schema gives it and the target's
+instance data writes it <!-- callout named -->: `verdict`, not wine's IRI for
+the property. `connecting_class`, in the absence claim, names a class by IRI
+instead, and the two conventions differ on purpose. A class is how the target
+graph types its records, and a check for a joining record compares the types
+records carry, which are IRIs. A slot is how the target's data is written,
+and a check of a value reads it off the record by the key the record carries.
+`target_schema_version` keeps the name unambiguous, since a name means one
+slot within one release of one schema.
+
+`value` is text <!-- callout quoted -->, read by the range of the slot it is
+claimed at rather than by YAML. So the target schema decides how a value is
+compared: `good` as a permissible value of wine's `VerdictEnum`, a number by
+value, and a bare id at a class-ranged slot as the IRI the target mints for
+it. Quoted, the value reaches that check as written, so `no` stays the
+word "no" instead of becoming YAML's false. The cost is that a number is
+written quoted:
+
+```yaml
+  - record: pr-cabsauv-grilledmeat
+    slot: confidence
+    value: '0.9'
+```
+
+Written as `0.9`, the value is a float, and the record fails verification
+because the slot's range is text.
+
+LinkML's own spelling for a value of any type is `range: Any`, or an
+`any_of` over the scalar types. We chose text so that the target slot is the
+only authority on how a value is read. That has a second cost: the generated
+Turtle carries `cqa:value "0.9"` as a plain string for a fact that is a
+float, and a Turtle reader cannot type it without the target schema.
+
+All three slots of an entry are required, since an entry missing any of them
+states nothing that can be checked. `expected_values` itself is optional, by
+the rule this chapter opened with: a closed-world negative states no value,
+because its answer is a missing connection, and a synthesis reads a pattern
+across records that no single slot carries.
+
+A question that states its values now says the same fact twice. CQ-wine 7's
+ground truth says the chart rates 2018 good, and its first entry says the
+assessment's `verdict` is `good`. Nothing checks one against the other, and
+neither is the authority. Both are written from the source the answer rests
+on, here the regional vintage chart, so when they disagree the record is
+wrong. The author settles it from the source, not by copying one into the
+other.
+
 ## The island check
 
 Every class in the generated graph is reachable:
 `CompetencyQuestionAnswer` reaches `DomainRecord` through the anchor and
-citation slots, and `Benchmark` reaches `CompetencyQuestionAnswer` through
-the questions it holds and `TargetDataset` through `target_datasets`. No
-class sits alone, so there is nothing here to explain or remove.
+citation slots and `ExpectedValue` through `expected_values`, which reaches
+`DomainRecord` in turn through `record`. `Benchmark` reaches
+`CompetencyQuestionAnswer` through the questions it holds and
+`TargetDataset` through `target_datasets`. No class sits alone, so there is
+nothing here to explain or remove.

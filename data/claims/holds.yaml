@@ -1,0 +1,74 @@
+# Value claims that hold against wine's worked-example graph at 0.2.1.
+# The questions and anchors are wine's own (CQ-wine 2, 4, 6 and 7), with
+# expected values added.
+id: expected-values-hold
+target_schema: https://w3id.org/wine-linkml/
+target_schema_version: 0.2.1
+target_datasets:
+  - dataset: worked-example
+    version: 0.2.1
+competency_question_answers:
+  - id: cq-02
+    question: Is Bordeaux a red or white wine?
+    ground_truth: Red.
+    answer_kind: [lookup]
+    expected_anchors: [bordeaux-wine]
+    expected_values:
+      - record: bordeaux-wine
+        slot: color
+        value: red
+  - id: cq-04
+    question: What is the best choice of wine for grilled meat?
+    ground_truth: >-
+      The Cabernet Sauvignon, on the pr-cabsauv-grilledmeat
+      recommendation, with confidence 0.9.
+    answer_kind: [attribution]
+    expected_anchors:
+      - grilled-meat
+      - cabernet-sauvignon
+      - pr-cabsauv-grilledmeat
+    expected_citations: [pr-cabsauv-grilledmeat]
+    expected_values:
+      - record: pr-cabsauv-grilledmeat
+        slot: wine
+        value: cabernet-sauvignon
+      - record: pr-cabsauv-grilledmeat
+        slot: confidence
+        value: '0.9'
+  - id: cq-06
+    question: >-
+      Does a bouquet or body of a specific wine change with vintage year?
+    ground_truth: >-
+      Yes. The 2017 and 2018 Napa Zinfandel differ in body: medium
+      against full.
+    answer_kind: [comparison]
+    expected_anchors:
+      - napa-zinfandel-2017
+      - napa-zinfandel-2018
+      - vy-2017
+      - vy-2018
+    expected_values:
+      - record: napa-zinfandel-2017
+        slot: body
+        value: medium
+      - record: napa-zinfandel-2018
+        slot: body
+        value: full
+  - id: cq-07
+    question: What were good vintages for Napa Zinfandel?
+    ground_truth: >-
+      2018. The regional vintage chart rates 2018 good and 2017 average.
+    answer_kind: [attribution, comparison]
+    expected_anchors:
+      - napa-zinfandel-2018
+      - napa-zinfandel-2017
+      - va-napa-zin-2018
+      - va-napa-zin-2017
+    expected_citations: [va-napa-zin-2018, va-napa-zin-2017]
+    expected_values:
+      - record: va-napa-zin-2018
+        slot: verdict
+        value: good
+      - record: va-napa-zin-2017
+        slot: verdict
+        value: average

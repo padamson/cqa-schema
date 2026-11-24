@@ -4,10 +4,10 @@ name: cqa
 description: |-
   A vocabulary for competency question benchmarks over a knowledge
   graph. One record pairs a question with the specification of its
-  correct answer: the answer in prose, the kind of answering the
-  question demands, and the records a correct answer must retrieve
-  and cite. The graph being evaluated is external — its records are
-  referenced by IRI rather than held here.
+  correct answer: the answer in prose and the values it states, the
+  kind of answering the question demands, and the records a correct
+  answer must retrieve and cite. The graph being evaluated is
+  external — its records are referenced by IRI rather than held here.
 license: https://creativecommons.org/licenses/by/4.0/
 version: 0.2.0-dev
 
@@ -50,6 +50,7 @@ classes:
       - expected_citations
       - unconnected_anchors
       - connecting_class
+      - expected_values
     # CALLOUT: scoped Unique within its benchmark, not globally: two benchmarks may each hold a cq-01 and they are different questions.
     slot_usage:
       id:
@@ -142,6 +143,17 @@ classes:
     slots:
       - dataset
       - version
+
+  # CALLOUT: claim No identifier, like TargetDataset: a claim is described by what it says, and the question that holds it is the only place it is written.
+  ExpectedValue:
+    description: >-
+      One value a correct answer states: a record of the target graph,
+      one of its slots, and the value the record carries there.
+    subclass_of: cco:ont00000958
+    slots:
+      - record
+      - slot
+      - value
 
   # CALLOUT: placeholder The one class with no grounding: it stands for a record in someone else's graph, and what that record is varies by domain.
   DomainRecord:
@@ -240,6 +252,47 @@ slots:
       it the claim is that no record of any kind joins the anchors,
       and with it the claim is narrowed to one kind.
     range: uri
+
+  expected_values:
+    description: >-
+      The values a correct answer states, each read from a record of
+      the target graph. Every record named is among the anchors, since
+      a value an answer depends on comes from a record the answer has
+      to retrieve.
+    range: ExpectedValue
+    multivalued: true
+    inlined_as_list: true
+    # CALLOUT: values The slot says what each entry claims, so a checker reads the record, the slot and the value from the entry and compares them with the target graph. "Among the anchors" reaches from the entry to the question that holds it, which no LinkML rule can.
+    annotations:
+      asserts_value:
+        value:
+          record_slot: record
+          slot_slot: slot
+          value_slot: value
+          among: expected_anchors
+
+  record:
+    description: >-
+      The record that carries the value, as an IRI into the target
+      graph.
+    range: DomainRecord
+    required: true
+    annotations:
+      expand_against: target_schema
+
+  # CALLOUT: named A slot is named as the target's instance data writes it, where connecting_class names a class by IRI, as the target graph types its records.
+  slot:
+    description: >-
+      The slot that carries the value, by the name the target schema
+      gives it.
+    required: true
+
+  # CALLOUT: quoted Text, read by the range of the target slot rather than by YAML, so a number is written quoted and a value such as no stays text.
+  value:
+    description: >-
+      The value, written as the target graph's data writes it and read
+      by the range of the slot it is claimed at.
+    required: true
 
   target_schema:
     description: >-

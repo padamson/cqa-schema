@@ -9,6 +9,7 @@
 # no remote hook repos are pulled. Required on PATH:
 #   - mdbook-listings (main HEAD — dogfood; see the dogfood-loop notes)
 #   - panschema (main HEAD — verifies the curated instance data)
+#   - jq (reads verify's JSON findings in the claim-fixtures hook)
 #   - perl + git (for the line-width gate; both standard)
 repos:
   - repo: local
@@ -62,3 +63,11 @@ repos:
         language: system
         pass_filenames: false
         files: ^(scripts/verify-frozen-benchmarks\.sh|book/editions/[^/]+/src/listings/.*\.yaml)$
+
+      - id: claim-fixtures-verify
+        name: panschema verify (value claims hold, and false ones fail)
+        # The per-file hook above leaves every value claim unchecked.
+        entry: scripts/verify-claim-fixtures.sh
+        language: system
+        pass_filenames: false
+        files: ^(schema/[^/]+\.yaml|data/claims/.*\.yaml|panschema(-publish)?\.toml|panschema\.lock|scripts/verify-claim-fixtures\.sh)$

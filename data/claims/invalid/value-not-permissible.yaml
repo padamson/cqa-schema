@@ -1,0 +1,18 @@
+# Purple is not a permissible value of wine's WineColorEnum.
+# expect: value-claim/uncheckable
+id: broken-benchmark
+target_schema: https://w3id.org/wine-linkml/
+target_schema_version: 0.2.1
+target_datasets:
+  - dataset: worked-example
+    version: 0.2.1
+competency_question_answers:
+  - id: cq-01
+    question: Is Bordeaux a red or white wine?
+    ground_truth: Purple.
+    answer_kind: [lookup]
+    expected_anchors: [bordeaux-wine]
+    expected_values:
+      - record: bordeaux-wine
+        slot: color
+        value: purple

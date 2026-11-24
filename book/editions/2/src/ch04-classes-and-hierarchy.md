@@ -15,12 +15,13 @@ the more salient concepts first and then generalizes and specializes
 them appropriately.
 ```
 
-Step 3 listed eleven terms. Three of them become classes here, and a fourth
-comes from finding that one term, *target schema*, names more than one thing.
-The rest describe a competency question answer rather than standing on their
+Step 3 listed eleven terms. Three of them become classes here. A fourth
+comes from finding that one term, *target schema*, names more than one thing,
+and a fifth from finding that another, *ground truth*, cannot be checked as
+written. The rest describe a competency question answer rather than standing on their
 own, and they become slots in Step 5.
 
-## The four classes
+## The five classes
 
 <!-- LISTING cqa-yaml-v3: diff from cqa-yaml-v2, context 4, caption "Step 4: the classes". Placeholder until the forward freeze. -->
 
@@ -41,6 +42,11 @@ being evaluated. Nothing here ever instantiates it.
 **`TargetDataset`** <!-- callout dataset --> is one of the instance graphs a
 benchmark is asked against. Why it is a class, and why it has no identifier,
 is under "The target, and the datasets in it" below.
+
+**`ExpectedValue`** <!-- callout claim --> is one value a correct answer
+states: a record of the target graph, one of its slots, and the value the
+record carries there. It is derived under "The answer, in a form a tool can
+check" below.
 
 ## Why the benchmark is a class
 
@@ -69,6 +75,8 @@ with the EARL correspondences recorded as `skos:closeMatch`. Both fit: a
 question with its answer is content, and a set of them is content too.
 `TargetDataset` grounds in the same node. A dataset is a body of records,
 which is content as well, and EARL has no term for it to correspond to.
+`ExpectedValue` grounds there too, since a statement that a record carries a
+value is content about that record.
 
 `DomainRecord` has no `subclass_of` at all, and that absence is the honest
 answer rather than an omission. The reason is what `subclass_of` does once
@@ -188,24 +196,57 @@ its own, holding both. It still has no identity apart from the benchmark that
 names it, so it carries no identifier and is written inside the benchmark,
 as a blank node rather than a record with an IRI of its own.
 
+## The answer, in a form a tool can check
+
+CQ-cqa 1 asks what the correct answer is, and Step 3 gave it one term,
+*ground truth*: the answer in prose. Prose is the form Chapter 1 chose for
+judging a generated answer, and the only form a reader needs. It is also a
+form nothing can compare with the graph. CQ-wine 7's ground truth says the
+regional vintage chart rates 2018 good, and if the chart's verdict in wine's
+graph changes, the prose goes on saying good.
+[Chapter 5](ch05-slots.md) shows that a corrected record can pass every
+other check, and the dataset versions do not catch it either.
+
+Most of wine's answers rest on a value one record carries at one slot.
+CQ-wine 2's whole answer is one enumerated value, `color: red` on
+`bordeaux-wine`. CQ-wine 6 is `body: medium` on the 2017 Napa Zinfandel
+against `body: full` on the 2018. CQ-wine 7 is the two verdicts. A value at
+a slot is a fact the graph either carries or does not, so a benchmark that
+states it can be checked against the graph, as an anchor is.
+
+Each such fact has three parts that belong together: the record, the slot,
+and the value. The previous section made a target dataset a record of its
+own for the same reason, since parallel lists would pair their entries by
+order. So an expected value is a record too. It has no identity apart from
+the question that states it, so like `TargetDataset` it carries no
+identifier and is written inside the question as a blank node.
+
+There is one class, not one per answer kind. A lookup states one value, a
+comparison two or more, and an attribution a value alongside the citation it
+rests on. Classes for each would differ only in how many values they hold,
+which a list already says, and `answer_kind` already says which check
+applies.
+
 ## The hierarchy, such as it is
 
-There is no `is_a` hierarchy among the four. They are siblings: three grounded
+There is no `is_a` hierarchy among the five. They are siblings: four grounded
 at the same CCO node, one grounded nowhere. N&M describe top-down, bottom-up,
 and combination approaches to building a hierarchy, and cqa has too few
 classes for the question to arise.
 
 A flat model is the right outcome here rather than a stage to grow out of.
 The domain has one thing (a question with its answer), one collection of that
-thing, one placeholder for something it does not own, and one record of
-where the collection is asked. Specialization
+thing, one placeholder for something it does not own, one record of where
+the collection is asked, and one statement of a value an answer reads.
+Specialization
 would come from answer kinds if they became classes, and Step 5 keeps them as
 values of a slot instead, since a subclass per kind would multiply classes
 without adding anything a query could use.
 
 One check comes up nearly empty at this step, honestly so: the class graph.
-With no slots, nothing connects the four classes, so the island test — a
+With no slots, nothing connects the five classes, so the island test — a
 disconnected node is a bug to explain or remove — has nothing to catch until
-Chapter 5, when the anchor and citation slots wire `CompetencyQuestionAnswer`
-to `DomainRecord`, and `Benchmark` to its questions and its target datasets. The classes are in place;
-Chapter 5 connects them.
+Chapter 5. There the anchor and citation slots wire `CompetencyQuestionAnswer`
+to `DomainRecord` and to the values it states, and `Benchmark` to its
+questions and its target datasets. The classes are in place; Chapter 5
+connects them.
