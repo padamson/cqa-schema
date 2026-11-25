@@ -25,12 +25,12 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
   # Exact pins for the tools that build the book and the schema pages: a
   # patch release can change rendered output, and the book's premise is
-  # frozen listings.
+  # frozen listings. mdbook and wasm-pack get the same exactness from the
+  # install-action SHA (their install step says how), so only a tool that
+  # action's manifest lacks is pinned here.
   # panschema and mdbook-admonish install from their branch tips on
   # purpose (the dogfood loop) and are not pinned here.
-  MDBOOK_VERSION: "0.5.2"
   MDBOOK_LISTINGS_VERSION: "0.2.2"
-  WASM_PACK_VERSION: "0.14.0"
 
 jobs:
   build:
@@ -60,6 +60,29 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
 
+      # --- Release binaries (mdbook, and wasm-pack for panschema) ---
+
+      - name: Install mdbook and wasm-pack (install-action)
+        # No version on either tool: the action resolves each from a
+        # manifest fixed at its pinned SHA, so the SHA is the tool pin.
+        # `fallback: none` fails the step on a tool the manifest lacks
+        # rather than building it through cargo-binstall. To hold one back,
+        # write `mdbook@<version>` with a comment saying why.
+        uses: taiki-e/install-action@4a76afe23f9e08d2d9550fb56e556444e8611d21 # v2.90.4
+        with:
+          tool: mdbook,wasm-pack
+          fallback: none
+
+      - name: Read the installed wasm-pack version
+        id: wasm-pack
+        # Fails rather than write an empty version, which would key the
+        # panschema cache on no wasm-pack at all.
+        run: |
+          version=$(wasm-pack --version)
+          version=${version#wasm-pack }
+          test -n "$version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
       # --- panschema (needs wasm-pack as a build prerequisite) ---
 
       - name: Cache panschema binaries
@@ -70,23 +93,13 @@ jobs:
           # link installer) build from the same workspace at the same rev.
           # The `-bins-` key prefix (vs the old `panschema-`) deliberately
           # busts pre-mdbook-panschema cache entries that hold only the one
-          # binary.
+          # binary. The wasm-pack version is in the key because wasm-pack
+          # builds the viz embedded in panschema: without it, a wasm-pack
+          # bump waits for panschema's main to move before it takes effect.
           path: |
             ~/.cargo/bin/panschema
             ~/.cargo/bin/mdbook-panschema
-          key: panschema-bins-${{ runner.os }}-${{ steps.panschema.outputs.sha }}
-
-      - name: Cache wasm-pack binary
-        if: steps.cache-panschema.outputs.cache-hit != 'true'
-        id: cache-wasm-pack
-        uses: actions/cache@v4
-        with:
-          path: ~/.cargo/bin/wasm-pack
-          key: wasm-pack-${{ runner.os }}-${{ env.WASM_PACK_VERSION }}
-
-      - name: Install wasm-pack
-        if: steps.cache-panschema.outputs.cache-hit != 'true' && steps.cache-wasm-pack.outputs.cache-hit != 'true'
-        run: cargo install wasm-pack --version "$WASM_PACK_VERSION" --locked
+          key: panschema-bins-${{ runner.os }}-${{ steps.panschema.outputs.sha }}-wasm-pack-${{ steps.wasm-pack.outputs.version }}
 
       - name: Install panschema binaries from main
         if: steps.cache-panschema.outputs.cache-hit != 'true'
@@ -99,18 +112,7 @@ jobs:
             --locked --force \
             panschema
 
-      # --- mdbook + preprocessors ---
-
-      - name: Cache mdbook binary
-        id: cache-mdbook
-        uses: actions/cache@v4
-        with:
-          path: ~/.cargo/bin/mdbook
-          key: mdbook-${{ runner.os }}-${{ env.MDBOOK_VERSION }}
-
-      - name: Install mdbook
-        if: steps.cache-mdbook.outputs.cache-hit != 'true'
-        run: cargo install mdbook --version "$MDBOOK_VERSION" --locked
+      # --- mdbook preprocessors ---
 
       - name: Cache mdbook-listings binary
         id: cache-mdbook-listings
