@@ -51,6 +51,7 @@ classes:
       - unconnected_anchors
       - connecting_class
       - expected_values
+      - ordered_by
     # CALLOUT: scoped Unique within its benchmark, not globally: two benchmarks may each hold a cq-01 and they are different questions.
     slot_usage:
       id:
@@ -102,6 +103,17 @@ classes:
         postconditions:
           slot_conditions:
             expected_anchors:
+              minimum_cardinality: 2
+      # CALLOUT: order Two values at the least, since one is in order however it is given. The rule cannot see which slot each value is at, so a question whose values sit at other slots still passes.
+      - description: >-
+          An ordered answer states two or more values to put in order.
+        preconditions:
+          slot_conditions:
+            ordered_by:
+              value_presence: PRESENT
+        postconditions:
+          slot_conditions:
+            expected_values:
               minimum_cardinality: 2
 
   # CALLOUT: set A class in its own right rather than a bare container, because two benchmarks will both hold a question called cq-01 and those must stay distinct.
@@ -270,6 +282,14 @@ slots:
           slot_slot: slot
           value_slot: value
           among: expected_anchors
+
+  # CALLOUT: ordered The order is read from values the target graph carries, so each of them is checked against the graph, and they survive in Turtle, where a list's order does not. The order itself is the grader's to check, against an answer.
+  ordered_by:
+    description: >-
+      The slot whose values order a correct answer, by the name the
+      target schema gives it. A correct answer gives the records its
+      expected values name at this slot in ascending order of those
+      values, as the slot's range orders them.
 
   record:
     description: >-

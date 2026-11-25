@@ -1,0 +1,17 @@
+# expect: conformance/rule-postcondition-failed `expected_values` has 0 value(s)
+id: broken-benchmark
+target_schema: https://w3id.org/wine-linkml/
+target_schema_version: 0.2.1
+target_datasets:
+  - dataset: worked-example
+    version: 0.2.1
+competency_question_answers:
+  - id: cq-01
+    question: Which pairings, from the least confident to the most?
+    ground_truth: Beaujolais, then Chardonnay, then Cabernet Sauvignon.
+    answer_kind: [comparison]
+    expected_anchors:
+      - pr-beaujolais-chicken
+      - pr-chardonnay-seafood
+      - pr-cabsauv-grilledmeat
+    ordered_by: confidence

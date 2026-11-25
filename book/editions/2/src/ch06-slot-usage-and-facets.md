@@ -11,9 +11,10 @@ the slot can take.
 
 In this process, we focus on narrowing what existing slots accept, never
 widening them or adding new slots. Few slots needed narrowing. Most of the
-work went to two things [Chapter 5](ch05-slots.md) left here: every citation
-must also be an anchor, and so must every record an expected value is read
-from. Neither turned out to be a facet.
+work went to three things [Chapter 5](ch05-slots.md) left here: every
+citation must also be an anchor, so must every record an expected value is
+read from, and an ordered answer must state values to order. None of them
+turned out to be a facet.
 
 <!-- LISTING cqa-yaml-v5: diff from cqa-yaml-v4, context 20, caption "Step 6: facets". Placeholder until the forward freeze. -->
 
@@ -125,6 +126,24 @@ because `expected_citations` specializes `expected_anchors`. The annotation is
 read where the benchmark and the target graph sit together, by the same
 check that compares each value with the graph, and Chapter 7 shows what that
 check reports.
+
+## An order needs values to order
+
+A question that names `ordered_by` and states fewer than two expected
+values claims an order with nothing in it, since one value is in order
+however it is given. That constraint relates two slots on one record,
+`ordered_by` and `expected_values`, which makes it a rule. A rule
+<!-- callout order --> requires two or more expected values whenever
+`ordered_by` is present, the same shape as the one that holds a comparison
+to two anchors.
+
+The rule counts entries, not the entries at the ordering slot. Which slot an
+entry names is a value one record down, in the `ExpectedValue`, so the
+constraint the order really needs spans nodes, and a rule cannot state it. A
+question with two values at other slots and `ordered_by` naming a third
+passes, and so does one whose two values sit on the same record. We left
+that open: like the limits in Chapter 5, it makes an order say less and
+never fails a correct answer.
 
 ## One `id` slot, two patterns
 

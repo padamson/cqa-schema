@@ -1,6 +1,7 @@
 # Value claims that hold against wine's worked-example graph at 0.2.1.
-# The questions and anchors are wine's own (CQ-wine 2, 4, 6 and 7), with
-# expected values added.
+# The first four questions and their anchors are wine's own (CQ-wine 2,
+# 4, 6 and 7), with expected values added. The last is ours: wine asks
+# for no order, so it orders wine's pairings by their confidence.
 id: expected-values-hold
 target_schema: https://w3id.org/wine-linkml/
 target_schema_version: 0.2.1
@@ -72,3 +73,27 @@ competency_question_answers:
       - record: va-napa-zin-2017
         slot: verdict
         value: average
+  - id: pairings-by-confidence
+    question: >-
+      Which pairings are recommended, from the least confident to the
+      most?
+    ground_truth: >-
+      Beaujolais with roast chicken at 0.7, Napa Chardonnay with a
+      seafood dish at 0.85, and Cabernet Sauvignon with grilled meat at
+      0.9.
+    answer_kind: [comparison]
+    expected_anchors:
+      - pr-beaujolais-chicken
+      - pr-chardonnay-seafood
+      - pr-cabsauv-grilledmeat
+    expected_values:
+      - record: pr-cabsauv-grilledmeat
+        slot: confidence
+        value: '0.9'
+      - record: pr-beaujolais-chicken
+        slot: confidence
+        value: '0.7'
+      - record: pr-chardonnay-seafood
+        slot: confidence
+        value: '0.85'
+    ordered_by: confidence

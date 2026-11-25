@@ -301,6 +301,71 @@ on, here the regional vintage chart, so when they disagree the record is
 wrong. The author settles it from the source, not by copying one into the
 other.
 
+## An answer given in order
+
+Some answers are a sequence. Wine asks for none, but two questions in
+another graph cqa benchmarks do: the steps of a procedure, in order, and the
+order in which a set of places is walked. A set of anchors cannot say
+either, so the order was written only in `ground_truth`, where nothing reads
+it.
+
+In both, the order is already in the graph. Each record carries its
+position, and the answer lists the records by it. So a question names the
+slot that orders its answer, and states the values at that slot as expected
+values like any other. `ordered_by` <!-- callout ordered --> names the slot
+the way `slot` does, by the name the target schema gives it. A correct
+answer gives the records the question's expected values name at that slot
+in ascending order of their values, compared as the slot's range compares
+them.
+
+Wine asks for no order, so the example orders wine's three pairing
+recommendations by confidence. It is a question this repository's tests ask
+of wine, not one of wine's own:
+
+```yaml
+expected_values:
+  - record: pr-cabsauv-grilledmeat
+    slot: confidence
+    value: '0.9'
+  - record: pr-beaujolais-chicken
+    slot: confidence
+    value: '0.7'
+  - record: pr-chardonnay-seafood
+    slot: confidence
+    value: '0.85'
+ordered_by: confidence
+```
+
+The entries are not in order, and need not be. The values decide the
+order, and each is checked against the graph as any expected value is.
+
+We also considered listing the records in order. LinkML marks a multivalued
+slot whose order matters with `list_elements_ordered: true`, and a subslot
+of `expected_anchors` could carry it. The order holds in YAML and JSON and
+is lost in RDF. LinkML writes a multivalued slot to RDF as one triple per
+value, with no order among them. Keeping the order would take an
+`rdf:List`, which OWL 2 reserves for its own syntax, so an ontology holding
+its data in one is no longer OWL 2 DL. The list would also be a second copy
+of the positions the graph carries, and nothing would check that the two
+agree.
+
+An order is not an answer kind. A question asking for a procedure's steps
+reads each step from one record, which makes it a lookup, and its answer
+comes in order. `answer_kind` says where an answer is found, and an order
+can come with any kind that states values, so it is a slot of its own, and
+optional.
+
+The order is ascending only. Both questions that asked for one list their
+records by increasing position, and a descending order waits for a question
+that needs it.
+
+Reading the order off the values has two limits. A record the answer lists
+with no value stated at `ordered_by` has no place in the order, and two
+records with equal values have no order between them. Neither stops a
+correct answer from passing. Each makes the order say less than its author
+meant. [Chapter 6](ch06-slot-usage-and-facets.md) adds the one requirement a
+rule can check.
+
 ## The island check
 
 Every class in the generated graph is reachable:

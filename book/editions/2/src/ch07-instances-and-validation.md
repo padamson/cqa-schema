@@ -115,15 +115,16 @@ not how few records a correct retrieval touches.
 present, every `answer_kind` a permissible value, every id matching the
 pattern [Chapter 6](ch06-slot-usage-and-facets.md) set, every citation and
 every stated absence drawn from the anchors, every answer kind holding to the
-promise its own definition makes, and every value carrying the type its slot
-declares.
+promise its own definition makes, every ordered answer stating values to
+order, and every value carrying the type its slot declares.
 
 One of those checks rests on a convention that can look like an omission.
-Ten of this schema's twelve datatype slots declare no `range:` at all, taking
-their type from `default_range` instead, so a reader might reasonably wonder
-whether an untyped slot is an unchecked one. It is checked: `question: 42`
-is rejected as "an integer, but the slot's range `string` expects a string."
-The type is stated once and enforced everywhere it applies.
+Eleven of this schema's thirteen datatype slots declare no `range:` at all,
+taking their type from `default_range` instead, so a reader might reasonably
+wonder whether an untyped slot is an unchecked one. It is checked:
+`question: 42` is rejected as "an integer, but the slot's range `string`
+expects a string." The type is stated once and enforced everywhere it
+applies.
 
 What it cannot report is whether the anchors exist. Every one of them names
 a record in a graph that is not here, and a cross-graph reference is
@@ -164,13 +165,14 @@ the schema against LinkML's metamodel, which is what `linkml-lint` is for.
 
 This repository holds no graph of its own, so to test the value claims it
 pins wine's worked example at `0.2.1` as a dependency, beside a benchmark of
-four of wine's questions that states seven values wine carries. Bare `verify`
-reports all seven holding. Each benchmark meant to fail (a contradicted
-verdict, a slot the record's class does not carry, a slot the record leaves
-unset, a record outside the anchors, a wrong number, an unreadable one, a
-value outside the enum) is checked on its own with `--entry`, and each fails
-with the one finding it was written to produce, matched by its kind
-(`value-claim/differs`, `value-claim/not-among`, and so on).
+four of wine's questions and the ordered question from Chapter 5, stating
+ten values wine carries. Bare `verify` reports all ten holding. Each
+benchmark meant to fail (a contradicted verdict, a slot the record's class
+does not carry, a slot the record leaves unset, a record outside the
+anchors, a wrong number, an unreadable one, a value outside the enum) is
+checked on its own with `--entry`, and each fails with the one finding it
+was written to produce, matched by its kind (`value-claim/differs`,
+`value-claim/not-among`, and so on).
 
 ## The litmus
 
@@ -361,10 +363,10 @@ copy of wine with the same one-line edit, the report ends:
 ```console
 $ panschema verify --strict
 warning: data/claims/holds.yaml: value claim `cq-07.expected_values[0]`: claims https://w3id.org/wine-linkml/va-napa-zin-2018 carries `good` at `verdict`, but in `wine` it carries `average`
-note: schema `cqa`: 22 of 22 cross-graph reference(s) into `wine` namespace(s) resolve
+note: schema `cqa`: 28 of 28 cross-graph reference(s) into `wine` namespace(s) resolve
 note: schema `cqa`: 0 of 0 stated absence claim(s) hold against `wine`
 note: schema `cqa`: 2 of 2 version pin(s) agree with `wine`
-note: schema `cqa`: 6 of 7 value claim(s) hold against `wine`
+note: schema `cqa`: 9 of 10 value claim(s) hold against `wine`
 Error: 1 value claim(s) do not hold; failing because --strict is set
 ```
 

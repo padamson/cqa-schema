@@ -35,7 +35,11 @@ chapters it touches, all in this edition.
       (data/claims/).
 - [ ] An absence narrowed by a slot value, and an empty slot as an
       answer.
-- [ ] An ordering claim over anchors.
+- [x] An ordering claim over anchors. Landed as ordered_by, naming the
+      target slot whose expected values order the answer, ascending, with
+      a rule requiring two or more expected values; ch05-ch07. Bare verify
+      checks the values against wine 0.2.1 (data/claims/holds.yaml); no
+      check reads ordered_by itself, by ruling 2026-11-25.
 - [ ] A retrieval budget and a citation-precision floor, as slots on
       Benchmark.
 - [ ] Alternative evidence sets, only if a consumer record rests on two
