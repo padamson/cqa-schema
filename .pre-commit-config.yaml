@@ -8,8 +8,8 @@
 # PATH, matching the dogfood setup (see README "Dogfooding the tooling"), so
 # no remote hook repos are pulled. Required on PATH:
 #   - mdbook-listings (main HEAD — dogfood; see the dogfood-loop notes)
-#   - panschema (main HEAD — verifies the curated instance data)
-#   - jq (reads verify's JSON findings in the claim-fixtures hook)
+#   - panschema (main HEAD — verifies the benchmarks and fixtures)
+#   - jq (reads verify's JSON findings in the fixtures hook)
 #   - perl + git (for the line-width gate; both standard)
 repos:
   - repo: local
@@ -38,22 +38,6 @@ repos:
         pass_filenames: false
         files: ^schema/[^/]+\.yaml$
 
-      - id: panschema-verify
-        name: panschema verify (curated instance data conforms)
-        # A curated A-box that feature 37 publishes to the docs site is a
-        # conformance claim; publish only warns, so gate it here. Verifies
-        # every data/*.yaml against the schema; non-zero on any violation.
-        entry: >-
-          bash -c 'shopt -s nullglob;
-          schema="$(scripts/schema-path.sh)";
-          for f in data/*.yaml; do
-          echo "verify $f";
-          panschema verify --schema "$schema" --data "$f" || exit 1;
-          done'
-        language: system
-        pass_filenames: false
-        files: ^(schema/[^/]+\.yaml|data/.*\.yaml)$
-
       - id: frozen-benchmarks-verify
         name: panschema verify (frozen benchmarks conform to their schema)
         # The frozen worked example in each edition's listings, which
@@ -64,10 +48,11 @@ repos:
         pass_filenames: false
         files: ^(scripts/verify-frozen-benchmarks\.sh|book/editions/[^/]+/src/listings/.*\.yaml)$
 
-      - id: claim-fixtures-verify
-        name: panschema verify (value claims hold, and false ones fail)
-        # The per-file hook above leaves every value claim unchecked.
-        entry: scripts/verify-claim-fixtures.sh
+      - id: fixtures-verify
+        name: panschema verify (fixtures fail as written, value claims hold)
+        # Each benchmark in data/ meant to fail fails with the one finding
+        # its `# expect:` line names, and the value claims hold against wine.
+        entry: scripts/verify-fixtures.sh
         language: system
         pass_filenames: false
-        files: ^(schema/[^/]+\.yaml|data/claims/.*\.yaml|panschema(-publish)?\.toml|panschema\.lock|scripts/verify-claim-fixtures\.sh)$
+        files: ^(schema/[^/]+\.yaml|data/.*\.yaml|panschema(-publish)?\.toml|panschema\.lock|scripts/(verify-fixtures|schema-path)\.sh)$

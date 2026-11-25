@@ -1,5 +1,5 @@
 # Purple is not a permissible value of wine's WineColorEnum.
-# expect: value-claim/uncheckable
+# expect: value-claim/uncheckable is not a permissible value
 id: broken-benchmark
 target_schema: https://w3id.org/wine-linkml/
 target_schema_version: 0.2.1

@@ -144,49 +144,20 @@ jobs:
 
       # --- Build outputs ---
 
-      - name: Verify curated instance data (panschema)
-        # A curated A-box feature 37 publishes to the site is a conformance
-        # claim; `publish` only warns on violations, so fail fast here
-        # before building anything. nullglob makes this a no-op until the
-        # data files land (Step 7), so it is safe to ship ahead of them.
-        run: |
-          shopt -s nullglob
-          schema="$(scripts/schema-path.sh)"
-          for f in data/*.yaml; do
-            echo "verify $f"
-            panschema verify --schema "$schema" --data "$f"
-          done
-
       - name: Verify the frozen worked example (panschema)
         # Appendix A embeds wine's benchmark, frozen from the repository that
-        # authors it, and ch07 states that it conforms. The loop above cannot
-        # cover it: it globs data/*.yaml and the frozen listing lives under
-        # the edition's src/. Without this step the chapter's conformance
-        # claim goes unchecked and rots silently the next time the schema
-        # tightens.
+        # authors it, and ch07 states that it conforms. Without this step the
+        # chapter's conformance claim goes unchecked and rots silently the
+        # next time the schema tightens.
         # Each is held to the schema it was written for, not to main, so an
         # edition's claim survives the schema moving on.
         run: scripts/verify-frozen-benchmarks.sh
 
-      - name: Assert invalid fixtures are rejected (panschema)
-        # The negative half of verification: every data/invalid/*.yaml MUST
-        # fail. If one conforms, the schema stopped catching that error and
-        # ch07's "a mistyped verdict fails the check" claim is now false. The
-        # top-level data/*.yaml loop above does not recurse, so these stay out
-        # of the positive loop.
-        run: |
-          shopt -s nullglob
-          schema="$(scripts/schema-path.sh)"
-          for f in data/invalid/*.yaml; do
-            if panschema verify --schema "$schema" --data "$f" >/dev/null 2>&1; then
-              echo "FAIL: $f conformed but should have been rejected"; exit 1
-            fi
-            echo "ok, rejected: $f"
-          done
-
-      - name: Check value claims against wine (panschema)
-        # The per-file loops above leave every value claim unchecked.
-        run: scripts/verify-claim-fixtures.sh
+      - name: Check the fixtures (panschema)
+        # Each benchmark in data/ meant to fail fails with the one finding
+        # its `# expect:` line names, and the value claims hold against
+        # wine. A fixture that starts failing for another reason fails here.
+        run: scripts/verify-fixtures.sh
 
       - name: Generate machine-readable artifacts (panschema)
         # TTL (schema + A-box KG), SHACL shapes, JSON Schema, and the

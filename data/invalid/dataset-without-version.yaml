@@ -1,3 +1,4 @@
+# expect: conformance/required-slot-absent `version`
 id: broken-benchmark
 target_schema: https://w3id.org/wine-linkml/
 target_schema_version: 0.2.0

@@ -1,5 +1,5 @@
 # Uncheckable, which fails --strict: a claim that cannot be read never holds.
-# expect: value-claim/uncheckable
+# expect: value-claim/uncheckable is not a number
 id: broken-benchmark
 target_schema: https://w3id.org/wine-linkml/
 target_schema_version: 0.2.1

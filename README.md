@@ -39,9 +39,10 @@ mdbook-panschema editions   # every edition from main into site/, as CI does
 Preprocessors must be on `PATH`: `mdbook-listings`, the `mdbook-admonish`
 fork, and `mdbook-panschema`. `scripts/install-assets.sh` generates their
 book assets in every edition. CI (`.github/workflows/docs.yml`) verifies
-the instance data, generates the machine-readable formats (via
-`panschema.toml`), builds every edition, and deploys the combined site to
-Pages.
+the frozen worked example and the benchmarks in `data/`
+(`scripts/verify-fixtures.sh`), generates the machine-readable formats
+(via `panschema.toml`), builds every edition, and deploys the combined
+site to Pages.
 
 ## Layout
 

@@ -1,5 +1,5 @@
 # The graph rates 2018 good.
-# expect: value-claim/differs
+# expect: value-claim/differs at `verdict`
 id: broken-benchmark
 target_schema: https://w3id.org/wine-linkml/
 target_schema_version: 0.2.1

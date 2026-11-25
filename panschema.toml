@@ -14,7 +14,7 @@ json_schema = "site/artifacts/cqa.schema.json"
 ttl = "site/artifacts/cqa.ttl"
 
 # Wine's worked example is the graph the value-claim fixtures in
-# data/claims/ are written against; scripts/verify-claim-fixtures.sh
+# data/claims/ are written against; scripts/verify-fixtures.sh
 # checks them.
 [schemas.wine]
 source = "github:padamson/ontology-authoring-template"

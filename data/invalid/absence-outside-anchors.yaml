@@ -1,3 +1,4 @@
+# expect: conformance/outside-specialized-slot `unconnected_anchors`
 id: broken-benchmark
 target_schema: https://w3id.org/wine-linkml/
 target_schema_version: 0.2.0

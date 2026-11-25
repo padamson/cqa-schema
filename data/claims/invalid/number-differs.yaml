@@ -1,5 +1,5 @@
 # The graph says 0.8. A number compares by value, so '0.80' would hold.
-# expect: value-claim/differs
+# expect: value-claim/differs at `confidence`
 id: broken-benchmark
 target_schema: https://w3id.org/wine-linkml/
 target_schema_version: 0.2.1
