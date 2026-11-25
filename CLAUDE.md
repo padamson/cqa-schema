@@ -112,9 +112,22 @@ edition). `mdbook-panschema editions` builds from the committed `main`,
 never the working tree, and runs those installs in its own checkout.
 The published docs site (schema HTML + every edition) is built and
 deployed by `.github/workflows/docs.yml` via the panschema toolchain on
-push to `main`. The release list is read from the tags, so a release is
-the version bump on `main` plus its tag, pushed together: `git push
---atomic origin main <tag>`.
+push to `main`. A pull request into `main` runs the same steps but
+deploys nothing. The checks that read the checkout see the PR's
+changes, while `panschema publish` and `mdbook-panschema editions` build
+`main`, so a green PR run tests its tools against `main`'s content, not
+its own book. That is what a Dependabot PR needs tested.
+`.github/dependabot.yml` proposes action bumps once a week, grouped
+into one PR, merged by hand once it is green. CI installs mdbook and
+wasm-pack through `taiki-e/install-action` with no version, so the
+action's pinned SHA is their pin, and a Dependabot PR that moves it
+names the tools that moved in its release notes. A new release can
+change the rendered book: install it locally, rebuild, and compare
+before merging. mdbook-listings is not in the action's manifest and
+keeps an exact `env:` pin in `docs.yml`, which nothing watches. The
+release list is read from the tags, so a release is the version bump on
+`main` plus its tag, pushed together: `git push --atomic origin main
+<tag>`.
 
 Math is **opt-in** and not shipped in the stock template: to write `$…$`
 in chapters, enable `mdbook-katex` (pin `0.10.0-alpha`, ordered

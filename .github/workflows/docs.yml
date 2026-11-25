@@ -6,16 +6,25 @@ on:
   # No tag trigger: a tag runs the workflow stored in its own commit, and
   # a patch on an older line carries that line's workflow. Publish such a
   # tag by dispatching this workflow on main.
+  # A pull request runs the same steps as a push but deploys nothing. The
+  # checks that read the checkout see the PR's changes; publish and the
+  # editions build read `main`, so they test the PR's tools against
+  # `main`'s content. That is what a Dependabot PR needs tested before it
+  # is merged by hand; the repo is trunk-based, so a human rarely opens
+  # one.
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
+# Deploys from main queue behind each other and never cancel. A pull
+# request gets a group of its own, and a new push to it cancels the stale
+# run.
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: ${{ github.event_name == 'pull_request' && github.ref || 'pages' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 # Opt the JS-based actions (actions/cache, actions/checkout,
 # actions/upload-artifact, ...) into Node 24 ahead of the June 2026
@@ -202,9 +211,15 @@ jobs:
     # GitHub Pages on a private repo requires a paid plan, so on a private
     # instantiation `deploy-pages` 404s and reds the whole run even though
     # `build` — the real verification — passed. Skip deploying while the repo
-    # is private; it resumes automatically if the repo goes public.
-    if: ${{ !github.event.repository.private }}
+    # is private; it resumes automatically if the repo goes public. Skipped
+    # too on a pull request, which only verifies.
+    if: ${{ github.event_name != 'pull_request' && !github.event.repository.private }}
     runs-on: ubuntu-latest
+    # The only job that writes to Pages, so the only one granted it.
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
