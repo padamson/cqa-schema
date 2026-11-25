@@ -1,0 +1,14 @@
+# expect: conformance/above-maximum
+id: broken-benchmark
+target_schema: https://w3id.org/wine-linkml/
+target_schema_version: 0.2.1
+target_datasets:
+  - dataset: worked-example
+    version: 0.2.1
+citation_precision_floor: 1.5
+competency_question_answers:
+  - id: cq-01
+    question: Which pairing is the most confident?
+    ground_truth: Cabernet Sauvignon with grilled meat.
+    answer_kind: [lookup]
+    expected_anchors: [pr-cabsauv-grilledmeat]

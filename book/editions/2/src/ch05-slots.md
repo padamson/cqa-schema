@@ -366,6 +366,46 @@ correct answer from passing. Each makes the order say less than its author
 meant. [Chapter 6](ch06-slot-usage-and-facets.md) adds the one requirement a
 rule can check.
 
+## How much an answer may retrieve
+
+The anchors say what a correct answer must reach, and nothing about how much
+else it may reach on the way. A system that retrieves every record in the
+graph reaches every anchor, and if it cites everything it retrieved, it cites
+every record the key expects it to cite. Every positive question passes, and
+the pass says nothing about the system. Wine's worked example holds
+thirty-seven records, and retrieving all of them is cheap.
+
+Two slots on `Benchmark` <!-- callout limits --> close that.
+`retrieval_budget` is the most records a correct answer may retrieve for any
+one question. `citation_precision_floor` is the least share of the records an
+answer cites that must be among its question's anchors. Retrieving the whole
+graph fails the first, and citing all of it fails the second.
+
+The floor counts against the anchors, not against `expected_citations`. Three
+of the six questions in wine's benchmark (CQ-wine 2, 3, and 6) name no
+expected citations, and an answer to CQ-wine 2 that cites the one record it
+read from would score zero against them. Counted against the anchors, an
+answer that cites exactly the records the key names scores one, since every
+expected citation is an anchor. An answer that cites nothing is not held to
+the floor. A question that needs a citation already says so with
+`expected_citations`, and an answer without it fails there.
+
+Both slots are the benchmark's, not options passed to whatever grades it.
+Two graders given different budgets would pass different systems on the same
+benchmark, and a pass should mean the same thing wherever it is run. Both are
+optional, so a benchmark that sets neither is graded on what its answers
+reach and cite, as before.
+
+There is one budget for the whole benchmark. The number of records a correct
+answer needs varies by question: CQ-wine 2 reads one, and CQ-wine 7 sets two
+vintages' assessments against each other and reads four. So a single budget
+is set by the question that needs the most, and it is loose for the rest. A
+budget per question would be tighter, but no question yet needs one, and in
+[Chapter 6](ch06-slot-usage-and-facets.md) we check the budget in a way that
+lets a question override it later without a change to the check. The budget
+counts records, not hops, so the depth a question needs bears on it only
+through the records that depth reaches.
+
 ## The island check
 
 Every class in the generated graph is reachable:

@@ -1,0 +1,19 @@
+# expect: count-bound/exceeded
+id: broken-benchmark
+target_schema: https://w3id.org/wine-linkml/
+target_schema_version: 0.2.1
+target_datasets:
+  - dataset: worked-example
+    version: 0.2.1
+retrieval_budget: 2
+competency_question_answers:
+  - id: cq-01
+    question: Which pairings are recommended?
+    ground_truth: >-
+      Beaujolais with roast chicken, Napa Chardonnay with a seafood
+      dish, and Cabernet Sauvignon with grilled meat.
+    answer_kind: [synthesis]
+    expected_anchors:
+      - pr-beaujolais-chicken
+      - pr-chardonnay-seafood
+      - pr-cabsauv-grilledmeat

@@ -139,6 +139,9 @@ classes:
       - target_schema
       - target_schema_version
       - target_datasets
+      # CALLOUT: limits On the benchmark rather than left to whoever grades it, so a pass means the same wherever it is graded. Optional: a benchmark without them is graded on what an answer reaches and cites, as before.
+      - retrieval_budget
+      - citation_precision_floor
     attributes:
       competency_question_answers:
         description: The questions this benchmark holds.
@@ -364,6 +367,28 @@ slots:
       records_version_of:
         value:
           sibling_slot: dataset
+
+  retrieval_budget:
+    description: >-
+      The most records a correct answer may retrieve for any one
+      question. A question with more anchors than this could not be
+      answered within it, so none may have more.
+    range: integer
+    minimum_value: 1
+    # CALLOUT: bound The bound relates a value on the benchmark to a count on each question it holds, which no rule can state, so the slot declares it and a checker counts. The nearest record setting the budget supplies it, so a budget set on a question would override the benchmark's without a change to the check.
+    annotations:
+      bounds_count_of:
+        value:
+          counted_slot: expected_anchors
+
+  citation_precision_floor:
+    description: >-
+      The least share of the records an answer cites that must be among
+      its question's anchors. An answer that cites nothing is not held
+      to it.
+    range: float
+    minimum_value: 0
+    maximum_value: 1
 
 enums:
 

@@ -116,10 +116,11 @@ present, every `answer_kind` a permissible value, every id matching the
 pattern [Chapter 6](ch06-slot-usage-and-facets.md) set, every citation and
 every stated absence drawn from the anchors, every answer kind holding to the
 promise its own definition makes, every ordered answer stating values to
-order, and every value carrying the type its slot declares.
+order, no question holding more anchors than the budget allows, and every
+value carrying the type its slot declares.
 
 One of those checks rests on a convention that can look like an omission.
-Eleven of this schema's thirteen datatype slots declare no `range:` at all,
+Eleven of this schema's fifteen datatype slots declare no `range:` at all,
 taking their type from `default_range` instead, so a reader might reasonably
 wonder whether an untyped slot is an unchecked one. It is checked:
 `question: 42` is rejected as "an integer, but the slot's range `string`
@@ -166,13 +167,16 @@ the schema against LinkML's metamodel, which is what `linkml-lint` is for.
 This repository holds no graph of its own, so to test the value claims it
 pins wine's worked example at `0.2.1` as a dependency, beside a benchmark of
 four of wine's questions and the ordered question from Chapter 5, stating
-ten values wine carries. Bare `verify` reports all ten holding. Each
-benchmark meant to fail (a contradicted verdict, a slot the record's class
-does not carry, a slot the record leaves unset, a record outside the
-anchors, a wrong number, an unreadable one, a value outside the enum) is
-checked on its own with `--entry`, and each fails with the one finding it
-was written to produce, matched by its kind (`value-claim/differs`,
-`value-claim/not-among`, and so on).
+ten values wine carries. It sets a floor of one half and a budget of four,
+the least the check accepts, since two of its questions have four anchors.
+A benchmark meant for grading would set more. Bare `verify` reports all ten
+values holding and finds no question over the budget. Each benchmark meant
+to fail (a contradicted verdict, a slot the record's class does not carry, a
+slot the record leaves unset, a record outside the anchors, a wrong number,
+an unreadable one, a value outside the enum) is checked on its own with
+`--entry`, and each fails with the one finding it was written to produce,
+matched by its kind (`value-claim/differs`, `value-claim/not-among`, and so
+on).
 
 ## The litmus
 

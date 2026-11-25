@@ -40,8 +40,12 @@ chapters it touches, all in this edition.
       a rule requiring two or more expected values; ch05-ch07. Bare verify
       checks the values against wine 0.2.1 (data/claims/holds.yaml); no
       check reads ordered_by itself, by ruling 2026-11-25.
-- [ ] A retrieval budget and a citation-precision floor, as slots on
-      Benchmark.
+- [x] A retrieval budget and a citation-precision floor, as slots on
+      Benchmark. Landed as retrieval_budget (integer >= 1, annotated
+      bounds_count_of expected_anchors, so per-file verify fails a
+      question with more anchors than the budget) and
+      citation_precision_floor (0-1, the share of cited records among the
+      question's anchors, by ruling 2026-11-25); ch05-ch07.
 - [ ] Alternative evidence sets, only if a consumer record rests on two
       sets of records; otherwise dropped, with the reason.
 - [x] closed-world-negative -> closed_world_negative, the spelling

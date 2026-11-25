@@ -11,10 +11,11 @@ the slot can take.
 
 In this process, we focus on narrowing what existing slots accept, never
 widening them or adding new slots. Few slots needed narrowing. Most of the
-work went to three things [Chapter 5](ch05-slots.md) left here: every
+work went to four things [Chapter 5](ch05-slots.md) left here: every
 citation must also be an anchor, so must every record an expected value is
-read from, and an ordered answer must state values to order. None of them
-turned out to be a facet.
+read from, an ordered answer must state values to order, and no question
+may have more anchors than the benchmark's budget. None of them turned out
+to be a facet.
 
 <!-- LISTING cqa-yaml-v5: diff from cqa-yaml-v4, context 20, caption "Step 6: facets". Placeholder until the forward freeze. -->
 
@@ -144,6 +145,46 @@ question with two values at other slots and `ordered_by` naming a third
 passes, and so does one whose two values sit on the same record. We left
 that open: like the limits in Chapter 5, it makes an order say less and
 never fails a correct answer.
+
+## A budget no question exceeds
+
+The two slots we put on `Benchmark` in Chapter 5 take ordinary facets. The budget
+is a whole number of at least one (`range: integer`, `minimum_value: 1`),
+since a budget of zero admits no answer. The floor is a share, a `float`
+between `0` and `1`. Each narrows what one slot accepts, so here the facet is
+the whole of it.
+
+The budget also has to fit the questions. A correct answer reaches every
+anchor, so a question with more anchors than the budget cannot be answered
+within it, and the benchmark contradicts itself. Nothing would say so until
+a grader failed a correct system on that question, and the fault would look
+like the system's.
+
+That constraint relates the budget on the benchmark to a count on each
+question it holds, so it spans two nodes, like the one on expected values
+above, and neither a facet nor a rule can state it. The slot declares it
+instead. `retrieval_budget` carries an annotation
+<!-- callout bound --> naming the slot whose values it bounds,
+`expected_anchors`, and a check counts the distinct values at that slot on
+every question beneath the benchmark. Citations and stated absences count
+with them, since both specialize `expected_anchors`, and a record listed
+twice counts once. A question that exceeds the budget fails, and the finding
+names the question, its count, and the budget.
+
+The check finds a budget no answer can meet, not one that is enough. The
+anchors are the least a correct answer must retrieve, and an answer can
+read records that are not anchors on its way to them, so a benchmark can
+pass this check with a budget that fails correct answers.
+
+Unlike the value claims, this check needs no target graph: a count of
+anchors is in the benchmark file. So the per-file `verify` that reports
+conformance reports it too, wherever the file is. The bound comes from the
+nearest record that sets the budget, which today is always the benchmark. A
+budget on a question, if one is ever needed, would take precedence for that
+question and need only a schema change.
+
+The floor has no such constraint. An answer that cites only anchors scores
+one, whatever the question, so no question can make a floor unreachable.
 
 ## One `id` slot, two patterns
 
