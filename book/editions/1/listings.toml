@@ -36,18 +36,21 @@ source = "../../../../ontology-authoring-template/data/wine-benchmark.yaml"
 frozen = "src/listings/wine-benchmark-v1.yaml"
 sha256 = "d330681b446cfa0de53f7a90c26d10e6dc3915d9af6e68f659de8246fca05b11"
 url = "https://github.com/padamson/ontology-authoring-template/blob/20cac5f/data/wine-benchmark.yaml"
+allow-long-lines = true
 
 [[listing]]
 tag = "cqa-yaml-v6"
 source = "../../../schema/cqa.yaml"
 frozen = "src/listings/cqa-yaml-v6.yaml"
 sha256 = "77932e3907588cc61c73c29fcf6c74d85c33589bf9955e4672dcdbebaada8ed9"
+allow-long-lines = true
 
 [[listing]]
 tag = "cqa-yaml-v7"
 source = "../../../schema/cqa.yaml"
 frozen = "src/listings/cqa-yaml-v7.yaml"
 sha256 = "2832584e4efdfd102508b15430cd627bf4b3e1b03e10347609f02a712034d7eb"
+allow-long-lines = true
 
 [[listing]]
 tag = "cqa-yaml-v8"
