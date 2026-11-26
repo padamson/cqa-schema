@@ -1,23 +1,26 @@
 {
-  "version": 1,
+  "version": 2,
   "skills": {
     "mdbook-listings": {
       "source": "padamson/mdbook-listings",
+      "commit": "602e96b2ab8d59b3cb7990ee54f716df64741e2f",
       "sourceType": "github",
       "skillPath": "skills/mdbook-listings/SKILL.md",
-      "computedHash": "69cb45c4cb7f0ec5e4a8245d7c596aec74e3471a9351d2703398b7185407e63c"
+      "computedHash": "25447b559c88672fb924f2c3b5421a5bcb6163a415d0a93408a221e2a9bf519f"
     },
     "ontology-authoring-advance-step": {
       "source": "padamson/ontology-authoring-template",
+      "commit": "37e2b588b4300d142fc34e1f0166bd3936d5ac71",
       "sourceType": "github",
       "skillPath": "skills/ontology-authoring-advance-step/SKILL.md",
-      "computedHash": "8f53fe360ec30ca7e5f567343c220d5a086953765115bf55b3d307a2cac3e01b"
+      "computedHash": "af0bdf578ff4888d4b612c06f58319830dacc7a8b7dafdc2d88e2f281a94ec9f"
     },
-    "panschema-development": {
+    "panschema-usage": {
       "source": "padamson/panschema",
+      "commit": "ff9366532c3346a6deff1935e04d2a4691275e7c",
       "sourceType": "github",
-      "skillPath": "skills/panschema-development/SKILL.md",
-      "computedHash": "0c0cb723ac16c2c5a8b163b2d0303d58eb33b857c586d20c3fcb866a1a560b87"
+      "skillPath": "skills/panschema-usage/SKILL.md",
+      "computedHash": "4f33cff38e502752970b81a01e8eb6100498bc5b7305205773ff5bac6713bbc4"
     }
   }
 }
