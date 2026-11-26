@@ -66,4 +66,8 @@ slices above change the schema and prose only; none of them freezes.
       and each `callout` comment its badge, the prose that names a diff
       or a listing re-read against what was frozen. Before the release
       slice.
+- [ ] After the forward freeze, decide whether scripts/check-line-width.sh
+      and its schema-line-width hook stay. Kept beside book.toml's
+      max-line-width by ruling 2026-11-26 (b87ba90), because the budget
+      checks only at freeze and this edition freezes nothing until then.
 -->
