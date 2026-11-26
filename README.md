@@ -44,6 +44,81 @@ the frozen worked example and the benchmarks in `data/`
 (via `panschema.toml`), builds every edition, and deploys the combined
 site to Pages.
 
+`./scripts/dev.sh` serves every edition and the versioned schema docs from
+the working tree at http://localhost:8000/, laid out as published, and
+rebuilds on any save in `schema/`, an edition's `src/` or `*.toml`, or
+`panschema-publish.toml`.
+
+## Dogfooding the tooling
+
+This repo exercises [panschema](https://github.com/padamson/panschema),
+`mdbook-listings`, and the `mdbook-admonish` fork. The scripts call each
+producer by name and resolve it through `$PATH`, the same contract CI
+uses, and every rebuild prints the binary that answered and its version,
+which is what exposes a stale install. They never build a producer: you
+build it in its own checkout.
+
+### Using local debug builds
+
+To have the scripts, `mdbook`'s preprocessors, the pre-commit hooks, and
+your shell all run your local debug builds, put each producer's
+`target/debug` on `PATH`. An alias is not enough. It reaches only the
+commands you type, while `mdbook build` spawns `mdbook-listings` and
+`mdbook-admonish` itself and reads `PATH`.
+
+```zsh
+# ~/.zshrc
+export PRODUCER_ROOT="/path/to/producers"   # wherever you cloned them
+for p in panschema mdbook-listings mdbook-admonish; do
+  d="$PRODUCER_ROOT/$p/target/debug"
+  [[ -d $d ]] || continue
+  (( ${path[(Ie)$d]} )) && continue   # already on PATH
+  i=${path[(ie)$HOME/.cargo/bin]}     # one past the end if absent
+  path[i,i-1]=("$d")                  # insert just ahead of ~/.cargo/bin
+done
+```
+
+The directories go just ahead of `~/.cargo/bin` rather than at the front,
+because a producer workspace builds other binaries into the same directory
+and one with a common name would shadow a system command. So the loop has
+to come after whatever puts `~/.cargo/bin` on `PATH` (a
+`. "$HOME/.cargo/env"` line, say); run before it, the directories land at
+the end of `PATH`. panschema's `target/debug` holds `mdbook-panschema`
+too. If a `cargo install`ed copy of a producer is still in
+`~/.cargo/bin`, a missing debug build silently falls through to it;
+uninstall it to make that fail loudly instead. To check what a script will
+see, ask a non-interactive shell:
+
+```bash
+bash -c 'for t in panschema mdbook-panschema mdbook-listings mdbook-admonish; do command -v $t; $t --version; done'
+```
+
+CI installs `panschema` and the fork from their branch tips, so a debug
+build of each tip is what CI runs. `mdbook-listings` comes from the
+crates.io release pinned in `docs.yml`, so a debug build of its `main` can
+be ahead of CI, and the published book can render a listing differently
+from your preview.
+
+### Seams for external tooling
+
+`scripts/dev.sh` honors two optional environment variables, so a wrapper
+that manages producer binaries can drive the loop without the repo
+knowing about it:
+
+- **`DEV_WATCH_EXTRA`** — space-separated extra paths to watch; edits
+  there trigger a rebuild like any watched source. Never hand it a
+  directory containing build output (a `target/`), which would loop the
+  watcher.
+- **`REBUILD_CMD`** — what to run on each change (default
+  `scripts/rebuild.sh`). A wrapper that resolves producer binaries can
+  point this back through itself so every cycle re-resolves — that is
+  how edit-producer → site-rebuilds loops are wired.
+
+> **panschema wasm note:** editing `panschema-viz/src` (the graph viz) does
+> not rebuild the embedded wasm via `cargo build` — `build.rs` only runs
+> `wasm-pack` when `panschema-viz/pkg/` is missing. Rebuild it with
+> `wasm-pack build` in `panschema-viz`, or `rm -rf panschema-viz/pkg`.
+
 ## Layout
 
 ```

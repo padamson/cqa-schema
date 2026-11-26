@@ -4,42 +4,47 @@
 # Simulate GitHub Pages locally with hot reload across:
 #   - the schema source (`schema/`)
 #   - each edition's book source (`book/editions/*/src/`, its `*.toml`)
-#   - PRODUCER source code (panschema, mdbook-listings, mdbook-admonish)
+#   - `panschema-publish.toml`
+#   - any extra paths named in DEV_WATCH_EXTRA (see below)
 #
-# Editing any of these triggers a full rebuild: refreshes producer debug
-# binaries (incremental `cargo build`), then regenerates the book and
-# versioned schema docs into `site/`. The producer binaries the rebuild
-# uses are resolved via $PATH prepends in scripts/rebuild.sh, pointing
-# at the freshly-built debug artifacts each time.
+# Editing any of these triggers a full rebuild: every edition and the
+# versioned schema docs are regenerated into `site/`, laid out as published. Producers
+# (`panschema`, `mdbook-listings`, `mdbook-admonish`, `mdbook-panschema`)
+# resolve via $PATH, and every rebuild prints which binary answered — the
+# consumer story, and what CI does.
 #
 # With `live-server` (npm) installed, the browser auto-refreshes after
 # each rebuild. Otherwise falls back to `python3 -m http.server`, where
 # you refresh manually.
 #
 # NOT watched: the generated book assets (*.js, *.css at an edition's root,
-# from the admonish/listings/schema-link installers) — rebuild.sh
-# regenerates them, so watching them would loop the watcher. If you
-# hand-edit one to test, nudge a rebuild by touching the edition's
-# book.toml.
+# from the admonish/listings/schema-link installers, which
+# scripts/install-assets.sh writes for `mdbook serve`). The loop's editions
+# build installs fresh copies in its scratch trees and never reads these.
 #
 # Usage:
 #   ./scripts/dev.sh                 # PORT=8000 (default)
 #   PORT=8080 ./scripts/dev.sh
-#   SKIP_PRODUCER_BUILD=1 ./scripts/dev.sh
-#       Don't build or watch the producers; use the binaries already on
-#       PATH and only regenerate the site on schema/book changes. Use when
-#       you're iterating on a producer (e.g. panschema) in its own repo and
-#       don't want its slow `cargo build` (linking a ~35 MB debug binary) on
-#       every schema change. After rebuilding the producer yourself,
-#       trigger a site refresh by touching a watched file
-#       (e.g. `touch` the schema file).
+#
+# Two seams for wrappers (both optional, both plain environment):
+#
+#   DEV_WATCH_EXTRA   Space-separated extra paths to watch. Anything a
+#                     wrapper wants the loop to rebuild on — e.g. a
+#                     producer's source tree — goes here. Paths are
+#                     watched as given; never hand this a directory
+#                     containing build output (a `target/`), which would
+#                     loop the watcher.
+#   REBUILD_CMD       What to run on each change (default:
+#                     scripts/rebuild.sh). A wrapper that resolves
+#                     producer binaries can point this back through
+#                     itself so every cycle re-resolves.
 #
 # Stop with Ctrl+C.
 #
-# Requires (in this repo):
-#   - mdbook, mdbook-listings, mdbook-admonish, panschema on PATH —
-#     ideally as aliases pointing at producer target/debug binaries
-#     (see README "Dogfooding the tooling").
+# Requires:
+#   - mdbook plus the producers on PATH: mdbook-listings, mdbook-admonish
+#     (the fork), panschema, mdbook-panschema — see README "Building the
+#     book" and "Dogfooding the tooling".
 #   - watchexec (general-purpose file watcher; cargo-watch is the wrong
 #     tool here because this is not a Cargo project):
 #       cargo install watchexec-cli
@@ -91,24 +96,12 @@ free_port() {
 PORT="$(free_port "${PORT:-8000}")"
 export PORT
 
-# When set, skip building/watching the producers (panschema, mdbook-listings,
-# mdbook-admonish); use the binaries on PATH and only regenerate the site.
-SKIP_PRODUCER_BUILD="${SKIP_PRODUCER_BUILD:-}"
-export SKIP_PRODUCER_BUILD
-
-# Producer dogfooding is opt-in: set PRODUCER_ROOT in your environment to
-# the directory where you've cloned the producer source repos (see the README
-# "Dogfooding the tooling" section). Unset (the normal author-only case) means
-# the producers aren't watched or rebuilt; the binaries on PATH are used as-is.
-# Exported so scripts/rebuild.sh (invoked below and on every watch trigger)
-# resolves the same location.
-PRODUCER_ROOT="${PRODUCER_ROOT:-}"
-export PRODUCER_ROOT
+REBUILD_CMD="${REBUILD_CMD:-scripts/rebuild.sh}"
 
 # --- Tool availability ---
 
 missing=()
-for cmd in mdbook mdbook-listings panschema watchexec; do
+for cmd in mdbook watchexec panschema mdbook-panschema mdbook-listings mdbook-admonish; do
   command -v "$cmd" >/dev/null 2>&1 || missing+=("$cmd")
 done
 if [ "${#missing[@]}" -gt 0 ]; then
@@ -116,8 +109,8 @@ if [ "${#missing[@]}" -gt 0 ]; then
   for c in "${missing[@]}"; do echo "  - $c"; done
   echo ""
   echo "Setup:"
-  echo "  - mdbook / mdbook-listings / mdbook-admonish / panschema:"
-  echo "      see README 'Dogfooding the tooling' for the alias pattern"
+  echo "  - mdbook-listings / mdbook-admonish / panschema / mdbook-panschema:"
+  echo "      see README 'Building the book' and 'Dogfooding the tooling'"
   echo "  - watchexec: cargo install watchexec-cli"
   exit 1
 fi
@@ -137,35 +130,12 @@ for book in book/editions/*/; do
   )
 done
 
-# Producer source paths. For each producer repo present locally, watch:
-#   - top-level Cargo.toml
-#   - top-level src/ if present (single-crate repos: mdbook-listings, mdbook-admonish)
-#   - any workspace sub-crate's Cargo.toml + src/ (panschema's workspace
-#     has panschema/, panschema-viz/)
-# Crucially do NOT watch the whole repo — target/ would create a rebuild loop.
-producer_dirs=()
-for producer in panschema mdbook-listings mdbook-admonish; do
-  # No PRODUCER_ROOT set → not dogfooding the producers, so don't watch them.
-  [ -z "$PRODUCER_ROOT" ] && break
-  # SKIP_PRODUCER_BUILD: don't watch producer source — you're driving the
-  # producer's build in its own repo, so leave it out of this loop.
-  [ -n "${SKIP_PRODUCER_BUILD:-}" ] && break
-  repo="$PRODUCER_ROOT/$producer"
-  [ -d "$repo" ] || continue
-
-  [ -f "$repo/Cargo.toml" ] && watch_args+=( --watch "$repo/Cargo.toml" )
-  [ -d "$repo/src" ] && watch_args+=( --watch "$repo/src" )
-
-  # Workspace sub-crates
-  for sub_toml in "$repo"/*/Cargo.toml; do
-    [ -f "$sub_toml" ] || continue
-    [ "$sub_toml" = "$repo/Cargo.toml" ] && continue
-    sub_dir="$(dirname "$sub_toml")"
-    watch_args+=( --watch "$sub_toml" )
-    [ -d "$sub_dir/src" ] && watch_args+=( --watch "$sub_dir/src" )
-  done
-
-  producer_dirs+=("$producer")
+# Wrapper-supplied extras (word-split on purpose; paths are one token each).
+extra_paths=()
+for p in ${DEV_WATCH_EXTRA:-}; do
+  [ -e "$p" ] || continue
+  watch_args+=( --watch "$p" )
+  extra_paths+=("$p")
 done
 
 # --- Initial build ---
@@ -173,7 +143,7 @@ done
 # The sole build on startup: watchexec runs with --postpone (below), so it
 # waits for the first change instead of also building on launch. Without it
 # the site builds twice and --clear wipes the "Starting server" messages.
-scripts/rebuild.sh
+sh -c "$REBUILD_CMD"
 
 # --- HTTP server ---
 
@@ -210,20 +180,21 @@ echo "Watching for changes in:"
 echo "  schema/, book/editions/*/{src/,*.toml}, panschema-publish.toml"
 # `${arr[@]+"${arr[@]}"}` not `"${arr[@]}"`: under `set -u`, bash < 4.4 —
 # including the /bin/bash 3.2 that ships with macOS — errors "unbound
-# variable" on an empty array, and this array IS empty in the default case
-# (no PRODUCER_ROOT) and under SKIP_PRODUCER_BUILD.
-for p in ${producer_dirs[@]+"${producer_dirs[@]}"}; do
-  echo "  $p source (producer dogfood)"
+# variable" on an empty array, and this array IS empty in the default case.
+for p in ${extra_paths[@]+"${extra_paths[@]}"}; do
+  echo "  $p (DEV_WATCH_EXTRA)"
 done
-[ -n "${SKIP_PRODUCER_BUILD:-}" ] && echo "  (producers skipped — SKIP_PRODUCER_BUILD set; using binaries from PATH)"
 echo ""
 echo "Edit any of those to trigger a rebuild. Ctrl+C to stop."
 echo ""
 
+# --shell=none keeps $REBUILD_CMD one argument; otherwise watchexec
+# rejoins the words and a wrapper's arguments are lost.
 watchexec \
   --debounce 500ms \
   --no-vcs-ignore \
   --postpone \
   --clear \
+  --shell=none \
   "${watch_args[@]}" \
-  -- scripts/rebuild.sh
+  -- sh -c "$REBUILD_CMD"
