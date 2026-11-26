@@ -39,7 +39,7 @@ env:
   # action's manifest lacks is pinned here.
   # panschema and mdbook-admonish install from their branch tips on
   # purpose (the dogfood loop) and are not pinned here.
-  MDBOOK_LISTINGS_VERSION: "0.2.2"
+  MDBOOK_LISTINGS_VERSION: "0.3.0"
 
 jobs:
   build:

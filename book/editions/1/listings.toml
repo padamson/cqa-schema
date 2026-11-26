@@ -35,6 +35,7 @@ tag = "wine-benchmark-v1"
 source = "../../../../ontology-authoring-template/data/wine-benchmark.yaml"
 frozen = "src/listings/wine-benchmark-v1.yaml"
 sha256 = "d330681b446cfa0de53f7a90c26d10e6dc3915d9af6e68f659de8246fca05b11"
+url = "https://github.com/padamson/ontology-authoring-template/blob/20cac5f/data/wine-benchmark.yaml"
 
 [[listing]]
 tag = "cqa-yaml-v6"
