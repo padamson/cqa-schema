@@ -143,12 +143,41 @@ records exist to be anchored at all.
 ```
 
 `target_schema` names the vocabulary the records conform to, and
-`target_schema_version` which release of it, since a release can change how
-identifiers are minted. `target_datasets` lists the bodies of records the
+`target_schema_version` which release of it, since a release can change
+what a claim refers to, as renaming a slot an expected value names would.
+`target_datasets` lists the bodies of records the
 anchors resolve in, inline, since a target dataset has no identifier to
 refer to it by. Each names its dataset in `dataset` and the state of it in
 `version`, since records can be added, removed or corrected without the
 schema moving at all.
+
+Wine's own benchmark names one dataset, `worked-example`. For wine published
+in the two parts Chapter 4 sketched, the benchmark names both, and CQ-wine
+4's anchors resolve across them:
+
+```yaml
+target_schema: https://w3id.org/wine-linkml/
+target_schema_version: 0.2.1
+target_datasets:
+  - dataset: reference
+    version: 0.2.1
+  - dataset: judgments
+    version: 0.2.1
+competency_question_answers:
+  - id: cq-04
+    name: Wine for grilled meat
+    expected_anchors:
+      - grilled-meat            # reference
+      - cabernet-sauvignon      # reference
+      - pr-cabsauv-grilledmeat  # judgments
+```
+
+The anchors do not say which dataset each is in. Each expands against
+`target_schema` to an IRI, and the benchmark claims that one of the named
+datasets holds a record with that IRI. All three versions are `0.2.1`, because
+wine's one package publishes the schema and both datasets. A dataset
+published from a package of its own would carry that package's release
+identifier, which could differ from the other two.
 
 `version` is the first slot in cqa whose predicate is not cqa's own. Every
 other slot emits a `cqa:` property, because what it states is particular to

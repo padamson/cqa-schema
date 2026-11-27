@@ -25,9 +25,12 @@ chapters it touches, all in this edition.
       re-encoded cq-07 states its verdicts, rewrite ch07's "What the checks
       cannot see" reproduction against wine's benchmark instead of
       data/claims/holds.yaml, and add expected_values to the litmus table's
-      CQ-cqa 1 row. If wine splits
-      its judgments into a dataset of their own, ch04's third failure
-      gets a public example. From the multi-dataset slice.
+      CQ-cqa 1 row. Wine keeps one dataset (ruled 2026-11-18: panschema
+      versions every dataset by its package, so a judgments dataset could
+      never move apart from the rest). ch04 and ch05 illustrate the third
+      failure on wine split hypothetically into reference and judgments
+      datasets (CQ-wine 4); the book does not name the private graphs
+      that drove it. From the multi-dataset slice.
 - [x] Expected values: an anchor, a slot of the target schema, and the
       value it carries, including an enumerated value as the answer.
       Landed as expected_values, a list of ExpectedValue (record, slot,

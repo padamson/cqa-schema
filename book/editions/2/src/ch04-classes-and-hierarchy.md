@@ -145,14 +145,21 @@ CQ-cqa 6 asks which graph a benchmark is asked against, and Step 3 turned
 that into a single term, *target schema*. Checking whether it needed a class
 of its own showed that the term was too small, in three ways.
 
-**A schema is not a version.** Wine's identifiers are not fixed. A later wine
-release scopes its judgment records — the pairing recommendations and vintage
-assessments — beneath their catalog, which changes their IRIs. Those are
-exactly the records that carry rationale, source, and confidence, so they are
-exactly the records a question with an `attribution` answer must cite. Three
-of wine's seven have to cite them. Their citations are correct against one
-version of wine and wrong against the next, and naming only the schema
-records nothing about which.
+**A schema is not a version.** A release can change what a benchmark's
+claims refer to while the schema keeps its IRI. CQ-wine 7 asks which Napa
+Zinfandel vintages were good, and its answer states that the 2018
+assessment carries the verdict `good`:
+
+```yaml
+- record: va-napa-zin-2018
+  slot: verdict
+  value: good
+```
+
+If a later wine release renamed `verdict` to `rating`, that claim would hold
+against one release and name a slot that does not exist in the next, with
+`https://w3id.org/wine-linkml/` the schema in both. Naming only the schema
+records nothing about which release the claims were written against.
 
 **A version is not a dataset.** Wine publishes two curated graphs against one
 schema: a four-record teaching preview and a thirty-seven-record worked
@@ -161,23 +168,61 @@ the worked example and not in the preview. A benchmark anchoring to it
 resolves against one and fails against the other, with the schema and the
 version identical in both cases.
 
-**A target is not always one dataset.** Wine's records are of two kinds.
-Grapes, regions, wineries, wines, and foods are reference facts. Pairing
-recommendations and vintage assessments are judgments about them, each with
-a source, a confidence, and a rationale, and judgments are corrected on a
-schedule of their own: a verdict is revised, or a second critic's assessments
-of the same vintages are added. Wine publishes both kinds in one dataset, so
-correcting one verdict moves the version of the whole graph. Published as a
-dataset of their own over the reference records, the judgments could move
-without the reference records moving with them. Two of the graphs cqa
-already benchmarks are published that way, a shared catalog of reference
-records in one dataset and each owner's records over it in another. A
-question that cites a judgment and anchors the record it judges then has
-anchors in both datasets, and each dataset has its own version.
+**A target is not always one dataset.** A graph can be published in parts,
+such as a shared catalog of reference records in one dataset and an owner's
+records, which refer into the catalog, in another. Wine is published as one
+dataset, but its records divide the same way, so we use it to show the
+shape. Grapes, regions, wineries, wines, and foods are reference records.
+Pairing recommendations and vintage assessments are judgments about them.
 
-The first two failures can be shown against wine as published, and the third
-against any graph published in parts. None of them is visible to a benchmark
-that records only a schema. So the question list is short one question again:
+Published in two parts, a `reference` dataset would hold the wine:
+
+```yaml
+wines:
+  - id: cabernet-sauvignon
+    name: Cabernet Sauvignon
+    color: red
+    body: full
+```
+
+A `judgments` dataset would hold the recommendation that pairs it with a
+food:
+
+```yaml
+pairing_recommendations:
+  - id: pr-cabsauv-grilledmeat
+    name: Cabernet Sauvignon with grilled meat
+    wine: wine:cabernet-sauvignon
+    food: wine:grilled-meat
+    confidence: 0.9
+```
+
+(A bare id names a record in the same file, so a reference into the other
+dataset is written with the `wine:` prefix.)
+
+CQ-wine 4 asks for the best wine for grilled meat. A correct answer cites
+the recommendation and reaches the wine and the food it pairs, so the
+question's anchors are in both datasets:
+
+```yaml
+expected_anchors:
+  - grilled-meat            # reference
+  - cabernet-sauvignon      # reference
+  - pr-cabsauv-grilledmeat  # judgments
+```
+
+A benchmark that names only one of the datasets does not say where the
+other anchors resolve, so it has to name both.
+
+Wine would publish both parts from its one package, so the two datasets
+would carry wine's version and change together. A dataset published from a
+package of its own, such as a catalog someone else maintains, would change
+on its own schedule. Step 5 takes up what that means for each dataset's
+version.
+
+A benchmark that names only a schema cannot say which version of it, which
+dataset, or which datasets its anchors were written against. So the
+question list is short one question again:
 
 > **CQ-cqa 8.** Which graph are these anchors valid against — which schema,
 > at which version, and which datasets, each at which version?
@@ -188,13 +233,15 @@ refers to it on its own. Making it a class would add a join no query would
 traverse. `Benchmark` needs to say which schema and which version, which is a
 slot question, and Step 5 takes it.
 
-**Each dataset is.** A benchmark can name several, and each comes with two
-facts that belong together, its name and its version. Written as two lists on
-`Benchmark`, which version goes with which dataset would rest on the order of
-the lists, and nothing checks an order. So a target dataset is a record of
-its own, holding both. It still has no identity apart from the benchmark that
-names it, so it carries no identifier and is written inside the benchmark,
-as a blank node rather than a record with an IRI of its own.
+**A target dataset is a class.** A benchmark can name several datasets, and
+each comes with two facts that belong together: its name and its version.
+Written as two lists on `Benchmark`, which version goes with which dataset
+would rest on the order of the lists, and nothing checks an order. One
+schema fits in two slots; several datasets do not. So each target dataset
+is a record of its own that holds both. Like the schema, it has no identity
+apart from the benchmark that names it, so it carries no identifier and is
+written inside the benchmark, as a blank node rather than a record with an
+IRI of its own.
 
 ## The answer, in a form a tool can check
 

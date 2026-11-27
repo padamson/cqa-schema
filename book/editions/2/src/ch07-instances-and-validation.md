@@ -391,13 +391,14 @@ A question that states no value is still blind to the edit, and so is
 wine's benchmark as frozen in Appendix A, which was written before cqa had
 the slot.
 
-One prediction did not hold. Wine's benchmark anchors twelve judgment-side
-records, and scoping their classes to their container was expected to move
-those records and break three of the six questions. It leaves the generated
-graph byte-identical, because a scoped record mints beneath its container's
-IRI and wine's catalog carries no identifier. Giving the catalog one would
-let a benchmark point at its dataset rather than name it, which Chapter 6
-wanted, and move half the benchmark's anchors at the same time.
+Wine's catalog carrying no identifier also fixes where its records' IRIs
+are minted. Wine's benchmark anchors twelve judgment-side records. Scoping
+their classes to their container, with `key: true` as Chapter 5 scopes a
+question to its benchmark, leaves the generated graph byte-identical,
+because a scoped record mints beneath its container's IRI and the catalog
+has none. Giving the catalog an identifier would let a benchmark point at
+its dataset rather than name it, which Chapter 6 wanted, and it would move
+those twelve anchors at the same time.
 
 ## One flag per class
 
