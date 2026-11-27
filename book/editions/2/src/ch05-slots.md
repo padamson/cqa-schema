@@ -387,12 +387,21 @@ The order is ascending only, the direction a position or a rank runs from
 the first record, and a descending order waits for a question that needs
 it.
 
+Records with equal values tie, and a correct answer may give tied records
+in any order. Two steps of a procedure that can be done in either order
+share a position, and an answer that lists them either way is right, and so
+is an answer that breaks the tie by something the question does not ask
+about, such as the order the records were entered in.
+
 Reading the order off the values has two limits. A record the answer lists
-with no value stated at `ordered_by` has no place in the order, and two
-records with equal values have no order between them. Neither stops a
-correct answer from passing. Each makes the order say less than its author
-meant. [Chapter 6](ch06-slot-usage-and-facets.md) adds the one requirement a
-rule can check.
+with no value stated at `ordered_by` has no place in the order, which does
+not stop a correct answer from passing but makes the order say less than its
+author meant. And a record is ordered only by a value it carries itself. An
+entry on a shopping list, ordered by the position of the store section its
+item is placed in, carries no position, and an expected value cannot claim
+one for it, so that order stays in `ground_truth`.
+[Chapter 6](ch06-slot-usage-and-facets.md) adds the one requirement a rule
+can check.
 
 ## How much an answer may retrieve
 

@@ -292,7 +292,8 @@ slots:
       The slot whose values order a correct answer, by the name the
       target schema gives it. A correct answer gives the records its
       expected values name at this slot in ascending order of those
-      values, as the slot's range orders them.
+      values, as the slot's range orders them. Records with equal values
+      tie, and a correct answer may give tied records in any order.
 
   record:
     description: >-

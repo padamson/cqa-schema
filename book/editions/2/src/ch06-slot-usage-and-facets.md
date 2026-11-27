@@ -143,7 +143,7 @@ entry names is a value one record down, in the `ExpectedValue`, so the
 constraint the order really needs spans nodes, and a rule cannot state it. A
 question with two values at other slots and `ordered_by` naming a third
 passes, and so does one whose two values sit on the same record. We left
-that open: like the limits in Chapter 5, it makes an order say less and
+that open: like the first limit in Chapter 5, it makes an order say less and
 never fails a correct answer.
 
 ## A budget no question exceeds
