@@ -37,6 +37,10 @@ Nothing below is sorted into classes or slots. That is Steps 4 and 5.
 | lookup, closed-world negative, comparison, synthesis, attribution | CQ-cqa 5 |
 | graph | CQ-cqa 2, 6 |
 | target schema | CQ-cqa 6 |
+| expected value (a value a record carries, which a correct answer states) | CQ-cqa 7 |
+| order (the sequence a correct answer gives its records in) | CQ-cqa 8 |
+| retrieval budget (the most records an answer may retrieve) | CQ-cqa 9 |
+| citation precision (the share of an answer's citations the question needs) | CQ-cqa 9 |
 
 Three of these need saying more precisely than the questions said them.
 
@@ -88,10 +92,10 @@ Chapter 1's domain statement, in the [Chapter
 `earl:TestRequirement`, and it is the word this book has used since the
 Introduction.
 
-No competency question asks anything about it. CQ-cqa 1 through 5 are all
-about a single record. CQ-cqa 6 mentions a benchmark only to ask which graph
-it targets. Nothing asks what a benchmark is called, how one is told from
-another, or what holds them together.
+No competency question asks anything about it. CQ-cqa 1 through 5 and 7
+through 9 are about a single question and its answer. CQ-cqa 6 mentions a
+benchmark only to ask which graph it targets. Nothing asks what a benchmark is
+called, how one is told from another, or what holds them together.
 
 That gap is not cosmetic. Two domains will both write `cq-01`, and those are
 different questions that must not merge into one record when their benchmarks
@@ -101,14 +105,14 @@ requirement that no question in Chapter 1 asks for.
 
 So the question list was incomplete. Adding it:
 
-> **CQ-cqa 7.** What identifies a benchmark, and what distinguishes one
+> **CQ-cqa 10.** What identifies a benchmark, and what distinguishes one
 > benchmark's questions from another's?
 
 This is Step 1 work arriving at Step 3, which N&M anticipate — they call the
 competency questions a sketch, and the term brainstorm is what catches where
 the sketch was thin. Chapter 1 stays as written, because the book is a log
 rather than a summary. The question is recorded here, where we found it, and
-Step 7 tests all seven.
+Step 7 tests all ten.
 
 ## Terms we explain but do not model
 

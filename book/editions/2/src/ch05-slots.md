@@ -28,7 +28,7 @@ for tidiness.
 
 ## Identity: one slot, refined per class
 
-CQ-cqa 7 asks what distinguishes one benchmark's questions from another's.
+CQ-cqa 10 asks what distinguishes one benchmark's questions from another's.
 [Chapter 4](ch04-classes-and-hierarchy.md) made `Benchmark` a class; the
 mechanism is here, and it turns on the difference between LinkML's
 `identifier` and its `key`, which look interchangeable but are not.
@@ -48,7 +48,7 @@ question belongs to its benchmark, so its `id` is a `key`. Both classes use
 the same `id` slot <!-- callout scoped -->, refined on
 `CompetencyQuestionAnswer` through `slot_usage`.
 
-The result is what CQ-cqa 7 asked for. Two benchmarks each holding a `cq-01`
+The result is what CQ-cqa 10 asked for. Two benchmarks each holding a `cq-01`
 produce:
 
 ```turtle
@@ -111,7 +111,7 @@ is recorded here.
 
 ## The target takes three slots
 
-CQ-cqa 6 asked which graph a benchmark is asked against. CQ-cqa 8 is that
+CQ-cqa 6 asked which graph a benchmark is asked against. CQ-cqa 11 is that
 question made precise, and Chapter 4 answered it: which schema, at which
 version, and which datasets, each at which version. It also made each target
 dataset a record of its own, so a dataset's name and its version travel
@@ -193,7 +193,7 @@ one. Here the meaning is the same, so identity is the right strength.
 [Chapter 2](ch02-reusing-existing-ontologies.md) set PROV-O aside because no
 competency question asked for provenance. PAV specializes PROV-O for
 authorship and versioning ([Ciccarese *et al.*,
-2013](https://doi.org/10.1186/2041-1480-4-37)), and CQ-cqa 8 now asks for a
+2013](https://doi.org/10.1186/2041-1480-4-37)), and CQ-cqa 11 now asks for a
 version. One property is all cqa takes from it.
 
 The dataset half matters more than it first appears. A record that disappears
@@ -259,12 +259,12 @@ benchmarks are written.
 
 ## Values a correct answer states
 
-`expected_values` lists the facts a correct answer states, one
-`ExpectedValue` each. No check reads a system's answer against them. What
-they do is keep the answer key true: each entry is a claim about the target
-graph, and where the benchmark and the graph sit together, a claim the graph
-contradicts fails. A correction like the one above, which no version records,
-then fails a check instead of leaving the ground truth quietly false.
+`expected_values` answers CQ-cqa 7: it lists the facts a correct answer
+states, one `ExpectedValue` each. No check reads a system's answer against
+them. What they do is keep the answer key true: each entry is a claim about
+the target graph, and where the benchmark and the graph sit together, a claim
+the graph contradicts fails. A correction like the one above, which no version
+records, then fails a check instead of leaving the ground truth quietly false.
 
 CQ-wine 7 states two:
 
@@ -332,19 +332,18 @@ other.
 
 ## An answer given in order
 
-Some answers are a sequence. Wine asks for none, but two questions in
-another graph cqa benchmarks do: the steps of a procedure, in order, and the
-order in which a set of places is walked. A set of anchors cannot say
-either, so the order was written only in `ground_truth`, where nothing reads
-it.
+CQ-cqa 8 asks what decides the order of an answer that is a sequence, such
+as the steps of a procedure. A set of anchors cannot say an order, so
+without a slot for it the order is written only in `ground_truth`, where
+nothing reads it.
 
-In both, the order is already in the graph. Each record carries its
-position, and the answer lists the records by it. So a question names the
-slot that orders its answer, and states the values at that slot as expected
-values like any other. `ordered_by` <!-- callout ordered --> names the slot
-the way `slot` does, by the name the target schema gives it. A correct
-answer gives the records the question's expected values name at that slot
-in ascending order of their values, compared as the slot's range compares
+The order is already in the graph. Each record carries the value it is ordered
+by, such as a step's position, and the answer lists the records by it. So a
+question names the slot that orders its answer, and states the values at that
+slot as expected values like any other. `ordered_by` <!-- callout ordered -->
+names the slot the way `slot` does, by the name the target schema gives it. A
+correct answer gives the records the question's expected values name at that
+slot in ascending order of their values, compared as the slot's range compares
 them.
 
 Wine asks for no order, so the example orders wine's three pairing
@@ -384,9 +383,9 @@ comes in order. `answer_kind` says where an answer is found, and an order
 can come with any kind that states values, so it is a slot of its own, and
 optional.
 
-The order is ascending only. Both questions that asked for one list their
-records by increasing position, and a descending order waits for a question
-that needs it.
+The order is ascending only, the direction a position or a rank runs from
+the first record, and a descending order waits for a question that needs
+it.
 
 Reading the order off the values has two limits. A record the answer lists
 with no value stated at `ordered_by` has no place in the order, and two
@@ -404,7 +403,8 @@ every record the key expects it to cite. Every positive question passes, and
 the pass says nothing about the system. Wine's worked example holds
 thirty-seven records, and retrieving all of them is cheap.
 
-Two slots on `Benchmark` <!-- callout limits --> close that.
+CQ-cqa 9 asks for that bound. Two slots on `Benchmark`
+<!-- callout limits --> answer it.
 `retrieval_budget` is the most records a correct answer may retrieve for any
 one question. `citation_precision_floor` is the least share of the records an
 answer cites that must be among its question's anchors. Retrieving the whole

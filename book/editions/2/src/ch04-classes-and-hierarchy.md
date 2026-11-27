@@ -34,7 +34,7 @@ scored attempt out of scope precisely so one benchmark can outlive many
 attempts at it.
 
 **`Benchmark`** <!-- callout set --> is the set of them, and it exists as a class
-because CQ-cqa 7 asked for one.
+because CQ-cqa 10 asked for one.
 
 **`DomainRecord`** <!-- callout placeholder --> stands for a record in the graph
 being evaluated. Nothing here ever instantiates it.
@@ -50,7 +50,7 @@ check" below.
 
 ## Why the benchmark is a class
 
-CQ-cqa 7 asks what identifies a benchmark and what distinguishes one
+CQ-cqa 10 asks what identifies a benchmark and what distinguishes one
 benchmark's questions from another's. A container that merely holds records
 answers neither.
 
@@ -224,7 +224,7 @@ A benchmark that names only a schema cannot say which version of it, which
 dataset, or which datasets its anchors were written against. So the
 question list is short one question again:
 
-> **CQ-cqa 8.** Which graph are these anchors valid against — which schema,
+> **CQ-cqa 11.** Which graph are these anchors valid against — which schema,
 > at which version, and which datasets, each at which version?
 
 **The schema is not a class.** It has no identity apart from the benchmark
@@ -254,12 +254,14 @@ graph changes, the prose goes on saying good.
 [Chapter 5](ch05-slots.md) shows that a corrected record can pass every
 other check, and the dataset versions do not catch it either.
 
-Most of wine's answers rest on a value one record carries at one slot.
-CQ-wine 2's whole answer is one enumerated value, `color: red` on
-`bordeaux-wine`. CQ-wine 6 is `body: medium` on the 2017 Napa Zinfandel
-against `body: full` on the 2018. CQ-wine 7 is the two verdicts. A value at
-a slot is a fact the graph either carries or does not, so a benchmark that
-states it can be checked against the graph, as an anchor is.
+CQ-cqa 7 asks for the answer in a form the graph can confirm: which values a
+correct answer states, and which record carries each one. Step 3 called each
+one an *expected value*. Most of wine's answers rest on such a value, carried
+by one record at one slot. CQ-wine 2's whole answer is one enumerated value,
+`color: red` on `bordeaux-wine`. CQ-wine 6 is `body: medium` on the 2017 Napa
+Zinfandel against `body: full` on the 2018. CQ-wine 7 is the two verdicts. A
+value at a slot is a fact the graph either carries or does not, so a benchmark
+that states it can be checked against the graph, as an anchor is.
 
 Each such fact has three parts that belong together: the record, the slot,
 and the value. The previous section made a target dataset a record of its

@@ -76,6 +76,11 @@ the Introduction sets out both labels.)
 5. What kind of answering does the question call for, so an evaluator knows
    which check to run?
 6. Which graph is the benchmark asked against?
+7. Which values must a correct answer state, and which record carries each
+   one?
+8. When a correct answer is a sequence, what decides its order?
+9. How much may a correct answer retrieve, and how much of what it cites may
+   fall outside what the question needs?
 
 ### Checking them against a real set
 
@@ -93,8 +98,11 @@ be checked against them: does some real question demand it?
 | 4 | CQ-wine 4 and 7 answer on someone's authority, with a confidence. An answer that drops the source is worse, not shorter. |
 | 5 | The seven do not answer alike: one is a lookup, one a negative, one a comparison across vintages, one a pattern across three rationales. |
 | 6 | Every anchor above is a record in wine's graph, named by an IRI this schema does not own. |
+| 7 | CQ-wine 2's answer is one value, red, on one wine. CQ-wine 6 sets one vintage's body against another's, and CQ-wine 7 reports two verdicts. Each is a value a record carries, which a prose answer can state and nothing can check against the graph. |
+| 8 | No CQ-wine asks for one. See below. |
+| 9 | Every question with a positive answer. A system that retrieves all of wine's graph reaches every anchor, and one that cites everything it retrieved cites every record a question needs cited. |
 
-Every row has a real demand behind it, so the check passes.
+Every row but one has a real demand behind it.
 
 ```admonish warning title="This check is by eye, not by machine"
 We read wine's prose answers and decided that each one needs what its row
@@ -106,7 +114,14 @@ either carries the fields its answer kind needs or it fails. Until then the
 table is an argument, not a test.
 ```
 
-Running the check turned up two other things.
+Running the check turned up three other things.
+
+**CQ-cqa 8 has no CQ-wine behind it.** None of wine's seven questions asks
+for an answer in order. An answer can still reach every right record and
+give them in the wrong order, as when a procedure's steps are listed out of
+sequence, and a benchmark that cannot say so leaves the order in prose. So
+the question stays on the list, and Step 5 shows it on a question we ask of
+wine rather than one of wine's own.
 
 **CQ-wine 1 gets no row.** "Which wine characteristics should I consider when
 choosing a wine?" is answered by wine's *schema* (the slots a `Wine`
@@ -147,9 +162,10 @@ depends on this contract; the contract depends on no benchmark.
   it.
 - **The graph under evaluation.** In scope only as IRIs. This ontology has no
   opinion about what a `Wine` is.
-- **How retrieval works.** Which records a correct answer must reach is in
-  scope; how a system reaches them is not. Encoding an assumption about
-  retrieval strategy would make this a test of one implementation.
+- **How retrieval works.** Which records a correct answer must reach, and
+  how many it may retrieve, are in scope; how a system reaches them is not.
+  Encoding an assumption about retrieval strategy would make this a test of
+  one implementation.
 - **How close a generated answer has to be.** The prose ground truth is in
   scope. The threshold at which a generated answer counts as correct is a
   policy of the tool doing the scoring, and reasonable tools disagree.
@@ -168,11 +184,11 @@ depends on this contract; the contract depends on no benchmark.
 
 ## On iteration
 
-The two open questions above are the second rule showing up early. CQ-cqa was
-written first and checked against CQ-wine immediately, and the check turned
-up a gap (CQ-wine 1) and a subtlety (the negative case). Neither would have
-come out of thinking about benchmarks alone. Both stay open here. Step
-1 asks the question; Step 4 and Step 5 answer it or decline it.
+CQ-cqa was written first and checked against CQ-wine immediately, and the
+check turned up a gap (CQ-wine 1) and a subtlety (the negative case). That is
+the second rule showing up early. Neither would have come out of thinking
+about benchmarks alone. Both stay open here. Step 1 asks the question; Step 4
+and Step 5 answer it or decline it.
 
 The first rule applies to a specific temptation. A benchmark could also be
 modeled as a set of test cases, or as a query paired with an expected result

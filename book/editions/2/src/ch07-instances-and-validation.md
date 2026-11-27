@@ -182,8 +182,9 @@ on).
 
 Chapter 1 stated its cross-check plainly as a by-eye reading of wine's
 prose, and promised this step would make the same claims testable. Run
-against the frozen benchmark, all eight questions are answered by a slot
-carrying a value:
+against the frozen benchmark, every question that benchmark was written
+for is answered by a slot carrying a value. It predates the slots for
+CQ-cqa 7 to 9, so their rows are empty:
 
 | | answered by | in the encoded benchmark |
 |---|---|---|
@@ -193,8 +194,11 @@ carrying a value:
 | CQ-cqa 4 | `expected_citations` | three of the six: `cq-04`, `cq-05`, `cq-07` |
 | CQ-cqa 5 | `answer_kind` | all five kinds used |
 | CQ-cqa 6 | `target_datasets` | one, `worked-example` |
-| CQ-cqa 7 | benchmark `id`, question `id` | `wine-benchmark`, six questions |
-| CQ-cqa 8 | `target_schema`, `target_schema_version`, and each target dataset's `dataset` and `version` | all present |
+| CQ-cqa 7 | `expected_values` | none; the benchmark predates the slot |
+| CQ-cqa 8 | `ordered_by` | none; the benchmark predates the slot |
+| CQ-cqa 9 | `retrieval_budget`, `citation_precision_floor` | none; the benchmark predates the slots |
+| CQ-cqa 10 | benchmark `id`, question `id` | `wine-benchmark`, six questions |
+| CQ-cqa 11 | `target_schema`, `target_schema_version`, and each target dataset's `dataset` and `version` | all present |
 
 **All five answer kinds are exercised by six questions**, which is the
 closest thing to evidence that the enum is neither too coarse nor padded.
